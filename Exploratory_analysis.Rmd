@@ -1,0 +1,52 @@
+---
+title: "Exploratory data analysis"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(readxl)
+library(skimr)
+```
+
+## Load dataset
+```{r}
+vis01 <- read_excel("data/originals/Visit1.xls") %>% round(digits = 3)
+vis02 <- read_excel("data/originals/Visit2.xls") %>% round(digits = 3)
+vis03 <- read_excel("data/originals/Visit3.xls") %>% round(digits = 3)
+vis04 <- read_excel("data/originals/Visit4.xls") %>% round(digits = 3)
+vis05 <- read_excel("data/originals/Visit5.xls") %>% round(digits = 3)
+vis06 <- read_excel("data/originals/Visit6.xls") %>% round(digits = 3)
+vis07 <- read_excel("data/originals/Visit7.xls") %>% round(digits = 3)
+vis08 <- read_excel("data/originals/Visit8(current).xls") 
+
+vis08 <- vis08 %>% 
+  mutate(across(where(is.character), ~as.numeric(.))) 
+
+```
+
+
+## Bind datasets, save csv
+
+```{r}
+vis_list <- list(vis01, vis02, vis03, vis04, vis05, vis06, vis07, vis08)
+
+vis_all <- reduce(vis_list, full_join, by = "id")
+
+vis_all <- vis_all %>% 
+  select(id, order(names(.)))
+
+write_csv(vis_all, "data/raw/vis_all.csv" ) 
+
+```
+## Mutate in Factor
+```{r}
+
+```
+
+
+
+
+
+
