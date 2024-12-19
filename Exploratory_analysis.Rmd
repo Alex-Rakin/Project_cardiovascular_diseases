@@ -45,28 +45,26 @@ write_csv(vis_all, "data/raw/vis_all.csv" )
 ## Mutate in Factor
 
 ```{r}
-vis_all <- vis_all %>% 
+vis_all <- vis_all %>%
   mutate(
     across(c(smoking_v1, smoking_v2, smoking_v3, smoking_v4, smoking_v5) , function(x)
       x %>% factor(
         levels = c(1, 2),
         labels = c("Current smoker", "Non-smoker")
-      )), 
+      )),
     across(c(smoking_v6, smoking_v8) , function(x)
       x %>% factor(
         levels = c(1, 3, 2),
         labels = c("Current smoker", "Non-smoker", "Former smoker")
-      )), 
+      )),
     across(c(smoking_v7) , function(x)
       x %>% factor(
         levels = c(1, 3, 2),
         labels = c("Current smoker", "Non-smoker", "Current smoker")
       )),
     across(c(alcohol_v5, alcohol_v6, alcohol_v8) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c("Yes", "No")
-      )),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
     across(c(alcohol_v7) , function(x)
       x %>% factor(
         levels = c(1, 2, 3, 4, 5, 6, 7),
@@ -75,82 +73,129 @@ vis_all <- vis_all %>%
     across(c(education_v7) , function(x)
       x %>% factor(
         levels = c(1, 2, 3, 4, 5),
-        labels = c( "Completed higher education", "Incomplete higher education", "Secondary specialized education", "Secondary education", "Incomplete secondary education")
+        labels = c(
+          "Completed higher education",
+          "Incomplete higher education",
+          "Secondary specialized education",
+          "Secondary education",
+          "Incomplete secondary education"
+        )
       )),
     across(c(education_v8) , function(x)
       x %>% factor(
         levels = c(1, 2, 3, 4, 5, 6),
-        labels = c( "Academic degree", "Completed higher education", "Incomplete higher education", "Secondary specialized education", "Secondary education", "Incomplete secondary education")
+        labels = c(
+          "Academic degree",
+          "Completed higher education",
+          "Incomplete higher education",
+          "Secondary specialized education",
+          "Secondary education",
+          "Incomplete secondary education"
+        )
       )),
-     across(c(highbp_v7) , function(x)
+    across(c(highbp_v7) , function(x)
       x %>% factor(
         levels = c(1, 2, 9),
-        labels = c( "Yes", "No", "Don`t know")
+        labels = c("Yes", "No", "Don`t know")
       )),
     across(c(highbp_v8) , function(x)
       x %>% factor(
         levels = c(1, 2, 3),
-        labels = c( "Yes", "No", "Don`t know")
+        labels = c("Yes", "No", "Don`t know")
       )),
     across(c(drugs_v7, drugs_v8) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c( "Yes", "No")
-      )),
-     across(c(drugs_v7, drugs_v8) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c( "Yes", "No")
-      )),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
+    across(c(drugs_v7, drugs_v8) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
     across(c(cad_v7) , function(x)
       x %>% factor(
         levels = c(1, 2, 9),
-        labels = c( "Yes", "No", "Don`t know")
+        labels = c("Yes", "No", "Don`t know")
       )),
     across(c(cad_v8) , function(x)
       x %>% factor(
         levels = c(1, 2, 3),
-        labels = c( "Yes", "No", "Don`t know")
+        labels = c("Yes", "No", "Don`t know")
       )),
-    across(c(stroke_v7, braininjury_v7, diabetes_v7, renald_v7, pulmonaryd_v7, gastrod_v7, allergy_v7, inflammation_v7, fcad_v7, fah_v7, fstroke_v7, fdiabetes_v7,  mcad_v7, mah_v7, mstroke_v7, mdiabetes_v7) , function(x)
+    across(c(
+      stroke_v7,
+      braininjury_v7,
+      diabetes_v7,
+      renald_v7,
+      pulmonaryd_v7,
+      gastrod_v7,
+      allergy_v7,
+      inflammation_v7,
+      fcad_v7,
+      fah_v7,
+      fstroke_v7,
+      fdiabetes_v7,
+      mcad_v7,
+      mah_v7,
+      mstroke_v7,
+      mdiabetes_v7
+    ) , function(x)
       x %>% factor(
         levels = c(1, 2, 9),
-        labels = c( "Yes", "No", "Don`t know")
+        labels = c("Yes", "No", "Don`t know")
       )),
-    across(c(stroke_v8, braininjury_v8, diabetes_v8, renald_v8, pulmonaryd_v8, gastrod_v8, allergy_v8, inflammation_v8, blood_v8, fcad_v8, fah_v8, fstroke_v8, fdiabetes_v8,  mcad_v8, mah_v8, mstroke_v8, mdiabetes_v8) , function(x)
+    across(c(
+      stroke_v8,
+      braininjury_v8,
+      diabetes_v8,
+      renald_v8,
+      pulmonaryd_v8,
+      gastrod_v8,
+      allergy_v8,
+      inflammation_v8,
+      blood_v8,
+      fcad_v8,
+      fah_v8,
+      fstroke_v8,
+      fdiabetes_v8,
+      mcad_v8,
+      mah_v8,
+      mstroke_v8,
+      mdiabetes_v8
+    ) , function(x)
       x %>% factor(
         levels = c(1, 2, 3),
-        labels = c( "Yes", "No", "Don`t know")
+        labels = c("Yes", "No", "Don`t know")
       )),
-     across(c(diabetestype_v7) , function(x)
+    across(c(diabetestype_v7) , function(x)
       x %>% factor(
         levels = c(1, 2, 9),
-        labels = c( "Type I", "Type II", "Don`t know")
+        labels = c("Type I", "Type II", "Don`t know")
       )),
-     across(c(diabetestype_v8) , function(x)
+    across(c(diabetestype_v8) , function(x)
       x %>% factor(
         levels = c(1, 2, 3),
-        labels = c( "Type I", "Type II", "Don`t know")
-      )),
-     across(c(fliving_v7, fliving_v8, mliving_v7, mliving_v8) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c( "Alive", "Dead")
+        labels = c("Type I", "Type II", "Don`t know")
       )),
     across(c(fliving_v7, fliving_v8, mliving_v7, mliving_v8) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Alive", "Dead"))),
+    across(c(fliving_v7, fliving_v8, mliving_v7, mliving_v8) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Alive", "Dead"))),
+    across(c(fcause_v7, fcause_v8, mcause_v7, mcause_v8) , function(x)
       x %>% factor(
-        levels = c(1, 2),
-        labels = c( "Alive", "Dead")
-      )),
-     across(c(fcause_v7, fcause_v8, mcause_v7, mcause_v8) , function(x)
-      x %>% factor(
-        levels = c(1, 2,3 ,4, 5, 6),
-        labels = c( "Heart attack",  "Stroke",  "Cancer",  "Chronic diseases",  "Accident",  "Unknown")
+        levels = c(1, 2, 3 , 4, 5, 6),
+        labels = c(
+          "Heart attack",
+          "Stroke",
+          "Cancer",
+          "Chronic diseases",
+          "Accident",
+          "Unknown"
+        )
       ))
     
-    )
- 
+  )
 
+write_rds(vis_all, "data/raw/vis_all.rds")
 ```
 
 
