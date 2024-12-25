@@ -8,6 +8,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
 library(skimr)
+library(writexl)
+library(dplyr)
 ```
 
 ## Load dataset
@@ -41,8 +43,11 @@ write_csv(vis_all, "data/raw/vis_all.csv" )
 
 ```
 
-
 ## Mutate in Factor
+```{r}
+#Определяем ранги степеней АГ
+level_order <- c("n_level", "h_level", "AG1", "AG2", "AG3")
+```
 
 ```{r}
 vis_all <- vis_all %>%
@@ -191,13 +196,54 @@ vis_all <- vis_all %>%
           "Accident",
           "Unknown"
         )
-      ))
-    
-  )
+      )),
+    # Расчёт средних значений для замеров систолических и диастолических давлений
+    sbp_all = rowMeans(select(., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)), na.rm = TRUE),
+    dbp_all = rowMeans(select(., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)), na.rm = TRUE),
+    # Определение степени артериальной гипертензии
+    AG_sbp = case_when(
+      sbp_all < 130 ~ "n_level",
+      sbp_all >= 130 & sbp_all < 140 ~ "h_level",
+      sbp_all >= 140 & sbp_all < 160 ~ "AG1",
+      sbp_all >= 160 & sbp_all < 180 ~ "AG2",
+      sbp_all >= 180 ~ "AG3"
+    ),
+    AG_dbp = case_when(
+      dbp_all < 85 ~ "n_level",
+      dbp_all >= 85 & dbp_all < 90 ~ "h_level",
+      dbp_all >= 90 & dbp_all < 100 ~ "AG1",
+      dbp_all >= 100 & dbp_all < 110 ~ "AG2",
+      dbp_all >= 110 ~ "AG3"
+    ),
+    #Выбираем худшую АГ из двух
+    high_AG = case_when(
+      is.na(AG_sbp) & !is.na(AG_dbp) ~ AG_dbp, 
+      !is.na(AG_sbp) & is.na(AG_dbp) ~ AG_sbp, 
+      !is.na(AG_sbp) & !is.na(AG_dbp) ~ {
+        ifelse(
+          match(AG_sbp, level_order) > match(AG_dbp, level_order),
+          AG_sbp,
+          AG_dbp
+        )
+      },
+      TRUE ~ NA_character_
+    )
+   )
 
 write_rds(vis_all, "data/raw/vis_all.rds")
 ```
 
+```{r}
+#Прост проверки всякие (НА СНОС)
+
+head(vis_all)
+combination_counts <- vis_all %>%
+  group_by(high_AG, AG_sbp, AG_dbp) %>%
+  summarise(Count = n(), .groups = "drop") %>%
+  arrange(desc(Count))
+print(combination_counts)
+write_xlsx(vis_all, "vis_all+AG.xlsx")
+```
 
 
 
