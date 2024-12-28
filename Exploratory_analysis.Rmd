@@ -22,6 +22,9 @@ vis05 <- read_excel("data/originals/Visit5.xls") %>% round(digits = 3)
 vis06 <- read_excel("data/originals/Visit6.xls") %>% round(digits = 3)
 vis07 <- read_excel("data/originals/Visit7.xls") %>% round(digits = 3)
 vis08 <- read_excel("data/originals/Visit8(current).xls") 
+ci_new <- read_excel("data/originals/CI_new.xls")
+ci_fun <- read_excel("data/originals/cognitivefunctions.xls")
+
 
 vis08 <- vis08 %>% 
   mutate(across(where(is.character), ~as.numeric(.))) 
@@ -32,18 +35,19 @@ vis08 <- vis08 %>%
 ## Bind datasets, save csv
 
 ```{r}
-vis_list <- list(vis01, vis02, vis03, vis04, vis05, vis06, vis07, vis08)
+vis_list <- list(vis01, vis02, vis03, vis04, vis05, vis06, vis07, vis08, ci_new, ci_fun)
 
 vis_all <- reduce(vis_list, full_join, by = "id")
 
-vis_all <- vis_all %>% 
-  select(id, order(names(.)))
+# vis_all <- vis_all %>% 
+#   select(id, order(names(.)))
 
 write_csv(vis_all, "data/raw/vis_all.csv" ) 
 
 ```
 
 ## Mutate in Factor
+
 ```{r}
 #Определяем ранги степеней АГ
 level_order <- c("n_level", "h_level", "AG1", "AG2", "AG3")
@@ -52,6 +56,11 @@ level_order <- c("n_level", "h_level", "AG1", "AG2", "AG3")
 ```{r}
 vis_all <- vis_all %>%
   mutate(
+ # Новая переменная data$cg_imp_all 1 -нет нарушений,  2 есть нарушения.    
+    cg_imp_all = case_when(
+      cognitiveimpairment_cl %in% c(2, 3) | memoryloss == 1 ~ 2,
+      cognitiveimpairment_cl == 1 ~ 1,
+      .default = NA ), 
     across(c(smoking_v1, smoking_v2, smoking_v3, smoking_v4, smoking_v5) , function(x)
       x %>% factor(
         levels = c(1, 2),
@@ -226,12 +235,14 @@ vis_all <- vis_all %>%
           AG_dbp
         )
       },
-      TRUE ~ NA_character_
-    )
+      TRUE ~ NA_character_)
+    
    )
 
 write_rds(vis_all, "data/raw/vis_all.rds")
 ```
+
+
 
 ```{r}
 #Прост проверки всякие (НА СНОС)
