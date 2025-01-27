@@ -5,11 +5,19 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(tidyverse)
-library(readxl)
-library(skimr)
-library(writexl)
-library(dplyr)
+library(tidyverse) # Основной пакет
+library(readxl) # для чтения файлов экселя xls xlsx
+library(skimr)  # для описательной статистики
+library(writexl)  # для записи файлов экселя xls xlsx
+library(corrr) # для составления корреляционной матрицы
+library(pheatmap) # для постройки хитмэпа
+library(flextable) # для красивых таблиц
+library(ggExtra) # для соединения графиков
+library(GGally)
+library(corrplot)
+
+library(BlandAltmanLeh) # для Bland-Altman plots
+
 ```
 
 ## Load dataset
@@ -247,16 +255,133 @@ write_rds(vis_all, "data/raw/vis_all.rds")
 ```{r}
 #Прост проверки всякие (НА СНОС)
 
-head(vis_all)
-combination_counts <- vis_all %>%
-  group_by(high_AG, AG_sbp, AG_dbp) %>%
-  summarise(Count = n(), .groups = "drop") %>%
-  arrange(desc(Count))
-print(combination_counts)
-write_xlsx(vis_all, "vis_all+AG.xlsx")
+
+
+
+# head(vis_all)
+# combination_counts <- vis_all %>%
+#   group_by(high_AG, AG_sbp, AG_dbp) %>%
+#   summarise(Count = n(), .groups = "drop") %>%
+#   arrange(desc(Count))
+# print(combination_counts)
+# write_xlsx(vis_all, "vis_all+AG.xlsx")
 ```
 
 
+## выбор переменных
+```{r}
+# выбираем: id, курение, акоголь, инсульт, ЧМТ, диабет,заболевания почек в анамнезе , заболевания органов дыхания в анамнезе, заболевания ЖКТ, алергии, анемии,гнойные воспплаения, сведения о родителях, АД, масса тела,  липидограмма, когнитивные нарушения, наличие АГ
 
 
+data <-
+  vis_all %>% select(
+    id,
+    starts_with("smoking"),
+    starts_with("alcoh"),
+    starts_with("cad"),
+    starts_with("stroke"),
+    starts_with("braininjury"),
+    starts_with("diabetes "),
+    starts_with("renald"),
+    starts_with("gastrod"),
+    starts_with("allergy"),
+    starts_with("blood"),
+    starts_with("inflammation"),
+    starts_with("covid"),
+    starts_with("fliving"),
+    starts_with("fdead"),
+    starts_with("fcause"),
+    starts_with("fcad"),
+    starts_with("fah"),
+    starts_with("fstroke"),
+    starts_with("fdiabetes"),
+    starts_with("mliving"),
+    starts_with("mdead"),
+    starts_with("mcause"),
+    starts_with("mcad"),
+    starts_with("mah"),
+    starts_with("mstroke"),
+    starts_with("mdiabetes"),
+    starts_with("sbp"),
+    starts_with("dbp"),
+    starts_with("high_AG"),
+    starts_with("weight"),
+    starts_with("waist"),
+    starts_with("hips"),
+    starts_with("height"),
+    starts_with("cholesterol"),
+    starts_with("hdl"),
+    starts_with("tg"),
+    starts_with("ldl"),
+    starts_with("vldl"),
+    starts_with("atheroindex"),
+    starts_with("glucose"),
+    starts_with("cg_imp_all"),
+     ) 
+
+```
+
+```{r}
+a1 <-
+  data %>% 
+  select(is.factor) %>% 
+  skim() %>% 
+  select(skim_variable, n_missing, factor.n_unique, factor.top_counts) %>% 
+  flextable() %>% 
+  theme_box() %>%
+  align(align = "center", part = "all")
+
+a1 %>%  save_as_html( values = NULL, path ="data/raw/fltab_factor.html", lang = "en", title = "&#32;")
+
+
+a2 <-
+  data %>% 
+  select(is.numeric) %>% 
+  skim_without_charts() %>% 
+  # select(skim_variable, n_missing, factor.n_unique, factor.top_counts) %>% 
+  flextable() %>% 
+  theme_box() %>%
+  align(align = "center", part = "all")
+
+a2 %>%  save_as_html( values = NULL, path ="data/raw/fltab_numeric.html", lang = "en", title = "&#32;")
+```
+
+##составление корреляционной матрицы
+```{r, fig.width=12, fig.height=12}
+data02 <- vis_all %>% select(
+  id, tricepskinfold_v7, weight_v7, weight_v8, smoking_v8, alcohol_v8, cad_v8, sbp_all, dbp_all, cg_imp_all, height_v8, cholesterol_v8, hdl_v8, tg_v8, ldl_v8, vldl_v8
+) 
+
+data02 %>% select(is.numeric & -id) %>% na.omit() %>% cor() %>% corrplot(method = "number")
+```
+
+## Оценка согласованности шкал тестов (Тесты для оценки состояния когнитивной сферы)
+
+```{r}
+# Проверяем согласованость четырех шкал.
+# 1. Краткая шкала оценки психического статуса (КШОПС) / Mini-mental State Examination (MMSE) – скрининговая переменная ‘mmse’
+# 2.	Монреальская шкала когнитивной оценки (МоСА) – скрининговая, более чувствительная к когнитивным нарушениям сосудистой этиологии  переменная ‘moca’
+# 3.	FAB (Frontal Assessment Batter - "Батарея лобной дисфункции") – выявляет нарушения лобных долей и их связи с подкорковыми структурами переменная ‘fab’
+# 4.	Тест символьно-цифрового кодирования – оценка скорости мыслительных процессов и концентрации внимания (работа теменной и затылочной долей) переменная ‘symboldigit’
+
+# Проверка будет осуществлятся следующими парами
+# moca ~ mmse, moca ~ fab, moca ~ symboldigit,  mmse ~ fab, mmse ~ symboldigit,  fab ~ symboldigit
+
+
+
+```
+
+
+## Оценка согласованности шкал тестов (Тесты для оценки эмоционально-аффективной сферы)
+
+```{r}
+# Проверяем согласованость двух шкал.
+# 1.	Шкала депрессии Бека-II  переменная ‘bdi’
+# 2.	Шкала тревоги Cпилбергера в адаптации Ханина переменные ‘stsutiational’ и ‘stpersonal’
+# 
+#  Проверка будет осуществлятся следующими парами
+#  bdi ~ stsutiational, bdi ~ stpersonal, stsutiational ~ stpersonal
+
+
+```
 
