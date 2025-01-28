@@ -45,7 +45,7 @@ vis08 <- vis08 %>%
 ## Bind datasets, save csv
 
 ```{r}
-vis_list <- list(vis01, vis02, vis03, vis04, vis05, vis06, vis07, vis08, ci_new, ci_fun)
+vis_list <- list(vis01, vis02, vis03, vis04, vis05, vis06, vis07, vis08, ci_new) # убрал ci_fun
 
 vis_all <- reduce(vis_list, full_join, by = "id")
 
@@ -66,11 +66,12 @@ level_order <- c("n_level", "h_level", "AG1", "AG2", "AG3")
 ```{r}
 vis_all <- vis_all %>%
   mutate(
- # Новая переменная data$cg_imp_all 1 -нет нарушений,  2 есть нарушения.    
+    # Новая переменная data$cg_imp_all 1 -нет нарушений,  2 есть нарушения.
     cg_imp_all = case_when(
-      cognitiveimpairment_cl %in% c(2, 3) | memoryloss == 1 ~ 2,
+      cognitiveimpairment_cl %in% c(2, 3) | memoryloss_v8 == 1 ~ 2,
       cognitiveimpairment_cl == 1 ~ 1,
-      .default = NA ), 
+      .default = NA
+    ),
     across(c(smoking_v1, smoking_v2, smoking_v3, smoking_v4, smoking_v5) , function(x)
       x %>% factor(
         levels = c(1, 2),
@@ -79,7 +80,7 @@ vis_all <- vis_all %>%
     across(c(smoking_v6, smoking_v8) , function(x)
       x %>% factor(
         levels = c(1, 3, 2),
-        labels = c("Current smoker", "Non-smoker", "Former smoker")
+        labels = c("Current smoker", "Non-smoker", "Former smoker") # изменил  "Former smoker" на "Current smoker"
       )),
     across(c(smoking_v7) , function(x)
       x %>% factor(
@@ -117,15 +118,17 @@ vis_all <- vis_all %>%
           "Incomplete secondary education"
         )
       )),
+    highbp_v7= if_else(highbp_v7 == 9,  NA,highbp_v7 ),
     across(c(highbp_v7) , function(x)
       x %>% factor(
-        levels = c(1, 2, 9),
-        labels = c("Yes", "No", "Don`t know")
+        levels = c(1, 2),
+        labels = c("Yes", "No")
       )),
+     highbp_v8= if_else(highbp_v8 == 3,  NA,highbp_v8 ),
     across(c(highbp_v8) , function(x)
       x %>% factor(
-        levels = c(1, 2, 3),
-        labels = c("Yes", "No", "Don`t know")
+        levels = c(1, 2),
+        labels = c("Yes", "No")
       )),
     across(c(drugs_v7, drugs_v8) , function(x)
       x %>% factor(levels = c(1, 2),
@@ -133,15 +136,17 @@ vis_all <- vis_all %>%
     across(c(drugs_v7, drugs_v8) , function(x)
       x %>% factor(levels = c(1, 2),
                    labels = c("Yes", "No"))),
-    across(c(cad_v7) , function(x)
+    cad_v7= if_else(cad_v7 == 9,  NA,cad_v7 ),
+     across(c(cad_v7) , function(x)
       x %>% factor(
-        levels = c(1, 2, 9),
-        labels = c("Yes", "No", "Don`t know")
+        levels = c(1, 2),
+        labels = c("Yes", "No")
       )),
+     cad_v8= if_else(cad_v8 == 3,  NA,cad_v8 ),
     across(c(cad_v8) , function(x)
       x %>% factor(
-        levels = c(1, 2, 3),
-        labels = c("Yes", "No", "Don`t know")
+        levels = c(1, 2),
+        labels = c("Yes", "No")
       )),
     across(c(
       stroke_v7,
@@ -217,9 +222,13 @@ vis_all <- vis_all %>%
         )
       )),
     # Расчёт средних значений для замеров систолических и диастолических давлений
-    sbp_all = rowMeans(select(., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)), na.rm = TRUE),
-    dbp_all = rowMeans(select(., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)), na.rm = TRUE),
-    # Определение степени артериальной гипертензии
+    sbp_all = rowMeans(select(
+      ., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)
+    ), na.rm = TRUE),
+    dbp_all = rowMeans(select(
+      ., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)
+    ), na.rm = TRUE),
+   # Определение степени артериальной гипертензии
     AG_sbp = case_when(
       sbp_all < 130 ~ "n_level",
       sbp_all >= 130 & sbp_all < 140 ~ "h_level",
@@ -245,9 +254,11 @@ vis_all <- vis_all %>%
           AG_dbp
         )
       },
-      TRUE ~ NA_character_)
-    
+      TRUE ~ NA_character_) %>% factor( labels = c("n_level", "h_level", "AG1" , "AG2", "AG3"))
    )
+    
+    
+vis_all$highbp_v7 %>% str()
 
 write_rds(vis_all, "data/raw/vis_all.rds")
 ```
@@ -306,6 +317,9 @@ data <-
 
 ```
 
+
+
+## Описательная статистика.
 ```{r}
 a1 <-
   data %>% 
@@ -574,6 +588,17 @@ ggsave("bland_altman_plot_emotion.png", plot = p02, path = "data/pics/", width =
 ## Всякое
 ```{r}
 # Проверка визитов
-vis_all %>% filter(id %in% c(548, 580))
+a1 <- vis_all %>% select(mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8, symboldigit_v8, bdi_v8, mmse__cl, -moca_cl, cognitiveimpairment_cl, memoryloss_cl) %>%  summarise(across(everything(), ~ sum(!is.na(.))))
+
+
+
+a1 %>% flextable() %>% 
+  theme_box() %>%
+  align(align = "center", part = "all") %>%  save_as_html( values = NULL, path ="data/raw/проверка визитов.html", lang = "en", title = "&#32;")
+
+ vis_all %>% select(mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8, symboldigit_v8, bdi_v8, mmse__cl, -moca_cl, cognitiveimpairment_cl,  memoryloss_cl) %>% na.omit() %>% summarise(across(everything(), ~ sum(!is.na(.))))%>% flextable() %>% 
+  theme_box() %>%
+  align(align = "center", part = "all") %>%  save_as_html( values = NULL, path ="data/raw/проверка визитов без пропусков.html", lang = "en", title = "&#32;")
+
 ```
 
