@@ -646,5 +646,6 @@ a1 %>% flextable() %>%
   align(align = "center", part = "all") %>%  save_as_html( values = NULL, path ="data/raw/проверка визитов без пропусков.html", lang = "en", title = "&#32;")
 
  
+ 
 ```
 
