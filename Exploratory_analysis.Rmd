@@ -13,8 +13,10 @@ library(corrr) # для составления корреляционной ма
 library(pheatmap) # для постройки хитмэпа
 library(flextable) # для красивых таблиц
 library(ggExtra) # для соединения графиков
+library(ggpubr) # для соединения графиков
 library(GGally)
 library(corrplot)
+
 
 library(BlandAltmanLeh) # для Bland-Altman plots
 
@@ -340,7 +342,7 @@ data02 %>% select(is.numeric & -id) %>% na.omit() %>% cor() %>% corrplot(method 
 
 ## Оценка согласованности шкал тестов (Тесты для оценки состояния когнитивной сферы)
 
-```{r}
+```{r bland.altman.plot.cognitive, fig.height= 10, fig.width=20}
 # Проверяем согласованость четырех шкал.
 # 1. Краткая шкала оценки психического статуса (КШОПС) / Mini-mental State Examination (MMSE) – скрининговая переменная ‘mmse’
 # 2.	Монреальская шкала когнитивной оценки (МоСА) – скрининговая, более чувствительная к когнитивным нарушениям сосудистой этиологии  переменная ‘moca’
@@ -351,13 +353,138 @@ data02 %>% select(is.numeric & -id) %>% na.omit() %>% cor() %>% corrplot(method 
 # moca ~ mmse, moca ~ fab, moca ~ symboldigit,  mmse ~ fab, mmse ~ symboldigit,  fab ~ symboldigit
 
 
+vis_all %>% select(starts_with(c("id", "moca_v8",  "mmse_v8", "fab_v8", "symboldigit_v8")))
 
+
+MOCA_vs_MMSE <-  bland.altman.plot(
+  vis_all$moca_v8,
+  vis_all$mmse_v8,
+  graph.sys = "ggplot2",
+  conf.int = .95,
+  geom_count = TRUE,
+  silent = TRUE
+) +
+  labs (title = "MOCA vs MMSE",
+        # subtitle = ,
+        y = "Differences",
+        x = "Means of measurements") +
+  theme_bw() +
+  theme (plot.title = element_text( 
+                                    size = 30, 
+                                    hjust = 0.5))
+
+ 
+
+MOCA_vs_FAB <-  bland.altman.plot(
+  vis_all$moca_v8,
+  vis_all$fab_v8,
+  graph.sys = "ggplot2",
+  conf.int = .95,
+  geom_count = TRUE,
+  silent = TRUE
+) +
+  labs (title = "MOCA vs FAB",
+        # subtitle = ,
+        y = "Differences",
+        x = "Means of measurements") +
+  theme_bw() +
+  theme (plot.title = element_text( 
+                                    size = 30, 
+                                    hjust = 0.5))
+
+
+  
+MOCA_vs_symboldigit <-  bland.altman.plot(
+  vis_all$moca_v8,
+  vis_all$symboldigit_v8,
+  graph.sys = "ggplot2",
+  conf.int = .95,
+  geom_count = TRUE,
+  silent = TRUE
+) +
+  labs (title = "MOCA vs symboldigit",
+        # subtitle = ,
+        y = "Differences",
+        x = "Means of measurements") +
+  theme_bw() +
+  theme (plot.title = element_text( 
+                                    size = 30, 
+                                    hjust = 0.5))
+
+
+MMSE_vs_FAB <-  bland.altman.plot(
+  vis_all$mmse_v8,
+  vis_all$fab_v8,
+  graph.sys = "ggplot2",
+  conf.int = .95,
+  geom_count = TRUE,
+  silent = TRUE
+) +
+  labs (title = "MMSE vs FAB",
+        # subtitle = ,
+        y = "Differences",
+        x = "Means of measurements") +
+  theme_bw() +
+  theme (plot.title = element_text( 
+                                    size = 30, 
+                                    hjust = 0.5))
+
+ 
+
+MMSE_vs_symboldigit <-  bland.altman.plot(
+  vis_all$mmse_v8,
+  vis_all$symboldigit_v8,
+  graph.sys = "ggplot2",
+  conf.int = .95,
+  geom_count = TRUE,
+  silent = TRUE
+) +
+  labs (title = "MMSE vs symboldigit",
+        # subtitle = ,
+        y = "Differences",
+        x = "Means of measurements") +
+  theme_bw() +
+  theme (plot.title = element_text( 
+                                    size = 30, 
+                                    hjust = 0.5))
+
+
+
+FAB_vs_symboldigit <-  bland.altman.plot(
+  vis_all$fab_v8,
+  vis_all$symboldigit_v8,
+  graph.sys = "ggplot2",
+  conf.int = .95,
+  geom_count = TRUE,
+  silent = TRUE
+) +
+  labs (title = "FAB vs symboldigit",
+        # subtitle = ,
+        y = "Differences",
+        x = "Means of measurements") +
+  theme_bw() +
+  theme (plot.title = element_text( 
+                                    size = 30, 
+                                    hjust = 0.5))
+
+
+
+
+
+p <- ggpubr::ggarrange(plotlist = list(MOCA_vs_MMSE, MOCA_vs_FAB, MOCA_vs_symboldigit, MMSE_vs_FAB , MMSE_vs_symboldigit, FAB_vs_symboldigit),
+                  ncol = 3,
+          nrow = 2,  
+          heights = c(1,1),
+          label.y = 0)
+
+ggsave("bland_altman_plot_cognitive.png", plot = , path = "data/pics/", width = 20,
+  height = 10)
 ```
 
 
 ## Оценка согласованности шкал тестов (Тесты для оценки эмоционально-аффективной сферы)
 
-```{r}
+```{r bland.altman.plot.emotion, fig.height= 6, fig.width=20}
 # Проверяем согласованость двух шкал.
 # 1.	Шкала депрессии Бека-II  переменная ‘bdi’
 # 2.	Шкала тревоги Cпилбергера в адаптации Ханина переменные ‘stsutiational’ и ‘stpersonal’
@@ -365,6 +492,88 @@ data02 %>% select(is.numeric & -id) %>% na.omit() %>% cor() %>% corrplot(method 
 #  Проверка будет осуществлятся следующими парами
 #  bdi ~ stsutiational, bdi ~ stpersonal, stsutiational ~ stpersonal
 
+vis_all %>% select(starts_with(c("id", "bdi_v8", "stsutiational_v8" , "stpersonal_v8")))
 
+BDI_vs_stsutiational <-  bland.altman.plot(
+  vis_all$bdi_v8,
+  vis_all$stsutiational_v8,
+  graph.sys = "ggplot2",
+  conf.int = .95,
+  geom_count = TRUE,
+  silent = TRUE
+) +
+  labs (title = "BDI vs stsutiational",
+        # subtitle = ,
+        y = "Differences",
+        x = "Means of measurements") +
+  theme_bw() +
+  theme (plot.title = element_text( 
+                                    size = 30, 
+                                    hjust = 0.5))
+
+BDI_vs_stsutiational
+
+
+
+BDI_vs_stpersonal <-  bland.altman.plot(
+  vis_all$bdi_v8,
+  vis_all$stpersonal_v8,
+  graph.sys = "ggplot2",
+  conf.int = .95,
+  geom_count = TRUE,
+  silent = TRUE
+) +
+  labs (title = "BDI vs stpersonal",
+        # subtitle = ,
+        y = "Differences",
+        x = "Means of measurements") +
+  theme_bw() +
+  theme (plot.title = element_text( 
+                                    size = 30, 
+                                    hjust = 0.5))
+
+BDI_vs_stpersonal
+
+
+
+stsutiational_vs_stpersonal <-  bland.altman.plot(
+  vis_all$bdi_v8,
+  vis_all$stpersonal_v8,
+  graph.sys = "ggplot2",
+  conf.int = .95,
+  geom_count = TRUE,
+  silent = TRUE
+) +
+  labs (title = "stsutiational vs stpersonal",
+        # subtitle = ,
+        y = "Differences",
+        x = "Means of measurements") +
+  theme_bw() +
+  theme (plot.title = element_text( 
+                                    size = 30, 
+                                    hjust = 0.5))
+
+
+stsutiational_vs_stpersonal
+
+p02 <- ggpubr::ggarrange(plotlist = list(BDI_vs_stpersonal, BDI_vs_stsutiational, stsutiational_vs_stpersonal),
+                  ncol = 3,
+          nrow = 1,  
+          heights = c(1,1),
+          label.y = 0)
+p02
+
+ggsave("bland_altman_plot_emotion.png", plot = p02, path = "data/pics/", width = 20,
+  height = 6)
+
+```
+
+
+
+
+## Всякое
+```{r}
+# Проверка визитов
+vis_all %>% filter(id %in% c(548, 580))
 ```
 
