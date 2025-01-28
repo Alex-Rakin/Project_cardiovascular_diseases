@@ -251,23 +251,6 @@ write_rds(vis_all, "data/raw/vis_all.rds")
 ```
 
 
-
-```{r}
-#Прост проверки всякие (НА СНОС)
-
-
-
-
-# head(vis_all)
-# combination_counts <- vis_all %>%
-#   group_by(high_AG, AG_sbp, AG_dbp) %>%
-#   summarise(Count = n(), .groups = "drop") %>%
-#   arrange(desc(Count))
-# print(combination_counts)
-# write_xlsx(vis_all, "vis_all+AG.xlsx")
-```
-
-
 ## выбор переменных
 ```{r}
 # выбираем: id, курение, акоголь, инсульт, ЧМТ, диабет,заболевания почек в анамнезе , заболевания органов дыхания в анамнезе, заболевания ЖКТ, алергии, анемии,гнойные воспплаения, сведения о родителях, АД, масса тела,  липидограмма, когнитивные нарушения, наличие АГ
