@@ -272,10 +272,10 @@ vis_all <- vis_all %>%
           "Chronic diseases",
           "Accident"
         )
-      )),
+      ))
     # Расчёт средних значений для замеров систолических и диастолических давлений
-    sbp_all = rowMeans(select(., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)), na.rm = TRUE),
-    dbp_all = rowMeans(select(., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)), na.rm = TRUE)
+    #sbp_all = rowMeans(select(., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)), na.rm = TRUE),
+    #dbp_all = rowMeans(select(., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)), na.rm = TRUE)
     # Определение степени артериальной гипертензии
     #    AG_sbp = case_when(
     #      sbp_all < 130 ~ "n_level",
