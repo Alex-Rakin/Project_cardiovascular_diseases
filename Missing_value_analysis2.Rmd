@@ -37,9 +37,9 @@ vars_keep <- c("mmse_v8", "moca_v8", "fab_v8",
 filtered_vis_all <- vis_all[rowSums(!is.na(vis_all[, vars_keep])) > 0, ]
 
 #Выбор только целевых переменных и предикторов
-filtered_vis_all <- filtered_vis_all[, c("id", names(filtered_vis_all)[grepl("height|weight|sbp|dbp|pulse|cholesterol|hdl|mmse_v8|moca_v8|fab_v8|stsutiational_v8|stpersonal_v8|symboldigit_v8|bdi_v8", names(filtered_vis_all))])] 
-#filtered_vis_all <- filtered_vis_all %>%
-#  select(-agesmoking_v7, -yearsmoking_v7)
+filtered_vis_all <- filtered_vis_all[, c("id", names(filtered_vis_all)[grepl("smoking_|alcohol_|height|weight|sbp|dbp|pulse|cholesterol|hdl|mmse_v8|moca_v8|fab_v8|stsutiational_v8|stpersonal_v8|symboldigit_v8|bdi_v8", names(filtered_vis_all))])] 
+filtered_vis_all <- filtered_vis_all %>%
+  select(-agesmoking_v7, -yearsmoking_v7)
 
 #Выбор только целевых переменных и предикторов +курение и алкоголь
 #filtered_vis_all <- filtered_vis_all[, c("id", #names(filtered_vis_all)[grepl("smoking_|alcohol_|height|weight|sbp|dbp|pulse|cholesterol|hdl|mmse_v8|moca_v8|fab_v8|stsutiational_v8|stpersonal_v8|symboldigit_v8|bdi_v8", #names(filtered_vis_all))])] 
@@ -54,18 +54,30 @@ md.pattern(filtered_vis_all, rotate.names = TRUE)
 #Построение матрицы импутации
 predictor_matrix <- make.predictorMatrix(filtered_vis_all)
 
-# Обнуление строк переменных позволяет использовать их в качестве предикторов, в то же время не дает восполнять в них пропуски
+# Обнуление строк переменных позволяет использовать их в качестве предикторов, в то же время не дает восполнять в них пропуски??
 predictor_matrix["id", ] <- 0
 predictor_matrix[, "id"] <- 0
 
+#predictor_matrix["mmse_v8", ] <- 0
+#predictor_matrix["moca_v8", ] <- 0
+#predictor_matrix["fab_v8", ] <- 0
+#predictor_matrix["stsutiational_v8", ] <- 0
+#predictor_matrix["stpersonal_v8", ] <- 0
+#predictor_matrix["symboldigit_v8", ] <- 0
+#predictor_matrix["bdi_v8", ] <- 0
+
+#predictor_matrix[, "mmse_v8"] <- 0
+#predictor_matrix[, "moca_v8"] <- 0
+#predictor_matrix[, "fab_v8"] <- 0
+#predictor_matrix[, "stsutiational_v8"] <- 0
+#predictor_matrix[, "stpersonal_v8"] <- 0
+#predictor_matrix[, "symboldigit_v8"] <- 0
+#predictor_matrix[, "bdi_v8"] <- 0
+
+print(predictor_matrix)
+
 #id, mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8 и symboldigit_v8, bdi_v8
 ```
-
-```{r}
-colMeans(is.na(filtered_vis_all))
-
-```
-
 
 ```{r}
 method <- rep("pmm", ncol(filtered_vis_all))
@@ -80,7 +92,7 @@ imputed_data <- mice(
   filtered_vis_all,
   m = 2,
   predictorMatrix = predictor_matrix,
-  method = method,  # Передаем скорректированный метод
+  method = method,  
   maxit = 2,
   printFlag = TRUE,
   seed = 123
@@ -92,24 +104,11 @@ imputed_data <- mice(
 imputed_data_1 <- complete(imputed_data, action = 1)
 md.pattern(imputed_data_1, rotate.names = TRUE)
 ```
-```{r}
-colMeans(is.na(imputed_data_1))
-```
-
 
 ```{r, eval = FALSE, include = FALSE}
 # 1. Сохранение в RDS
-
 saveRDS(imputed_data, file = "data/raw/imputed_data_mids_raw.rds")
 ```
-
-```{r}
-imputed_data_1 <- complete(imputed_data, action = 1)
-md.pattern(imputed_data_1, rotate.names = TRUE)
-
-
-```
-
 
 ```{r, eval = FALSE, include = FALSE}
 # 2. Сохранения ДС в длинном формате
@@ -119,26 +118,80 @@ imputed_data_long <- complete(imputed_data, action = "long", include = TRUE)
 #write.csv(imputed_data_long, "data/raw/imputed_data_long.csv", row.names = FALSE)
 ```
 
-```{r}
-# 2.1. Сшиваем imputed_data_long обратно в <<<MIDS ДЛЯ ПОСТРОЕНИЯ МОДЕЛЕЙ>>>
+```{r, echo = FALSE}
+#Расчет переменных ИМТ, "САД" - среднее артериальное давление, индекс атерогенности
 
+imputed_data_long$bmi_v1 <- round(imputed_data_long$weight_v1 / ((imputed_data_long$height_v1 / 100) ^ 2), 3)
+imputed_data_long$sad_v1 <- round((1 / 3 * imputed_data_long$sbp_v1) + (2 / 3 * imputed_data_long$dbp_v1), 3)
+imputed_data_long$athero_index_v1 <- round((imputed_data_long$cholesterol_v1 - imputed_data_long$hdl_v1) / imputed_data_long$hdl_v1, 3)
+
+imputed_data_long$bmi_v2 <- round(imputed_data_long$weight_v2 / ((imputed_data_long$height_v2 / 100) ^ 2), 3)
+imputed_data_long$sad_v2 <- round((1 / 3 * imputed_data_long$sbp_v2) + (2 / 3 * imputed_data_long$dbp_v2), 3)
+imputed_data_long$athero_index_v2 <- round((imputed_data_long$cholesterol_v2 - imputed_data_long$hdl_v2) / imputed_data_long$hdl_v2, 3)
+
+imputed_data_long$bmi_v3 <- round(imputed_data_long$weight_v3 / ((imputed_data_long$height_v3 / 100) ^ 2), 3)
+imputed_data_long$sad_v3 <- round((1 / 3 * imputed_data_long$sbp_v3) + (2 / 3 * imputed_data_long$dbp_v3), 3)
+imputed_data_long$athero_index_v3 <- round((imputed_data_long$cholesterol_v3 - imputed_data_long$hdl_v3) / imputed_data_long$hdl_v3, 3)
+
+imputed_data_long$bmi_v4 <- round(imputed_data_long$weight_v4 / ((imputed_data_long$height_v4 / 100) ^ 2), 3)
+imputed_data_long$sad_v4 <- round((1 / 3 * imputed_data_long$sbp_v4) + (2 / 3 * imputed_data_long$dbp_v4), 3)
+imputed_data_long$athero_index_v4 <- round((imputed_data_long$cholesterol_v4 - imputed_data_long$hdl_v4) / imputed_data_long$hdl_v4, 3)
+
+imputed_data_long$bmi_v5 <- round(imputed_data_long$weight_v5 / ((imputed_data_long$height_v5 / 100) ^ 2), 3)
+imputed_data_long$sad_v5 <- round((1 / 3 * imputed_data_long$sbp_v5) + (2 / 3 * imputed_data_long$dbp_v5), 3)
+imputed_data_long$athero_index_v5 <- round((imputed_data_long$cholesterol_v5 - imputed_data_long$hdl_v5) / imputed_data_long$hdl_v5, 3)
+
+imputed_data_long$bmi_v6 <- round(imputed_data_long$weight_v6 / ((imputed_data_long$height_v6 / 100) ^ 2), 3)
+imputed_data_long$sad_v6 <- round((1 / 3 * imputed_data_long$sbp_v6) + (2 / 3 * imputed_data_long$dbp_v6), 3)
+imputed_data_long$athero_index_v6 <- round((imputed_data_long$cholesterol_v6 - imputed_data_long$hdl_v6) / imputed_data_long$hdl_v6, 3)
+
+imputed_data_long$bmi_v7 <- round(imputed_data_long$weight_v7 / ((imputed_data_long$height_v7 / 100) ^ 2), 3)
+imputed_data_long$sad_v7 <- round((1 / 3 * imputed_data_long$sbp_v7) + (2 / 3 * imputed_data_long$dbp_v7), 3)
+imputed_data_long$athero_index_v7 <- round((imputed_data_long$cholesterol_v7 - imputed_data_long$hdl_v7) / imputed_data_long$hdl_v7, 3)
+
+imputed_data_long$bmi_v8 <- round(imputed_data_long$weight_v8 / ((imputed_data_long$height_v8 / 100) ^ 2), 3)
+imputed_data_long$sad_v8 <- round((1 / 3 * imputed_data_long$sbp1_v8) + (2 / 3 * imputed_data_long$dbp1_v8), 3)
+imputed_data_long$athero_index_v8 <- round((imputed_data_long$cholesterol_v8 - imputed_data_long$hdl_v8) / imputed_data_long$hdl_v8, 3)
 
 ```
 
+```{r}
+colnames(imputed_data_long)
+```
+# Длинный формат данных
 
+```{r}
+imputed_data_long <- imputed_data_long %>%
+  select(.id, .imp, id, mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8, symboldigit_v8, bdi_v8,
+         matches("smoking_|alcohol_|pulse|athero_index|sad|bmi"))
+colnames(imputed_data_long)
+```
 
-```{r, eval = FALSE, include = FALSE}
-# 3. "длинный датасет перевести в еще более длинный формат"
+# Ещё длиннее формат данны
 
+```{r}
 imputed_data_longest <- imputed_data_long %>%
   pivot_longer(
-    cols = -c(.id, .imp),  # Исключаем `.id` и `.imp`, если `id` отсутствует
-    names_to = "variable",
-    values_to = "value"
+    cols = -c(.id, .imp, id),
+    names_pattern = "(.+)_(v[0-9]+)",
+    names_to = c(".value", "id_point")
+  )
+colnames(imputed_data_longest)
+```
+
+```{r}
+# Сшиваем imputed_data_longest обратно в <<<MIDS ДЛЯ ПОСТРОЕНИЯ МОДЕЛЕЙ>>>
+imputed_data_wide <- imputed_data_longest %>%
+  pivot_wider(
+    names_from = "id_point", 
+    values_from = -c(.id, .imp, id, id_point)  # Здесь мы выбираем все колонки, кроме идентификаторов
   )
 
-write.csv(imputed_data_longest, "data/raw/imputed_data_longest.csv", row.names = FALSE)
+imputed_data_mids <- as.mids(imputed_data_wide)
 ```
+
+
+
 
 ```{r, eval = FALSE, include = FALSE}
 # 4. Расчет среднего значения каждого предиктора на каждом визите из 10 восполненных 
@@ -163,46 +216,9 @@ imputed_data_mean_long <- read_csv("data/raw/imputed_data_mean_long.csv", show_c
 skim(imputed_data_mean_long)
 ```
 
-```{r, echo = FALSE}
-#Расчет переменных ИМТ, "САД" - среднее артериальное давление, индекс атерогенности
 
-imputed_data_mean_long$bmi_v1 <- round(imputed_data_mean_long$weight_v1 / ((imputed_data_mean_long$height_v1 / 100) ^ 2), 3)
-imputed_data_mean_long$sad_v1 <- round((1 / 3 * imputed_data_mean_long$sbp_v1) + (2 / 3 * imputed_data_mean_long$dbp_v1), 3)
-imputed_data_mean_long$athero_index_v1 <- round((imputed_data_mean_long$cholesterol_v1 - imputed_data_mean_long$hdl_v1) / imputed_data_mean_long$hdl_v1, 3)
 
-imputed_data_mean_long$bmi_v2 <- round(imputed_data_mean_long$weight_v2 / ((imputed_data_mean_long$height_v2 / 100) ^ 2), 3)
-imputed_data_mean_long$sad_v2 <- round((1 / 3 * imputed_data_mean_long$sbp_v2) + (2 / 3 * imputed_data_mean_long$dbp_v2), 3)
-imputed_data_mean_long$athero_index_v2 <- round((imputed_data_mean_long$cholesterol_v2 - imputed_data_mean_long$hdl_v2) / imputed_data_mean_long$hdl_v2, 3)
 
-imputed_data_mean_long$bmi_v3 <- round(imputed_data_mean_long$weight_v3 / ((imputed_data_mean_long$height_v3 / 100) ^ 2), 3)
-imputed_data_mean_long$sad_v3 <- round((1 / 3 * imputed_data_mean_long$sbp_v3) + (2 / 3 * imputed_data_mean_long$dbp_v3), 3)
-imputed_data_mean_long$athero_index_v3 <- round((imputed_data_mean_long$cholesterol_v3 - imputed_data_mean_long$hdl_v3) / imputed_data_mean_long$hdl_v3, 3)
-
-imputed_data_mean_long$bmi_v4 <- round(imputed_data_mean_long$weight_v4 / ((imputed_data_mean_long$height_v4 / 100) ^ 2), 3)
-imputed_data_mean_long$sad_v4 <- round((1 / 3 * imputed_data_mean_long$sbp_v4) + (2 / 3 * imputed_data_mean_long$dbp_v4), 3)
-imputed_data_mean_long$athero_index_v4 <- round((imputed_data_mean_long$cholesterol_v4 - imputed_data_mean_long$hdl_v4) / imputed_data_mean_long$hdl_v4, 3)
-
-imputed_data_mean_long$bmi_v5 <- round(imputed_data_mean_long$weight_v5 / ((imputed_data_mean_long$height_v5 / 100) ^ 2), 3)
-imputed_data_mean_long$sad_v5 <- round((1 / 3 * imputed_data_mean_long$sbp_v5) + (2 / 3 * imputed_data_mean_long$dbp_v5), 3)
-imputed_data_mean_long$athero_index_v5 <- round((imputed_data_mean_long$cholesterol_v5 - imputed_data_mean_long$hdl_v5) / imputed_data_mean_long$hdl_v5, 3)
-
-imputed_data_mean_long$bmi_v6 <- round(imputed_data_mean_long$weight_v6 / ((imputed_data_mean_long$height_v6 / 100) ^ 2), 3)
-imputed_data_mean_long$sad_v6 <- round((1 / 3 * imputed_data_mean_long$sbp_v6) + (2 / 3 * imputed_data_mean_long$dbp_v6), 3)
-imputed_data_mean_long$athero_index_v6 <- round((imputed_data_mean_long$cholesterol_v6 - imputed_data_mean_long$hdl_v6) / imputed_data_mean_long$hdl_v6, 3)
-
-imputed_data_mean_long$bmi_v7 <- round(imputed_data_mean_long$weight_v7 / ((imputed_data_mean_long$height_v7 / 100) ^ 2), 3)
-imputed_data_mean_long$sad_v7 <- round((1 / 3 * imputed_data_mean_long$sbp_v7) + (2 / 3 * imputed_data_mean_long$dbp_v7), 3)
-imputed_data_mean_long$athero_index_v7 <- round((imputed_data_mean_long$cholesterol_v7 - imputed_data_mean_long$hdl_v7) / imputed_data_mean_long$hdl_v7, 3)
-
-imputed_data_mean_long$bmi_v8 <- round(imputed_data_mean_long$weight_v8 / ((imputed_data_mean_long$height_v8 / 100) ^ 2), 3)
-imputed_data_mean_long$sad_v8 <- round((1 / 3 * imputed_data_mean_long$sbp1_v8) + (2 / 3 * imputed_data_mean_long$dbp1_v8), 3)
-imputed_data_mean_long$athero_index_v8 <- round((imputed_data_mean_long$cholesterol_v8 - imputed_data_mean_long$hdl_v8) / imputed_data_mean_long$hdl_v8, 3)
-
-```
-
-```{r}
-#intersect(colnames(imputed_data_mean_long), colnames(filtered_vis_all_add))
-```
 
 ```{r}
 # Берем те переменные, которые нужно добавить к восполненному датасету
