@@ -20,7 +20,8 @@ library(mice)
 library(lme4)
 library(broom.mixed)
 library(BlandAltmanLeh) # для Bland-Altman plots
-library(igraph) # для сетевого графика значимости 
+
+library(gtsummary) # для описательной статистики
 
 ```
 
@@ -743,8 +744,8 @@ run_mcnemar_test_pair <- function(var1, var2) {
     return(data.frame(
       variable1 = var1,
       variable2 = var2,
-      p.value = round(test_result$p.value,4),
-      statistic = round(test_result$statistic,4),
+      p.value = round(test_result$p.value,5),
+      statistic = round(test_result$statistic,5),
       warning = NA
     ))
   } else {
@@ -770,20 +771,39 @@ results %>% flextable() %>%
 
 ```{r}
 
+# Задаем желаемый порядок переменных
+var_order <- c(
+  "memoryloss_v8",
+  "moca_bin",
+  "mmse_bin",
+  "fab_bin",
+  "symboldigit_bin",
+  "bdi_bin",
+  "stsutiational_bin",
+  "stpersonal_bin"
+)
 
+# Преобразуем данные и устанавливаем конкретный порядок
 heatmap_data <- results %>%
+# filter(!is.na(p.value)) %>%  # Исключаем невалидные тесты
+  select(variable1, variable2, p.value) %>%
+  mutate(significant = ifelse(p.value < 0.05, "yes", "no")) %>%  # Добавляем признак значимости
+  mutate(
+    variable1 = factor(variable1, levels = var_order),  # Упорядочиваем variable1
+    variable2 = factor(variable2, levels = var_order)   # Упорядочиваем variable2
+  )
 
-  select(variable1, variable2, p.value) 
-
-
-# Тепловая карта
+# Построение тепловой карты
 ggplot(heatmap_data, aes(x = variable1, y = variable2, fill = p.value)) +
-  geom_tile(color = "black") +  # Квадраты тепловой карты
-  scale_fill_gradient(low = "white", high = "red", name = "p-value") + # Цветовая шкала
-  geom_text(aes(label = round(p.value, 3)), color = "black", size = 3) +  # Подписи p-value
+  geom_tile(color = "black") + 
+  # scale_fill_gradientn(colours = grDevices::Cyan-Magenta(10))+
+  scale_fill_gradient(low = "#DEB0D0", high = "white", na.value = "grey90") + # Цветовая шкала
+  geom_text(aes(label = gtsummary::style_pvalue(p.value, 3)), color = "black", size = 3) +  # Подписи p-value
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(title = "Тепловая карта p-значений", x = "Переменная 1", y = "Переменная 2")
+  theme(panel.grid.major = element_blank(),
+        axis.title = element_blank())+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +  # Поворот подписи оси X
+  labs(title = "Результаты теста Мак-Неймара, p-значения")
 ```
 
 ## Всякое
@@ -832,6 +852,7 @@ vis_all %>% select(
   )
 
 
+gtsummary::style_pvalue(p, 3)
 ```
 
  
