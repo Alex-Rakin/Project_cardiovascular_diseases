@@ -16,9 +16,11 @@ library(ggExtra) # для соединения графиков
 library(ggpubr) # для соединения графиков
 library(GGally)
 library(corrplot)
-
-
+library(mice)
+library(lme4)
+library(broom.mixed)
 library(BlandAltmanLeh) # для Bland-Altman plots
+library(igraph) # для сетевого графика значимости 
 
 ```
 
@@ -396,7 +398,7 @@ a2 %>%  save_as_html( values = NULL, path ="data/raw/fltab_numeric.html", lang =
 ##составление корреляционной матрицы
 ```{r, fig.width=12, fig.height=12}
 data02 <- vis_all %>% select(
-  id, tricepskinfold_v7, weight_v7, weight_v8, smoking_v8, alcohol_v8, cad_v8, sbp_all, dbp_all, cg_imp_all, height_v8, cholesterol_v8, hdl_v8, tg_v8, ldl_v8, vldl_v8
+  id, tricepskinfold_v7, weight_v7, weight_v8, smoking_v8, alcohol_v8, cad_v8, cg_imp_all, height_v8, cholesterol_v8, hdl_v8, tg_v8, ldl_v8, vldl_v8
 ) 
 
 data02 %>% select(is.numeric & -id) %>% na.omit() %>% cor() %>% corrplot(method = "number")
@@ -630,8 +632,195 @@ ggsave("bland_altman_plot_emotion.png", plot = p02, path = "data/pics/", width =
 
 ```
 
+## Критерий Мкнеймара
+
+```{r}
+# mcnemar.test()
+# Сравним различия между тестами для оценки состояния когнитивной сферы  / тесты для оценки эмоционально-аффективной сферы(дихотомические переменные) и жалобами на снижение памяти.
+# Для этого заведем новые перемееные переводящие резкльтаты психологических тестов в дихотомические переменные. 1- есть нарушение, 0 - нет нарушений.
 
 
+dataset_for_mcnemar <- vis_all %>%
+  select(
+    "id",
+    "memoryloss_v8",
+    "moca_v8",
+    "mmse_v8",
+    "fab_v8",
+    "symboldigit_v8",
+    "bdi_v8",
+    "stsutiational_v8" ,
+    "stpersonal_v8"
+    
+  )
+
+dataset_for_mcnemar <- dataset_for_mcnemar %>% 
+  mutate(
+    memoryloss_v8 = ifelse(memoryloss_v8==2, 0,1 ),
+    moca_bin = ifelse(moca_v8<26, 1,0 ),
+    mmse_bin = ifelse(mmse_v8<29, 1,0 ),
+    fab_bin = ifelse(fab_v8<16, 1,0 ),
+    symboldigit_bin = ifelse(symboldigit_v8<45, 1,0 ),
+    bdi_bin = ifelse(bdi_v8>13, 1,0 ),
+    stsutiational_bin = ifelse(stsutiational_v8>30, 1,0 ),
+    stpersonal_bin = ifelse(stpersonal_v8>30, 1,0 )
+  )
+
+
+
+var_for_mcnemar <- c("moca_bin",
+"mmse_bin",
+"fab_bin" ,
+"symboldigit_bin",
+"bdi_bin",
+"stsutiational_bin",
+"stpersonal_bin")
+
+run_mcnemar_test <- function(var) {
+  tbl <- table(dataset_for_mcnemar $memoryloss_v8, dataset_for_mcnemar[[var]])
+  test_result <- mcnemar.test(tbl)
+  return(data.frame(variable = var, p.value = round(test_result$p.value, 4) , statistic = round(test_result$statistic, 4)))
+}
+
+results_mcmemar <-  map_dfr(var_for_mcnemar, run_mcnemar_test) %>% flextable() 
+
+#  mcnemar.test(table(dataset_for_mcnemar$moca_bin, dataset_for_mcnemar$fab_bin))
+```
+
+
+```{r}
+#  GTP  подсказал код 
+# Генерируем список бинарных переменных
+var_for_mcnemar <- c(
+  "memoryloss_v8",
+  "moca_bin",
+  "mmse_bin",
+  "fab_bin",
+  "symboldigit_bin",
+  "bdi_bin",
+  "stsutiational_bin",
+  "stpersonal_bin"
+)
+
+# Функция для выполнения теста Мак-Нимара для пары переменных
+run_mcnemar_test_pair <- function(var1, var2) {
+  # Создание таблицы сопряженности
+  tbl <- table(dataset_for_mcnemar[[var1]], dataset_for_mcnemar[[var2]])
+  
+  # Проверка, что таблица корректна (без пустых клеток)
+  if (any(tbl < 1)) {
+    return(data.frame(
+      variable1 = var1,
+      variable2 = var2,
+      p.value = NA,
+      statistic = NA,
+      warning = "Table contains zeros"
+    ))
+  }
+  
+  # Выполнение теста Мак-Нимара (пробуем с обработкой исключений)
+  test_result <- tryCatch(
+    mcnemar.test(tbl),
+    error = function(e) {
+      return(data.frame(
+        variable1 = var1,
+        variable2 = var2,
+        p.value = NA,
+        statistic = NA,
+        warning = "Test failed"
+      ))
+    }
+  )
+
+  # Если тест прошел успешно, возвращаем результат
+  if (inherits(test_result, "htest")) {
+    return(data.frame(
+      variable1 = var1,
+      variable2 = var2,
+      p.value = round(test_result$p.value,4),
+      statistic = round(test_result$statistic,4),
+      warning = NA
+    ))
+  } else {
+    return(test_result)
+  }
+}
+
+# Генерация всех возможных пар переменных
+all_pairs <- combn(var_for_mcnemar, 2, simplify = FALSE)
+
+# Применение теста Мак-Нимара ко всем парам переменных
+results <- map_dfr(all_pairs, ~ run_mcnemar_test_pair(.x[1], .x[2]))
+
+# Вывод результатов
+results %>% flextable() %>% 
+ theme_box() %>% 
+  align(align = "center", part = "all") %>% 
+  merge_v("variable1") %>%  save_as_html( values = NULL, path ="data/raw/ результаты_теста_макнеймара.html", lang = "en", title = "&#32;")
+```
+
+
+
+
+```{r}
+ggplot(results, aes(x = reorder(variable1, p.value), y = p.value, color = variable2)) +
+  geom_point(size = 3) +  # Точки для p-значений
+  geom_hline(yintercept = 0.05, linetype = "dashed", color = "red") +  # Линия уровня значимости (0.05)
+  theme_minimal() +
+  labs(
+    title = "Диаграмма точек для p-значений",
+    x = "Переменная 1",
+    y = "p-значение",
+    color = "Переменная 2"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_y_log10()  # Логарифмическая шкала, чтобы лучше увидеть различие в значениях
+
+
+
+
+
+library(igraph)
+
+# Оставляем только значимые результаты (p-value < 0.05)
+edges <- results %>%
+  filter(!is.na(p.value) & p.value < 0.05) %>%
+  select(variable1, variable2)
+
+# Создаем граф из значимых соединений
+graph <- graph_from_data_frame(edges)
+
+# Визуализация графа
+plot(
+  graph,
+  vertex.size = 20,
+  vertex.label.cex = 0.8,
+  edge.arrow.size = 0.5,
+  main = "Сетевой график значимых результатов (p-value < 0.05)"
+)
+
+
+
+
+
+
+# Преобразуйте результаты в формат «длинной таблицы»
+heatmap_data <- results %>%
+  filter(!is.na(p.value)) %>%  # Исключение невалидных тестов
+  select(variable1, variable2, p.value) %>%
+  mutate(significant = ifelse(p.value < 0.05, "yes", "no"))  # Добавляем признак значимости
+
+# Тепловая карта
+ggplot(heatmap_data, aes(x = variable1, y = variable2, fill = p.value)) +
+  geom_tile(color = "grey") +  # Квадраты тепловой карты
+  scale_fill_gradient(low = "white", high = "red", name = "p-value") + # Цветовая шкала
+  geom_text(aes(label = round(p.value, 3)), color = "black", size = 3) +  # Подписи p-value
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Тепловая карта p-значений", x = "Переменная 1", y = "Переменная 2")
+
+
+```
 
 ## Всякое
 ```{r}
@@ -649,6 +838,7 @@ a1 %>% flextable() %>%
   align(align = "center", part = "all") %>%  save_as_html( values = NULL, path ="data/raw/проверка визитов без пропусков.html", lang = "en", title = "&#32;")
 
  
- 
+
 ```
+
 
