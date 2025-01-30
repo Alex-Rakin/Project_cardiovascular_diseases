@@ -21,44 +21,59 @@ library(mice)
 ```{r, echo = FALSE}
 #Чтение данных
 vis_all <- read_csv("data/raw/vis_all.csv", show_col_types = FALSE)
+
+# Усредняем 3 замера давления + СМАД на 8 визите
+vis_all <- vis_all %>%
+  mutate(sbp_v8 = rowMeans(select(., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)), na.rm = TRUE),
+         dbp_v8 = rowMeans(select(., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)), na.rm = TRUE))
 ```
 
 
 ```{r}
 #Анализ пропусков
 
-#Взяты все строки кроме NA в moca
-#filtered_vis_all <- vis_all[!is.na(vis_all$moca_v8), ] 
+#Взяты все строки кроме NA в moca_v8
+filtered_vis_all <- vis_all[!is.na(vis_all$moca_v8), ] 
 
 # Взяты все строки кроме NA в mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8 и symboldigit_v8, bdi_v8
+
+# Выбор целевых переменных
 vars_keep <- c("mmse_v8", "moca_v8", "fab_v8", 
                "stsutiational_v8", "stpersonal_v8", 
                "symboldigit_v8", "bdi_v8")
-filtered_vis_all <- vis_all[rowSums(!is.na(vis_all[, vars_keep])) > 0, ]
+
+#filtered_vis_all <- vis_all[rowSums(!is.na(vis_all[, vars_keep])) > 0, ]
+
+vars_imp <- names(filtered_vis_all)[grepl("^smoking_|^alcohol_|height|weight|^sbp_|^dbp_|pulse|cholesterol|hdl|mmse_v8|moca_v8|fab_v8|stsutiational_v8|stpersonal_v8|symboldigit_v8|bdi_v8", names(filtered_vis_all))]
+# $ в конце
+
+filtered_vis_all <- filtered_vis_all[rowSums(!is.na(filtered_vis_all[, vars_imp])) > 0, ]
 
 #Выбор только целевых переменных и предикторов
-filtered_vis_all <- filtered_vis_all[, c("id", names(filtered_vis_all)[grepl("smoking_|alcohol_|height|weight|sbp|dbp|pulse|cholesterol|hdl|mmse_v8|moca_v8|fab_v8|stsutiational_v8|stpersonal_v8|symboldigit_v8|bdi_v8", names(filtered_vis_all))])] 
-filtered_vis_all <- filtered_vis_all %>%
-  select(-agesmoking_v7, -yearsmoking_v7)
+filtered_vis_all <- filtered_vis_all[, c("id", vars_imp)] 
 
+#filtered_vis_all <- filtered_vis_all %>%
+#  select(-agesmoking_v7, -yearsmoking_v7)
 #Выбор только целевых переменных и предикторов +курение и алкоголь
 #filtered_vis_all <- filtered_vis_all[, c("id", #names(filtered_vis_all)[grepl("smoking_|alcohol_|height|weight|sbp|dbp|pulse|cholesterol|hdl|mmse_v8|moca_v8|fab_v8|stsutiational_v8|stpersonal_v8|symboldigit_v8|bdi_v8", #names(filtered_vis_all))])] 
 #filtered_vis_all <- filtered_vis_all %>%
 #  select(-agesmoking_v7, -yearsmoking_v7)
 
 md.pattern(filtered_vis_all, rotate.names = TRUE)
+colnames(filtered_vis_all)
 ```
-# Первый вариант импутации
+# Построение матрицы импутации
 
 ```{r}
 #Построение матрицы импутации
 predictor_matrix <- make.predictorMatrix(filtered_vis_all)
 
 # Обнуление строк переменных позволяет использовать их в качестве предикторов, в то же время не дает восполнять в них пропуски??
+
 predictor_matrix["id", ] <- 0
 predictor_matrix[, "id"] <- 0
 
-#predictor_matrix["mmse_v8", ] <- 0
+predictor_matrix[vars_keep,] <- 0
 #predictor_matrix["moca_v8", ] <- 0
 #predictor_matrix["fab_v8", ] <- 0
 #predictor_matrix["stsutiational_v8", ] <- 0
@@ -74,12 +89,14 @@ predictor_matrix[, "id"] <- 0
 #predictor_matrix[, "symboldigit_v8"] <- 0
 #predictor_matrix[, "bdi_v8"] <- 0
 
-print(predictor_matrix)
+#print(predictor_matrix)
 
 #id, mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8 и symboldigit_v8, bdi_v8
 ```
 
 ```{r}
+# Чанк импутации. В следующем чанке загрузка результата импутации
+
 method <- rep("pmm", ncol(filtered_vis_all))
 names(method) <- colnames(filtered_vis_all)
 
@@ -90,31 +107,61 @@ method[c("id", "mmse_v8", "moca_v8", "fab_v8",
 
 imputed_data <- mice(
   filtered_vis_all,
-  m = 2,
+  m = 10,
   predictorMatrix = predictor_matrix,
   method = method,  
-  maxit = 2,
-  printFlag = TRUE,
+  maxit = 10,
+  printFlag = FALSE,
   seed = 123
 )
 
 ```
+```{r}
+# Сохранение результатов импутации
+saveRDS(imputed_data, file = "data/raw/imputed_data_rawmids.rds")
+```
 
 ```{r}
+# Загрузка результатов импутации
+imputed_data <- imputed_data <- readRDS("data/raw/imputed_data_rawmids.rds")
+```
+
+```{r}
+# Оценка паттернов пропусков в 1 импутированном датасете
 imputed_data_1 <- complete(imputed_data, action = 1)
 md.pattern(imputed_data_1, rotate.names = TRUE)
+
+not_na_imputed <- imputed_data_1 %>% 
+  filter_all(function(x) !is.na(x))
+
+# Оценка паттернов пропусков в оригинальном датасете из тех, кто был полностью импутирован
+filtered_vis_all_not_na <- filtered_vis_all %>%
+  filter(id %in% not_na_imputed$id)
+md.pattern(filtered_vis_all_not_na, rotate.names = TRUE)
+
+
+# Оценка паттернов пропусков в оригинальном датасете из тех, кто не был полностью импутирован
+filtered_vis_all_na <- filtered_vis_all %>%
+  filter(!id %in% not_na_imputed$id)
+md.pattern(filtered_vis_all_na, rotate.names = TRUE)
+
+# Результат оценки: ничего не понятно. В когорте импутированных даже есть чел с одним визитом и без целевых переменных и ему всё равно mice всё собрал...
+
+#vis_all %>% filter(id == 648) %>% View()
+
+#filter_all()
+#not_na_imputed <- imputed_data_1[rowSums(!is.na(imputed_data_1)) > 0, ]
+#filtered_vis_all <- vis_all[rowSums(!is.na(vis_all[, vars_keep])) > 0, ]
+```
+
+```{r}
+colnames(imputed_data_1)
 ```
 
 ```{r, eval = FALSE, include = FALSE}
-# 1. Сохранение в RDS
-saveRDS(imputed_data, file = "data/raw/imputed_data_mids_raw.rds")
-```
-
-```{r, eval = FALSE, include = FALSE}
-# 2. Сохранения ДС в длинном формате
+# Сохранения ДС в длинном формате
 
 imputed_data_long <- complete(imputed_data, action = "long", include = TRUE)
-
 #write.csv(imputed_data_long, "data/raw/imputed_data_long.csv", row.names = FALSE)
 ```
 
@@ -150,169 +197,48 @@ imputed_data_long$sad_v7 <- round((1 / 3 * imputed_data_long$sbp_v7) + (2 / 3 * 
 imputed_data_long$athero_index_v7 <- round((imputed_data_long$cholesterol_v7 - imputed_data_long$hdl_v7) / imputed_data_long$hdl_v7, 3)
 
 imputed_data_long$bmi_v8 <- round(imputed_data_long$weight_v8 / ((imputed_data_long$height_v8 / 100) ^ 2), 3)
-imputed_data_long$sad_v8 <- round((1 / 3 * imputed_data_long$sbp1_v8) + (2 / 3 * imputed_data_long$dbp1_v8), 3)
+imputed_data_long$sad_v8 <- round((1 / 3 * imputed_data_long$sbp_v8) + (2 / 3 * imputed_data_long$dbp_v8), 3)
 imputed_data_long$athero_index_v8 <- round((imputed_data_long$cholesterol_v8 - imputed_data_long$hdl_v8) / imputed_data_long$hdl_v8, 3)
 
 ```
 
 ```{r}
-colnames(imputed_data_long)
+# Проверка столбцов
+#colnames(imputed_data_long)
 ```
 # Длинный формат данных
 
 ```{r}
 imputed_data_long <- imputed_data_long %>%
-  select(.id, .imp, id, mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8, symboldigit_v8, bdi_v8,
-         matches("smoking_|alcohol_|pulse|athero_index|sad|bmi"))
+  select(.id, .imp, id, everything())
 colnames(imputed_data_long)
 ```
 
-# Ещё длиннее формат данны
-
+# Ещё длиннее формат данных
+# <<<MIDS ДЛЯ ПОСТРОЕНИЯ МОДЕЛЕЙ>>>
 ```{r}
-imputed_data_longest <- imputed_data_long %>%
+# Сшиваем imputed_data_longest обратно в <<<MIDS ДЛЯ ПОСТРОЕНИЯ МОДЕЛЕЙ>>>
+
+imputed_data_longest_forMIDS <- imputed_data_long %>%
   pivot_longer(
-    cols = -c(.id, .imp, id),
-    names_pattern = "(.+)_(v[0-9]+)",
+    cols = -c(.id, .imp, id, all_of(vars_keep)),
+    names_pattern = "(.+)_(.+)",
     names_to = c(".value", "id_point")
   )
+colnames(imputed_data_longest_forMIDS)
+saveRDS(imputed_data_longest_forMIDS, file = "data/raw/imputed_data_mids_raw.rds")
+
+```
+
+#ЗДЕСЬ ЕЩЁ НАДО СРЕДНЮЮ ПО ДАТАСЕТАМ СОБРАТЬ ЖЕ
+
+```{r}
+# Датасеты для графиков
+# Самый длинный формат без "нулевой" импутации
+
+imputed_data_longest <- imputed_data_long %>%
+  filter(.imp != 0)  # Убрали строки с .imp == 0
 colnames(imputed_data_longest)
 ```
 
-```{r}
-# Сшиваем imputed_data_longest обратно в <<<MIDS ДЛЯ ПОСТРОЕНИЯ МОДЕЛЕЙ>>>
-imputed_data_wide <- imputed_data_longest %>%
-  pivot_wider(
-    names_from = "id_point", 
-    values_from = -c(.id, .imp, id, id_point)  # Здесь мы выбираем все колонки, кроме идентификаторов
-  )
-
-imputed_data_mids <- as.mids(imputed_data_wide)
-```
-
-
-
-
-```{r, eval = FALSE, include = FALSE}
-# 4. Расчет среднего значения каждого предиктора на каждом визите из 10 восполненных 
-
-#imputed_data_mean_long <- imputed_data_long %>%
-#  group_by(.id, .imp) %>%  # Группируем по пациенту и номеру импутации
-#  summarise(across(where(is.numeric), ~mean(.x, na.rm = TRUE)), .groups = "drop")
-
-imputed_data_mean_long <- imputed_data_long %>%
-  group_by(.id) %>%  # Только по пациенту, без учета импутаций
-  summarise(across(where(is.numeric), ~mean(.x, na.rm = TRUE)), .groups = "drop")
-
-
-write.csv(imputed_data_mean_long, "data/raw/imputed_data_mean_long.csv", row.names = FALSE)
-```
-
-
-```{r, echo = FALSE}
-#Загрузка восполненного усредненного датасета из файла
-
-imputed_data_mean_long <- read_csv("data/raw/imputed_data_mean_long.csv", show_col_types = FALSE)
-skim(imputed_data_mean_long)
-```
-
-
-
-
-
-```{r}
-# Берем те переменные, которые нужно добавить к восполненному датасету
-
-filtered_vis_all_add <- filtered_vis_all %>%
-  select(id, mmse_v8, fab_v8, stsutiational_v8, stpersonal_v8, symboldigit_v8, bdi_v8)
-df_combined <- bind_cols(imputed_data_mean_long, filtered_vis_all_add)
-
-
-#df_combined <- df_combined %>%
-# select(id, )
-```
-
 # Конец
-
-```{r}
-# Собираем восполненный датасет и целевые переменные
-
-df_combined <- df_combined[, c("id", sort(names(df_combined)[grepl("sad|bmi|athero_index|pulse|mmse_v8|moca_v8|fab_v8|stsutiational_v8|stpersonal_v8|symboldigit_v8|bdi_v8", names(df_combined))]))]
- 
-```
-
-
-
-
-
-
-
-
-# Датасеты для целевых переменных
-
-###Список целевых переменных
-###mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8 и symboldigit_v8, bdi_v8
-
-## Датасет для целевой переменной mmse
-
-```{r, echo = FALSE}
-mmse_data <- vis_all %>%
-  select(id, mmse_v8)
-mmse_data <- mmse_data %>%
-  right_join(imputed_data, by = 'id') %>%
-  filter(!is.na(mmse_v8)) 
-#skim(mmse_data)
-```
-
-## Датасет для целевой переменной moca
-
-```{r}
-moca_data <- vis_all %>%
-  select(id, moca_v8)
-moca_data <- moca_data %>%
-  right_join(imputed_data, by = 'id') %>%
-  filter(!is.na(moca_v8)) 
-```
-
-## Датасет для целевой переменной fab
-
-```{r}
-fab_data <- vis_all %>%
-  select(id, fab_v8)
-fab_data <- fab_data %>%
-  right_join(imputed_data, by = 'id') %>%
-  filter(!is.na(fab_v8)) 
-```
-
-## Датасет для целевой переменной stsutiational
-
-```{r}
-stsutiational_data <- vis_all %>%
-  select(id, stsutiational_v8)
-stsutiational_data <- stsutiational_data %>%
-  right_join(imputed_data, by = 'id') %>%
-  filter(!is.na(stsutiational_v8)) 
-```
-
-## Датасет для целевой переменной stpersonal & symboldigit
-
-```{r}
-stpersonal_symboldigit_data <- vis_all %>%
-  select(id, stpersonal_v8, symboldigit_v8)
-stpersonal_symboldigit_data <- stpersonal_symboldigit_data %>%
-  right_join(imputed_data, by = 'id') %>%
-  filter(!is.na(stpersonal_v8)) #Здесь сделал одну переменную, т.к. они заполнены или пропущены вместе
-```
-
-## Датасет для целевой переменной bdi_v8
-
-```{r}
-bdi_data <- vis_all %>%
-  select(id, bdi_v8)
-bdi_data <- bdi_data %>%
-  right_join(imputed_data, by = 'id') %>%
-  filter(!is.na(bdi_v8)) 
-```
-
-
-
