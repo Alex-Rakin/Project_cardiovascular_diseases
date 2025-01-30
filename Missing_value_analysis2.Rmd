@@ -367,7 +367,7 @@ predictor_matrix["id", ] <- 0
 predictor_matrix[, "id"] <- 0
 
 predictor_matrix[vars_keep,] <- 0
-#predictor_matrix["moca_v8", ] <- 0
+predictor_matrix[,vars_keep[vars_keep !="moca_v8"]] <- 0
 #predictor_matrix["fab_v8", ] <- 0
 #predictor_matrix["stsutiational_v8", ] <- 0
 #predictor_matrix["stpersonal_v8", ] <- 0
