@@ -306,9 +306,15 @@ vis_all <- vis_all %>%
     #      },
     #      TRUE ~ NA_character_)
    )
+
+
+# Исправление ошибок ввода 
     
-    
-vis_all$stroke_v7 %>% str()
+ vis_all[vis_all$id == 333, "height_v8"] = 178
+ vis_all[vis_all$id == 410, "height_v8"] = 172
+vis_all[vis_all$id == 779, "height_v8"] = 180
+vis_all[vis_all$id == 779, "weight_v8"] = 115
+
 
 write_rds(vis_all, "data/raw/vis_all.rds")
 ```
@@ -763,81 +769,68 @@ results %>% flextable() %>%
 
 
 ```{r}
-ggplot(results, aes(x = reorder(variable1, p.value), y = p.value, color = variable2)) +
-  geom_point(size = 3) +  # Точки для p-значений
-  geom_hline(yintercept = 0.05, linetype = "dashed", color = "red") +  # Линия уровня значимости (0.05)
-  theme_minimal() +
-  labs(
-    title = "Диаграмма точек для p-значений",
-    x = "Переменная 1",
-    y = "p-значение",
-    color = "Переменная 2"
-  ) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_y_log10()  # Логарифмическая шкала, чтобы лучше увидеть различие в значениях
 
 
-
-
-
-library(igraph)
-
-# Оставляем только значимые результаты (p-value < 0.05)
-edges <- results %>%
-  filter(!is.na(p.value) & p.value < 0.05) %>%
-  select(variable1, variable2)
-
-# Создаем граф из значимых соединений
-graph <- graph_from_data_frame(edges)
-
-# Визуализация графа
-plot(
-  graph,
-  vertex.size = 20,
-  vertex.label.cex = 0.8,
-  edge.arrow.size = 0.5,
-  main = "Сетевой график значимых результатов (p-value < 0.05)"
-)
-
-
-
-
-
-
-# Преобразуйте результаты в формат «длинной таблицы»
 heatmap_data <- results %>%
-  filter(!is.na(p.value)) %>%  # Исключение невалидных тестов
-  select(variable1, variable2, p.value) %>%
-  mutate(significant = ifelse(p.value < 0.05, "yes", "no"))  # Добавляем признак значимости
+
+  select(variable1, variable2, p.value) 
+
 
 # Тепловая карта
 ggplot(heatmap_data, aes(x = variable1, y = variable2, fill = p.value)) +
-  geom_tile(color = "grey") +  # Квадраты тепловой карты
+  geom_tile(color = "black") +  # Квадраты тепловой карты
   scale_fill_gradient(low = "white", high = "red", name = "p-value") + # Цветовая шкала
   geom_text(aes(label = round(p.value, 3)), color = "black", size = 3) +  # Подписи p-value
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(title = "Тепловая карта p-значений", x = "Переменная 1", y = "Переменная 2")
-
-
 ```
 
 ## Всякое
 ```{r}
 # Проверка визитов
-a1 <- vis_all %>% select(mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8, symboldigit_v8, bdi_v8, mmse__cl, -moca_cl, cognitiveimpairment_cl, memoryloss_cl) %>%  summarise(across(everything(), ~ sum(!is.na(.))))
-
-
-
-a1 %>% flextable() %>% 
+vis_all %>% select(
+  mmse_v8,
+  moca_v8,
+  fab_v8,
+  stsutiational_v8,
+  stpersonal_v8,
+  symboldigit_v8,
+  bdi_v8,
+  mmse__cl,
+  -moca_cl,
+  cognitiveimpairment_cl,
+  memoryloss_cl
+) %>%  summarise(across(everything(), ~ sum(!is.na(.)))) %>% flextable() %>%
   theme_box() %>%
-  align(align = "center", part = "all") %>%  save_as_html( values = NULL, path ="data/raw/проверка визитов.html", lang = "en", title = "&#32;")
+  align(align = "center", part = "all") %>%  save_as_html(
+    values = NULL,
+    path = "data/raw/проверка визитов.html",
+    lang = "en",
+    title = "&#32;"
+  )
 
- vis_all %>% select(mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8, symboldigit_v8, bdi_v8, mmse__cl, -moca_cl, cognitiveimpairment_cl,  memoryloss_cl) %>% na.omit() %>% summarise(across(everything(), ~ sum(!is.na(.))))%>% flextable() %>% 
+vis_all %>% select(
+  mmse_v8,
+  moca_v8,
+  fab_v8,
+  stsutiational_v8,
+  stpersonal_v8,
+  symboldigit_v8,
+  bdi_v8,
+  mmse__cl,
+  -moca_cl,
+  cognitiveimpairment_cl,
+  memoryloss_cl
+) %>% na.omit() %>% summarise(across(everything(), ~ sum(!is.na(.)))) %>% flextable() %>%
   theme_box() %>%
-  align(align = "center", part = "all") %>%  save_as_html( values = NULL, path ="data/raw/проверка визитов без пропусков.html", lang = "en", title = "&#32;")
+  align(align = "center", part = "all") %>%  save_as_html(
+    values = NULL,
+    path = "data/raw/проверка визитов без пропусков.html",
+    lang = "en",
+    title = "&#32;"
+  )
 
- 
 
 ```
 
