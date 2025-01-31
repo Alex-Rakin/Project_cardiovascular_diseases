@@ -1,0 +1,113 @@
+---
+title: "PCA-analysis before imptation"
+author: 
+date: 
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(writexl)
+library(tidyverse)
+library(skimr)
+library(ggpubr)
+library(factoextra)
+library(FactoMineR)
+library(corrplot)
+library(GGally)
+library(rstatix)
+library(pheatmap)
+library(heatmaply)
+library(cluster)
+library(tidymodels)
+library(embed)
+library(umap)
+library(plotly)
+library(naniar)
+library(ggbiplot)
+library(reshape2)
+library(corrr)
+library(ggbiplot)
+library(patchwork)
+
+```
+
+## Загрузка датасета
+```{r}
+vis_all <- readRDS("data/raw/vis_all.rds")
+ 
+data_for_pca <- vis_all %>%
+  select(
+    
+    "moca_v8",
+    "mmse_v8",
+    "fab_v8",
+    "symboldigit_v8",
+    "bdi_v8",
+    "stsutiational_v8" ,
+    "stpersonal_v8") 
+
+
+# Проверка датасета на количество заполненых значений до удаления пропусков
+data_for_pca %>%  summarise(across(everything(), ~ sum(!is.na(.)))) %>% flextable() %>%
+  theme_box()
+
+# Проверка датасета на количество заполненых значений ПОСЛЕ удаления пропусков
+data_for_pca %>% na.omit %>%  summarise(across(everything(), ~ sum(!is.na(.)))) %>% flextable() %>%
+  theme_box()
+
+# А надо ли визуализировать?
+# na_percentage <- sapply(data_for_pca, function(x) mean(is.na(x)) * 100)
+# na_percentage_df <- data.frame(Variable = names(na_percentage), NA_Percentage = na_percentage)
+# print(na_percentage_df)
+# 
+# ggplot(na_percentage_df, aes(x = reorder(Variable, -NA_Percentage), y = NA_Percentage)) +
+#   geom_bar(stat = "identity", fill = "steelblue") +
+#   coord_flip() +
+#   labs(title = "Процент пропущенных значений по переменным", x = "Переменные", y = "% NA") +
+#   theme_minimal()
+# 
+# # ggsave("na_percentage_plot.png", width = 10, height = 8)
+
+```
+
+```{r}
+pca_data <- prcomp(data_for_pca %>% na.omit,scale = TRUE)
+```
+
+```{r}
+pic_6 <- fviz_eig(pca_data, addlabels = TRUE, ylim = c(0, 50), main = "Доля объяснённой дисперсии")
+
+pic_1 <- fviz_contrib(pca_data, choice = "var", axes = 1, top = 24)
+pic_2 <- fviz_contrib(pca_data, choice = "var", axes = 2, top = 24)
+pic_3 <- fviz_contrib(pca_data, choice = "var", axes = 3, top = 24)
+```
+
+```{r}
+pic_4 <- fviz_pca_var(
+  pca_data, 
+  col.var = "contrib",
+  repel = TRUE,
+  title = "График переменных PCA"
+)
+
+pic_5 <- fviz_pca_ind(
+  pca_data, 
+  geom = "point", 
+  col.ind = "cos2",
+  repel = TRUE,
+  title = "График наблюдений PCA"
+)
+
+plots <- list(pic_1 = pic_1, pic_2 = pic_2, pic_3 = pic_3, pic_4 = pic_4, pic_5 = pic_5, pic_6=pic_6)
+lapply(names(plots), function(name) ggsave(paste0(name, ".png"), plots[[name]],path = "data/pics/", width = 8, height = 6))
+
+pic_6
+pic_1
+pic_2
+pic_3 
+pic_4 
+pic_5
+
+```
+

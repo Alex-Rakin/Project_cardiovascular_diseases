@@ -26,7 +26,7 @@ library(gtsummary) # для описательной статистики
 ```
 
 ## Load dataset
-```{r}
+```{r Load_dataset}
 vis01 <- read_excel("data/originals/Visit1.xls") %>% round(digits = 3)
 vis02 <- read_excel("data/originals/Visit2.xls") %>% round(digits = 3)
 vis03 <- read_excel("data/originals/Visit3.xls") %>% round(digits = 3)
@@ -47,7 +47,7 @@ vis08 <- vis08 %>%
 
 ## Bind datasets, save csv
 
-```{r}
+```{r Bind_datasets}
 vis_list <- list(vis01, vis02, vis03, vis04, vis05, vis06, vis07, vis08, ci_new) # убрал ci_fun
 
 vis_all <- reduce(vis_list, full_join, by = "id")
@@ -68,12 +68,8 @@ write_csv(vis_all, "data/raw/vis_all.csv" )
 
 ## Mutate in Factor
 
-```{r}
-#Определяем ранги степеней АГ
-#level_order <- c("n_level", "h_level", "AG1", "AG2", "AG3")
-```
 
-```{r}
+```{r processing_dataset}
 vis_all <- vis_all %>%
   mutate(
     # Новая переменная data$cg_imp_all 1 -нет нарушений,  2 есть нарушения.
@@ -276,36 +272,7 @@ vis_all <- vis_all %>%
           "Accident"
         )
       ))
-    # Расчёт средних значений для замеров систолических и диастолических давлений
-    #sbp_all = rowMeans(select(., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)), na.rm = TRUE),
-    #dbp_all = rowMeans(select(., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)), na.rm = TRUE)
-    # Определение степени артериальной гипертензии
-    #    AG_sbp = case_when(
-    #      sbp_all < 130 ~ "n_level",
-    #      sbp_all >= 130 & sbp_all < 140 ~ "h_level",
-    #      sbp_all >= 140 & sbp_all < 160 ~ "AG1",
-    #      sbp_all >= 160 & sbp_all < 180 ~ "AG2",
-    #      sbp_all >= 180 ~ "AG3"
-    #    ),
-    #    AG_dbp = case_when(
-    #      dbp_all < 85 ~ "n_level",
-    #      dbp_all >= 85 & dbp_all < 90 ~ "h_level",
-    #     dbp_all >= 90 & dbp_all < 100 ~ "AG1",
-    #     dbp_all >= 100 & dbp_all < 110 ~ "AG2",
-    #      dbp_all >= 110 ~ "AG3"
-    #    ),
-    #    #Выбираем худшую АГ из двух
-    #    high_AG = case_when(
-    #      is.na(AG_sbp) & !is.na(AG_dbp) ~ AG_dbp, 
-    #      !is.na(AG_sbp) & is.na(AG_dbp) ~ AG_sbp, 
-    #      !is.na(AG_sbp) & !is.na(AG_dbp) ~ {
-    #        ifelse(
-    #          match(AG_sbp, level_order) > match(AG_dbp, level_order),
-    #          AG_sbp,
-    #          AG_dbp
-    #        )
-    #      },
-    #      TRUE ~ NA_character_)
+   
    )
 
 
@@ -323,7 +290,8 @@ write_rds(vis_all, "data/raw/vis_all.rds")
 
 ## выбор переменных
 ```{r}
-# выбираем: id, курение, акоголь, инсульт, ЧМТ, диабет,заболевания почек в анамнезе , заболевания органов дыхания в анамнезе, заболевания ЖКТ, алергии, анемии,гнойные воспплаения, сведения о родителях, АД, масса тела,  липидограмма, когнитивные нарушения, наличие АГ
+# НАДО ПЕРЕДЕЛАТЬ НА ПЕРЕМЕННЫЕ КОТОРЫЕ МЫ ИСПОЛЬЗУЕМ ДЛЯ АНАЛИЗА!!!
+
 
 
 data <-
@@ -378,6 +346,10 @@ data <-
 
 ## Описательная статистика.
 ```{r}
+
+
+
+
 a1 <-
   data %>% 
   select(is.factor) %>% 
@@ -404,6 +376,9 @@ a2 %>%  save_as_html( values = NULL, path ="data/raw/fltab_numeric.html", lang =
 
 ##составление корреляционной матрицы
 ```{r, fig.width=12, fig.height=12}
+
+Когнитивные показатели в PCA
+
 data02 <- vis_all %>% select(
   id, tricepskinfold_v7, weight_v7, weight_v8, smoking_v8, alcohol_v8, cad_v8, cg_imp_all, height_v8, cholesterol_v8, hdl_v8, tg_v8, ldl_v8, vldl_v8
 ) 
@@ -412,6 +387,7 @@ data02 %>% select(is.numeric & -id) %>% na.omit() %>% cor() %>% corrplot(method 
 ```
 
 ## Оценка согласованности шкал тестов (Тесты для оценки состояния когнитивной сферы)
+!!! МЕТОД НЕ ПОДХОДИТ из-за разности 
 
 ```{r bland.altman.plot.cognitive, fig.height= 10, fig.width=20}
 # Проверяем согласованость четырех шкал.
@@ -806,6 +782,100 @@ ggplot(heatmap_data, aes(x = variable1, y = variable2, fill = p.value)) +
   labs(title = "Результаты теста Мак-Неймара, p-значения")
 ```
 
+
+##Visualisation
+```{r}
+# Графики на  boxplot
+# "memoryloss_v8",
+#   "moca_v8",
+#   "mmse_v8",
+#   "fab_v8",
+#   "symboldigit_v8,
+#   "bdi_v8",
+#   "stsutiational_v8",
+#   "stpersonal_v8"
+# 
+# 
+# cg_grade_all (фактор!!!!) (Екатерина )  Интепрпетация
+
+# vis_all %>% select( %>% as.factor, moca_v8) %>% na.omit %>% 
+# ggplot()+
+#   geom_boxplot(aes(x=cognitiveimpairment_v8, y=moca_v8))
+
+
+# к графикам сделать анову КН и количесвтеными показателями
+# aov(moca_v8~ cg_grade_all)
+
+
+# vis_all   Графики индивидуальной динамики показателей   (индекс атарогенности, , ИМТ,   давление, пульс,  ) ДО ИМПУТАЦИИ
+# барплоты для курильщиков и алкоголиков ДО ИМПУТАЦИИ
+ 
+vis_all$bmi_v1 <- round(vis_all$weight_v1 / ((vis_all$height_v1 / 100) ^ 2), 3)
+vis_all$sad_v1 <- round((1 / 3 * vis_all$sbp_v1) + (2 / 3 * vis_all$dbp_v1), 3)
+vis_all$athero_index_v1 <- round((vis_all$cholesterol_v1 - vis_all$hdl_v1) / vis_all$hdl_v1, 3)
+
+vis_all$bmi_v2 <- round(vis_all$weight_v2 / ((vis_all$height_v2 / 100) ^ 2), 3)
+vis_all$sad_v2 <- round((1 / 3 * vis_all$sbp_v2) + (2 / 3 * vis_all$dbp_v2), 3)
+vis_all$athero_index_v2 <- round((vis_all$cholesterol_v2 - vis_all$hdl_v2) / vis_all$hdl_v2, 3)
+
+vis_all$bmi_v3 <- round(vis_all$weight_v3 / ((vis_all$height_v3 / 100) ^ 2), 3)
+vis_all$sad_v3 <- round((1 / 3 * vis_all$sbp_v3) + (2 / 3 * vis_all$dbp_v3), 3)
+vis_all$athero_index_v3 <- round((vis_all$cholesterol_v3 - vis_all$hdl_v3) / vis_all$hdl_v3, 3)
+
+vis_all$bmi_v4 <- round(vis_all$weight_v4 / ((vis_all$height_v4 / 100) ^ 2), 3)
+vis_all$sad_v4 <- round((1 / 3 * vis_all$sbp_v4) + (2 / 3 * vis_all$dbp_v4), 3)
+vis_all$athero_index_v4 <- round((vis_all$cholesterol_v4 - vis_all$hdl_v4) / vis_all$hdl_v4, 3)
+
+vis_all$bmi_v5 <- round(vis_all$weight_v5 / ((vis_all$height_v5 / 100) ^ 2), 3)
+vis_all$sad_v5 <- round((1 / 3 * vis_all$sbp_v5) + (2 / 3 * vis_all$dbp_v5), 3)
+vis_all$athero_index_v5 <- round((vis_all$cholesterol_v5 - vis_all$hdl_v5) / vis_all$hdl_v5, 3)
+
+vis_all$bmi_v6 <- round(vis_all$weight_v6 / ((vis_all$height_v6 / 100) ^ 2), 3)
+vis_all$sad_v6 <- round((1 / 3 * vis_all$sbp_v6) + (2 / 3 * vis_all$dbp_v6), 3)
+vis_all$athero_index_v6 <- round((vis_all$cholesterol_v6 - vis_all$hdl_v6) / vis_all$hdl_v6, 3)
+
+vis_all$bmi_v7 <- round(vis_all$weight_v7 / ((vis_all$height_v7 / 100) ^ 2), 3)
+vis_all$sad_v7 <- round((1 / 3 * vis_all$sbp_v7) + (2 / 3 * vis_all$dbp_v7), 3)
+vis_all$athero_index_v7 <- round((vis_all$cholesterol_v7 - vis_all$hdl_v7) / vis_all$hdl_v7, 3)
+
+vis_all$bmi_v8 <- round(vis_all$weight_v8 / ((vis_all$height_v8 / 100) ^ 2), 3)
+vis_all$sad_v8 <- round((1 / 3 * vis_all$sbp_v8) + (2 / 3 * vis_all$dbp_v8), 3)
+vis_all$athero_index_v8 <- round((vis_all$cholesterol_v8 - vis_all$hdl_v8) / vis_all$hdl_v8, 3)
+
+
+data_spagetty_before_imp <- vis_all %>% select(id, starts_with(c("bmi",  "athero_i", "sad", "pulse"))) %>% 
+  pivot_longer(
+    cols = -c(id),
+    names_pattern = "(.+)_(.+)",
+    names_to = c(".value", "id_point")
+  )
+
+
+
+data_spagetty_before_imp %>% filter(!is.na(bmi)) %>% ggplot() +
+  geom_line(aes(x = id_point, y = bmi, group = id),
+            col = "grey50",
+            alpha = 0.4) +
+  theme_bw() +
+  geom_boxplot(aes(x = id_point, y = bmi),
+               fill = "#DEB0D0",
+               alpha = 0.8, 
+               outlier.size = 0.5)
+
+Динамика ИМП по визитам
+
+
+# mputed_data_longest_mean Графики индивидуальной динамики показателей  Спагетти (светлосерый, а потом  боксплоты)  (индекс атарогенности, , ИМТ,   давление, пульс,  ) ПОСЛЕ ИМПУТАЦИИ
+# барплоты для курильщиков и алкоголиков ПОСЛЕ ИМПУТАЦИИ
+
+
+
+
+
+
+```
+
+
 ## Всякое
 ```{r}
 # Проверка визитов
@@ -852,7 +922,7 @@ vis_all %>% select(
   )
 
 
-gtsummary::style_pvalue(p, 3)
+# gtsummary::style_pvalue(p, 3)
 ```
 
  
