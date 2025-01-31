@@ -38,7 +38,6 @@ If a participant reported memory loss but his cognitive performance was the same
 
 If a participant reported memory loss and his cognitive tests' scores were < 26 points for MoCA and / or < 29 points for MMSE, he was diagnosed with **moderate cognitive impairment**.
 
-Individuals with subjective and mild cognitive impairment were merged into **'CI'** group.
 
 
 ## Methods
