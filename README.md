@@ -21,7 +21,7 @@ The following objectives were set in order to achieve the goal:
 
 ## Study design
 
-The initial study design was prospective cohort observational single-center study. It started in 1984 when 23 Moscow schools were randomly selected, and 1143 boys were enrolled (average age 11.9 ± 0.11 years old).
+The initial study design was prospective cohort observational single-center study. It started in 1984 when 23 Moscow schools were randomly selected, and 1143 boys were enrolled (average age 11.9, SD 0.11).
 Over 40 years of prospective study, participants underwent 8 medical examinations with different time intervals -- before graduation from school there was an annual follow-up (Visits 1-4), later this interval was increased to 4 years (Visit 5), 
 and starting from Visit 6 the interval was 8 years. During the current visit (Visit 8) the average age of participants is 51 years old. 
 The main goal of initial prospective cohort study was to analyze risk factors for cardiovascular diseases from school age.
