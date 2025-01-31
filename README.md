@@ -54,6 +54,14 @@ To impute data on possible CI predictors we used MICE method for missing value i
 The association between CI and other variables in dynamics was assessed with mixed-effects models.
 
 
+## Limitations
+* Single-center study
+* No exact information on CI onset and its dynamics
+* Irregular intervals between visits (up to 8 years after participants had graduated from school)
+* Cohort specificity (same sex and age)
+* Low CI prevalence for this age group
+* Loss to follow-up -> no updates on patients’ status, medical history, and reasons for dropout (esp. death)
+* Missing values
 
 
 
