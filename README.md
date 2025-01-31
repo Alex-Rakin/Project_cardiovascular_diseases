@@ -30,18 +30,14 @@ We decided to focus on cognitive performance that was assessed only during the c
 In order to study association of cognitive performance and variables from previous visits (Visit 1-7) we chose case-control design.
 There were also some variables describing MRI data and depression / anxiety inventories that were also performed on the current visit, thus, their association suggested cross-sectional design.
 
-It is also worth mentioning to describe the algorithm for assessing cognitive performance. Participants were able to make self-reports about their cognitive decline -- memory loss -- and its duration in years. These complaints 
-were noted as subjective cognitive decline. Apart from self-reported CI, complex neuropsychological testing was performed by a neurologist and included Montreal Cognitive Assessment (MoCA) and / or Mini–Mental State Examination 
-(MMSE) used as screening assessment, Frontal Assessment Battery (FAB) for evaluating frontal lobe functions (executive functions), and Symbol Digit Modalities Test (SDMT) for assessing temporal and occipital lobes functions 
-(sustained attention, processing speed). Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-Hanin scale of reactive and personal anxiety (SRPA) in order to study their emotional and affective sphere.
+It is also worth mentioning to describe the algorithm for assessing cognitive performance. Participants were able to make self-reports about their cognitive decline -- memory loss -- and its duration in years. These complaints were noted as subjective cognitive decline. Apart from self-reported CI, complex neuropsychological testing was performed by a neurologist and included Montreal Cognitive Assessment (MoCA) and / or Mini–Mental State Examination (MMSE) used as screening assessment, Frontal Assessment Battery (FAB) for evaluating frontal lobe functions (executive functions), and Symbol Digit Modalities Test (SDMT) for assessing temporal and occipital lobes functions (sustained attention, processing speed), and several more tests. Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-Hanin scale of reactive and personal anxiety (SRPA) in order to study their emotional and affective sphere.
 
 If a participant reported no complaints and his cognitive tests' scores were ≥ 26 points for MoCA and / or ≥ 29 points for MMSE, his cognitive functions were considered normal (**'no CI'** group).
 
 If a participant reported memory loss but his cognitive performance was the same as in the previous case, he was diagnosed with **subjective cognitive impairment**.
 
-If a participant reported memory loss and his cognitive tests' scores were < 26 points for MoCA and / or < 29 points for MMSE, he was diagnosed with **mild cognitive impairment**.
+If a participant reported memory loss and his cognitive tests' scores were < 26 points for MoCA and / or < 29 points for MMSE, he was diagnosed with **moderate cognitive impairment**.
 
-Individuals with subjective and mild cognitive impairment were merger into **'CI'** group.
 
 
 ## Methods
