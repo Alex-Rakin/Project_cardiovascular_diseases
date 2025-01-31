@@ -53,6 +53,16 @@ In order to compare scores for depression and anxiety in 'no CI' and 'CI' groups
 To impute data on possible CI predictors we used MICE method for missing value imputation.
 The association between CI and other variables in dynamics was assessed with mixed-effects models.
 
+## Results
+
+### Subheading 1
+
+### Subheading 2
+
+### Subheading 3
+
+
+## Conclusions
 
 ## Limitations
 * Single-center study
@@ -63,6 +73,7 @@ The association between CI and other variables in dynamics was assessed with mix
 * Loss to follow-up -> no updates on patients’ status, medical history, and reasons for dropout (esp. death)
 * Missing values
 
+These limitations forced us to change study design from initial cohort study to case-control study with elements of cross-sectional analysis.
 
 
 ## References:
