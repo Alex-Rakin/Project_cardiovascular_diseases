@@ -35,6 +35,7 @@ ci_fun <- read_excel("data/originals/cognitivefunctions.xls")
 vis08 <- vis08 %>% 
   mutate(across(where(is.character), ~as.numeric(.))) 
 
+
 ```
 
 
@@ -295,6 +296,11 @@ vis_all <- vis_all %>%
     
 vis_all$stroke_v7 %>% str()
 
+vis_all[vis_all$id == 333, "height_v8"] = 178 
+vis_all[vis_all$id == 410, "height_v8"] = 172
+vis_all[vis_all$id == 779, "height_v8"] = 180
+vis_all[vis_all$id == 779, "weight_v8"] = 115
+
 #write_rds(vis_all, "data/raw/vis_all.rds")
 ```
 
@@ -514,7 +520,7 @@ imputed_data_longest <- imputed_data_long %>%
 colnames(imputed_data_longest)
 ```
 
-#ЗДЕСЬ ЕЩЁ НАДО СРЕДНЮЮ ПО ДАТАСЕТАМ СОБРАТЬ ЖЕ
+# Самый длинный формат без "нулевой" импутации
 
 ```{r}
 # Датасеты для графиков
@@ -530,6 +536,9 @@ imputed_data_longest_mean <- imputed_data_longest %>%
          alcohol = fct_rev(factor(alcohol, 0:1, levels(vis_all$alcohol_v8))))
 
 colnames(imputed_data_longest_mean)
+
+saveRDS(imputed_data_longest_mean, file = "data/raw/imputed_data_longest_mean.rds")
+
 ```
 
 # Конец
