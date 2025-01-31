@@ -111,7 +111,7 @@ vis_all <- vis_all %>%
     across(c(alcohol_v7) , function(x)
       x %>% factor(
         levels = c(1, 2, 3, 4, 5, 6, 7),
-        labels = c("Yes", "Yes", "Yes", "Yes", "Yes", "No", "Yes")
+        labels = c("Yes", "Yes", "Yes", "Yes", "No", "No", "No")
       )),
     across(c(education_v7) , function(x)
       x %>% factor(
@@ -136,13 +136,13 @@ vis_all <- vis_all %>%
           "Incomplete secondary education"
         )
       )),
-    highbp_v7= if_else(highbp_v7 == 9,  NA,highbp_v7 ),
+    highbp_v7 = if_else(highbp_v7 == 9,  NA, highbp_v7),
     across(c(highbp_v7) , function(x)
       x %>% factor(
         levels = c(1, 2),
         labels = c("Yes", "No")
       )),
-     highbp_v8= if_else(highbp_v8 == 3,  NA,highbp_v8 ),
+    highbp_v8 = if_else(highbp_v8 == 3,  NA, highbp_v8),
     across(c(highbp_v8) , function(x)
       x %>% factor(
         levels = c(1, 2),
@@ -154,13 +154,13 @@ vis_all <- vis_all %>%
     across(c(drugs_v7, drugs_v8) , function(x)
       x %>% factor(levels = c(1, 2),
                    labels = c("Yes", "No"))),
-    cad_v7= if_else(cad_v7 == 9,  NA,cad_v7 ),
-     across(c(cad_v7) , function(x)
+    cad_v7 = if_else(cad_v7 == 9,  NA, cad_v7),
+    across(c(cad_v7) , function(x)
       x %>% factor(
         levels = c(1, 2),
         labels = c("Yes", "No")
       )),
-     cad_v8= if_else(cad_v8 == 3,  NA,cad_v8 ),
+    cad_v8 = if_else(cad_v8 == 3,  NA, cad_v8),
     across(c(cad_v8) , function(x)
       x %>% factor(
         levels = c(1, 2),
@@ -184,7 +184,7 @@ vis_all <- vis_all %>%
       mstroke_v7,
       mdiabetes_v7
     ) , function(x)
-      x = ifelse(x ==9, NA, x)),
+      x = ifelse(x == 9, NA, x)),
     
     across(c(
       stroke_v7,
@@ -204,10 +204,8 @@ vis_all <- vis_all %>%
       mstroke_v7,
       mdiabetes_v7
     ) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c("Yes", "No")
-      )),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
     across(c(
       stroke_v8,
       braininjury_v8,
@@ -227,7 +225,7 @@ vis_all <- vis_all %>%
       mstroke_v8,
       mdiabetes_v8
     ) , function(x)
-      x = ifelse(x ==3, NA, x)),
+      x = ifelse(x == 3, NA, x)),
     across(c(
       stroke_v8,
       braininjury_v8,
@@ -247,22 +245,16 @@ vis_all <- vis_all %>%
       mstroke_v8,
       mdiabetes_v8
     ) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c("Yes", "No")
-      )),
-    diabetestype_v7= if_else(diabetestype_v7 == 9,  NA,diabetestype_v7 ),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
+    diabetestype_v7 = if_else(diabetestype_v7 == 9,  NA, diabetestype_v7),
     across(c(diabetestype_v7) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c("Type I", "Type II")
-      )),
-    diabetestype_v8= if_else(diabetestype_v8 == 3,  NA,diabetestype_v8 ),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Type I", "Type II"))),
+    diabetestype_v8 = if_else(diabetestype_v8 == 3,  NA, diabetestype_v8),
     across(c(diabetestype_v8) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c("Type I", "Type II")
-      )),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Type I", "Type II"))),
     across(c(fliving_v7, fliving_v8, mliving_v7, mliving_v8) , function(x)
       x %>% factor(levels = c(1, 2),
                    labels = c("Alive", "Dead"))),
@@ -272,7 +264,7 @@ vis_all <- vis_all %>%
     
     
     across(c(fcause_v7, fcause_v8, mcause_v7, mcause_v8) , function(x)
-     x = ifelse(x ==6, NA, x)),
+      x = ifelse(x == 6, NA, x)),
     across(c(fcause_v7, fcause_v8, mcause_v7, mcause_v8) , function(x)
       x %>% factor(
         levels = c(1, 2, 3 , 4, 5),
@@ -283,9 +275,14 @@ vis_all <- vis_all %>%
           "Chronic diseases",
           "Accident"
         )
-      ))
-   
-   )
+      )),
+      sbp_v8 = rowMeans(select(
+        ., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)
+      ), na.rm = TRUE),
+      dbp_v8 = rowMeans(select(
+        ., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)
+      ), na.rm = TRUE)
+    )
 
 
 # Исправление ошибок ввода 
@@ -1013,6 +1010,9 @@ ggsave(
   height = 20,
   width = 30
 )
+
+
+
 ```
 
 ## Visualisation BARplot
@@ -1021,35 +1021,168 @@ ggsave(
 
 # барплоты для курильщиков и алкоголиков ДО ИМПУТАЦИИ
 data_barplot_before_imp <- vis_all %>% select(id, starts_with(c("smoki", "alco"))) %>% 
-
   pivot_longer(
     cols = -c(id),
     names_pattern = "(.+)_(.+)",
     names_to = c(".value", "id_point")
-  ) %>% str()
+  )
 
 
 
 
 
 
-# Подсчет количества значений smoking, разбитых по группам id_point
-data_counts <- data_barplot_before_imp %>% filter(!is.na(smoking)) %>% 
+# # Подсчет количества значений smoking, разбитых по группам id_point
+# data_counts <-
+#   data_barplot_before_imp %>% 
+#   filter(!is.na(smoking)) %>%
+#   group_by(id_point, smoking) %>%
+#   summarise(count = n(), .groups = "drop")
+# 
+# # Визуализация данных
+# data_counts %>%
+#   ggplot() +
+#   geom_col(aes(x = id_point, y = count, fill = smoking), position = "dodge") +
+#   labs(
+#     x = "id_point",
+#     
+#     title = "Smoking dynamics by visit before data imputation"
+#   ) +
+#   theme_custom
+
+
+##### SMOKING
+
+# Подсчет долей smoking, разбитых по группам id_point
+data_ratios_smok <- data_barplot_before_imp %>%
+  filter(!is.na(smoking)) %>%
   group_by(id_point, smoking) %>%
-  summarise(count = n(), .groups = "drop")
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(id_point) %>%
+  mutate(ratio = count / sum(count)) %>%  # Вычисляем долю
+mutate(smoking = factor(smoking, levels = c("Non-smoker", "Current smoker"))) # для порядка столбцов
 
-# Визуализация данных
-data_counts %>%
+# график с долями
+bar_smoking_before_imp <- data_ratios_smok %>%
   ggplot() +
-  geom_col(aes(x = id_point, y = count, fill = smoking), position = "dodge") +
+  geom_col(aes(x = id_point, y = ratio, fill = smoking), position = "dodge") +
   labs(
     x = "id_point",
-    
-    title = "Smoking dynamics by visit before data imputation"
+    y = "ratios",
+    title = "Smoking dynamics by visit before data imputation (ratios)"
   ) +
-  theme_custom
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values = c("Current smoker" = "#B44922",
+                               "Non-smoker" = "#3A6B99"))+
+    theme_custom
 
-# барплоты для курильщиков и алкоголиков ДО ИМПУТАЦИИ
+#########################
+# ALCOHOL
+
+data_ratios_alc <- data_barplot_before_imp %>%
+  filter(!is.na(alcohol)) %>%
+  group_by(id_point, alcohol) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(id_point) %>%
+  mutate(ratio = count / sum(count)) %>%  # Вычисляем долю
+mutate(alcohol = factor(alcohol, levels = c("Yes", "No"))) # для порядка столбцов
+
+# график с долями
+bar_alcohol_before_imp <- data_ratios_alc %>%
+  ggplot() +
+  geom_col(aes(x = id_point, y = ratio, fill = alcohol), position = "dodge") +
+  labs(
+    x = "id_point",
+    y = "ratios",
+    title = "Alcohol dynamics by visit before data imputation (ratios)"
+  ) +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = c("Yes" = "#B44922",
+                               "No" = "#3A6B99"))+
+    theme_custom
+
+
+
+###############
+# барплоты для курильщиков и алкоголиков ПОСЛЕ ИМПУТАЦИИ
+
+# imputed_data_longest_mean
+
+##### SMOKING
+
+# Подсчет долей smoking, разбитых по группам id_point
+data_ratios_smok_aft <- imputed_data_longest_mean %>%
+  filter(!is.na(smoking)) %>%
+  group_by(id_point, smoking) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(id_point) %>%
+  mutate(ratio = count / sum(count)) %>%  # Вычисляем долю
+  mutate(smoking = factor(smoking, levels = c("Non-smoker", "Current smoker"))) # для порядка столбцов %>%
+
+# график с долями
+bar_smoking_aft_imp <- data_ratios_smok_aft %>%
+  ggplot() +
+  geom_col(aes(x = id_point, y = ratio, fill = smoking), position = "dodge") +
+  labs(
+    x = "id_point",
+    y = "ratios",
+    title = "Smoking dynamics by visit after data imputation (ratios)"
+  ) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values = c("Current smoker" = "#B44922",
+                               "Non-smoker" = "#3A6B99"))+
+    theme_custom
+
+
+#########################
+# ALCOHOL
+
+data_ratios_alc_aft <- imputed_data_longest_mean %>%
+  filter(!is.na(alcohol)) %>%
+  group_by(id_point, alcohol) %>%
+  summarise(count = n(), .groups = "drop") %>%
+  group_by(id_point) %>%
+  mutate(ratio = count / sum(count)) %>%   # Вычисляем долю
+mutate(alcohol = factor(alcohol, levels = c("Yes", "No"))) # для порядка столбцов
+
+# график с долями
+bar_alcohol_aft_imp <- data_ratios_alc_aft  %>%
+  ggplot() +
+  geom_col(aes(x = id_point, y = ratio, fill = alcohol), position = "dodge") +
+  labs(
+    x = "id_point",
+    y = "ratios",
+    title = "Alcohol dynamics by visit after data imputation (ratios)"
+  ) +
+  scale_y_continuous(labels = scales::percent) + 
+  scale_fill_manual(values = c("Yes" = "#B44922",
+                               "No" = "#3A6B99"))+
+    theme_custom
+
+
+# Все графики вместе
+boxplot_all <- ggpubr::ggarrange(
+  plotlist = list(
+    bar_smoking_before_imp,
+    bar_alcohol_before_imp,
+    bar_smoking_aft_imp,
+    bar_alcohol_aft_imp
+  ),
+  ncol = 2,
+  nrow = 2,
+  heights = c(1, 1)
+)
+
+boxplot_all
+
+ggsave(
+  "data/pics/barplot_all.png",
+  plot = boxplot_all,
+  height = 16,
+  width = 24
+)
+
+
 ```
 
 # Графики на  boxplot
