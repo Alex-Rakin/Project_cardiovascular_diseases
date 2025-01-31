@@ -1,0 +1,121 @@
+---
+title: "Groups comparison "
+date: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tableone)
+library(ggplot2)
+library(reshape2)
+library(tidyr)
+```
+
+```{r outcome, echo=F} 
+# data <- read.csv("data/raw/vis8.csv", header=T, sep = ";")
+# 
+# # Создание переменной - исхода
+# data$cg_grade_all <- ifelse(is.na(data$cognitiveimpairment) & is.na(data$cg_sr), 
+#                             999, 
+#                             ifelse(is.na(data$cognitiveimpairment), data$cg_sr, data$cognitiveimpairment))
+# 
+# # Перекодирование значений перменной-исхода 
+# data <- data %>%
+#   mutate(cg_grade_all = case_when(
+#     cg_grade_all == 1 ~ 0,          # Нет когнитивных нарушений
+#     cg_grade_all %in% c(2, 4) ~ 1,  # Субъективные когнитивные нарушения
+#     cg_grade_all %in% 3 ~ 2,        # Умеренные когнитивные нарушения
+#     cg_grade_all == 999 ~ NA        # Не принял участие в исследовании когнитивной функции
+#     
+#     ))
+
+data <- read.csv("data/raw/vis8.csv")
+#glimpse(data)
+
+# Создание переменной - исхода
+data$cg_grade_all <- ifelse(is.na(data$cognitiveimpairment) & is.na(data$cg_sr), 
+                            999, 
+                            ifelse(is.na(data$cognitiveimpairment), data$cg_sr, data$cognitiveimpairment))
+
+# Перекодирование значений перменной-исхода 
+data <- data %>%
+  mutate(cg_grade_all = case_when(
+    cg_grade_all == 1 ~ 0,         # Нет когнитивных нарушений
+    cg_grade_all == 2 ~ 1,         # Субъективные когнитивные нарушения
+    cg_grade_all %in% c(3, 4) ~ 2, # Умеренные когнитивные нарушения
+    cg_grade_all == 999 ~ 3        # Не принял участие в исследовании когнитивной функции
+    ))
+```
+
+ 
+```{r table, fig.width=100, echo=F}
+# Укажем переменные для анализа (исключаем ID и group)
+vars <- c("wordsimmediate", "wordsimmediatehint", "wordsimmediatetotal", "wordsdelayed", 
+          "wordsdelayedhint", "wordsdelayedtotal", "litass", "catass", "munsterberg", "benton", 
+          "clock", "cube", "tmtatime", "tmtamistakes", "tmtbtime", "tmtbmistakes", "symboldigit", 
+          "mmse", "moca", "fab", "stsutiational", "stpersonal", "bdi", "mriseverallesions", 
+          "mrimultiplelesions", "mriperivascularspaces", "mricsfspaces", "mrilacunes", 
+          "mristroke", "mrihippocampus")  
+
+# Разделяем переменные по типу данных
+categorical_vars <- c("mriseverallesions", "mrimultiplelesions", "mriperivascularspaces", "mricsfspaces", "mrilacunes", 
+          "mristroke", "mrihippocampus")
+continuous_vars <- c("wordsimmediate", "wordsimmediatehint", "wordsimmediatetotal", "wordsdelayed", 
+          "wordsdelayedhint", "wordsdelayedtotal", "litass", "catass", "munsterberg", "benton", 
+          "clock", "cube", "tmtatime", "tmtamistakes", "tmtbtime", "tmtbmistakes", "symboldigit", 
+          "mmse", "moca", "fab", "stsutiational", "stpersonal", "bdi")
+
+# Создаем таблицу 1
+table1 <- CreateTableOne(
+  vars = vars, 
+  strata = "cg_grade_all", 
+  data = data, 
+  factorVars = categorical_vars,  # Указываем категориальные переменные
+  test = TRUE  # Автоматический расчет тестов (включая тест Вилкоксона для числовых)
+)
+
+# Отображение таблицы
+print(table1, showAllLevels = TRUE, smd = TRUE)
+
+# Преобразование таблицы в data.frame
+table1_df <- print(table1, showAllLevels = TRUE, smd = TRUE, printToggle = FALSE)
+table1_df <- table1_df[, !names(table1_df) %in% c("test", "SMD", "Variable")]
+# Сохранение таблицы в CSV
+write.csv2(table1_df, "data/raw/table1_rang1.csv", row.names = TRUE)
+
+```
+
+```{r VIS, echo=F}
+# Бокс-плоты
+vars <- c( "moca", "mmse", "fab", "symboldigit", "bdi", "stsutiational", "stpersonal", "benton")
+
+data_long <- melt(data, id.vars = "cg_grade_all", measure.vars = vars)
+data_long <- data_long %>% filter(!is.na(cg_grade_all))
+
+variable_names <- c(
+                    "moca" = "MoCA",
+                    "mmse" = "MMSE",
+                    "fab" = "FAB",
+                    "symboldigit" = "Symbol Digit",
+                    "bdi" = "BDI",
+                    "stsutiational" = "Situational",
+                    "stpersonal" = "Personal",
+                    "benton" = "Benton Test")
+
+
+ggplot(data_long, aes(x = factor(cg_grade_all), y = value, fill = factor(cg_grade_all))) +
+  geom_boxplot() +
+  facet_wrap(~ variable, scales = "free_y", labeller = labeller(variable = variable_names)) + 
+  scale_fill_manual(values = c("grey90", "#DEB0D0", "#DEB0D0", "grey90"), 
+                    labels = c("No Cognitive Impairments", "Subjective Cognitive Impairments", "Moderate Cognitive Impairments", NA)) +  
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none") + 
+  labs(x = "CI Category", y = "Values", 
+       title = "Boxplots for Different Variables Stratified by Cognitive Impairment Category") + 
+  scale_x_discrete(labels = c("No CI", "Subjective CI", "Moderate CI"))
+
+
+```

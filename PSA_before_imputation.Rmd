@@ -38,14 +38,32 @@ vis_all <- readRDS("data/raw/vis_all.rds")
  
 data_for_pca <- vis_all %>%
   select(
-    
-    "moca_v8",
-    "mmse_v8",
-    "fab_v8",
-    "symboldigit_v8",
+         "moca_v8",
     "bdi_v8",
-    "stsutiational_v8" ,
-    "stpersonal_v8") 
+    "benton_v8",
+    "fab_v8",
+    "mmse_v8",
+    "stpersonal_v8",
+    "stsutiational_v8",
+    "symboldigit_v8"
+    #   "clock_v8",
+    # "catass_v8",
+    # "cube_v8",
+    # "litass_v8",
+    # "tmtamistakes_v8",
+    # "tmtatime_v8",
+    # "tmtbmistakes_v8",
+    # "tmtbtime_v8",
+    # "wordsdelayed_v8",
+    # "wordsdelayedhint_v8",
+    # "wordsdelayedtotal_v8",
+    # "wordsimmediate_v8",
+    # "wordsimmediatehint_v8",
+    # "wordsimmediatetotal_v8",
+    # "munsterberg_v8"
+   
+
+  )
 
 
 # Проверка датасета на количество заполненых значений до удаления пропусков

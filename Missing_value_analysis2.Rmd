@@ -80,7 +80,7 @@ vis_all <- vis_all %>%
     across(c(smoking_v7) , function(x)
       x %>% factor(
         levels = c(1, 3, 2),
-        labels = c("Current smoker", "Non-smoker", "Non-smoker")  # "Non-smoker"
+        labels = c("Current smoker", "Non-smoker", "Non-smoker") # "Non-smoker"
       )),
     across(c(alcohol_v5, alcohol_v6, alcohol_v8) , function(x)
       x %>% factor(levels = c(1, 2),
@@ -88,7 +88,7 @@ vis_all <- vis_all %>%
     across(c(alcohol_v7) , function(x)
       x %>% factor(
         levels = c(1, 2, 3, 4, 5, 6, 7),
-        labels = c("Yes", "Yes", "Yes", "Yes", "Yes", "No", "Yes")
+        labels = c("Yes", "Yes", "Yes", "Yes", "No", "No", "No")
       )),
     across(c(education_v7) , function(x)
       x %>% factor(
@@ -113,13 +113,13 @@ vis_all <- vis_all %>%
           "Incomplete secondary education"
         )
       )),
-    highbp_v7= if_else(highbp_v7 == 9,  NA,highbp_v7 ),
+    highbp_v7 = if_else(highbp_v7 == 9,  NA, highbp_v7),
     across(c(highbp_v7) , function(x)
       x %>% factor(
         levels = c(1, 2),
         labels = c("Yes", "No")
       )),
-     highbp_v8= if_else(highbp_v8 == 3,  NA,highbp_v8 ),
+    highbp_v8 = if_else(highbp_v8 == 3,  NA, highbp_v8),
     across(c(highbp_v8) , function(x)
       x %>% factor(
         levels = c(1, 2),
@@ -131,13 +131,13 @@ vis_all <- vis_all %>%
     across(c(drugs_v7, drugs_v8) , function(x)
       x %>% factor(levels = c(1, 2),
                    labels = c("Yes", "No"))),
-    cad_v7= if_else(cad_v7 == 9,  NA,cad_v7 ),
-     across(c(cad_v7) , function(x)
+    cad_v7 = if_else(cad_v7 == 9,  NA, cad_v7),
+    across(c(cad_v7) , function(x)
       x %>% factor(
         levels = c(1, 2),
         labels = c("Yes", "No")
       )),
-     cad_v8= if_else(cad_v8 == 3,  NA,cad_v8 ),
+    cad_v8 = if_else(cad_v8 == 3,  NA, cad_v8),
     across(c(cad_v8) , function(x)
       x %>% factor(
         levels = c(1, 2),
@@ -161,7 +161,7 @@ vis_all <- vis_all %>%
       mstroke_v7,
       mdiabetes_v7
     ) , function(x)
-      x = ifelse(x ==9, NA, x)),
+      x = ifelse(x == 9, NA, x)),
     
     across(c(
       stroke_v7,
@@ -181,10 +181,8 @@ vis_all <- vis_all %>%
       mstroke_v7,
       mdiabetes_v7
     ) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c("Yes", "No")
-      )),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
     across(c(
       stroke_v8,
       braininjury_v8,
@@ -204,7 +202,7 @@ vis_all <- vis_all %>%
       mstroke_v8,
       mdiabetes_v8
     ) , function(x)
-      x = ifelse(x ==3, NA, x)),
+      x = ifelse(x == 3, NA, x)),
     across(c(
       stroke_v8,
       braininjury_v8,
@@ -224,22 +222,16 @@ vis_all <- vis_all %>%
       mstroke_v8,
       mdiabetes_v8
     ) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c("Yes", "No")
-      )),
-    diabetestype_v7= if_else(diabetestype_v7 == 9,  NA,diabetestype_v7 ),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
+    diabetestype_v7 = if_else(diabetestype_v7 == 9,  NA, diabetestype_v7),
     across(c(diabetestype_v7) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c("Type I", "Type II")
-      )),
-    diabetestype_v8= if_else(diabetestype_v8 == 3,  NA,diabetestype_v8 ),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Type I", "Type II"))),
+    diabetestype_v8 = if_else(diabetestype_v8 == 3,  NA, diabetestype_v8),
     across(c(diabetestype_v8) , function(x)
-      x %>% factor(
-        levels = c(1, 2),
-        labels = c("Type I", "Type II")
-      )),
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Type I", "Type II"))),
     across(c(fliving_v7, fliving_v8, mliving_v7, mliving_v8) , function(x)
       x %>% factor(levels = c(1, 2),
                    labels = c("Alive", "Dead"))),
@@ -249,7 +241,7 @@ vis_all <- vis_all %>%
     
     
     across(c(fcause_v7, fcause_v8, mcause_v7, mcause_v8) , function(x)
-     x = ifelse(x ==6, NA, x)),
+      x = ifelse(x == 6, NA, x)),
     across(c(fcause_v7, fcause_v8, mcause_v7, mcause_v8) , function(x)
       x %>% factor(
         levels = c(1, 2, 3 , 4, 5),
@@ -260,48 +252,23 @@ vis_all <- vis_all %>%
           "Chronic diseases",
           "Accident"
         )
-      ))
-    # Расчёт средних значений для замеров систолических и диастолических давлений
-    #sbp_all = rowMeans(select(., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)), na.rm = TRUE),
-    #dbp_all = rowMeans(select(., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)), na.rm = TRUE)
-    # Определение степени артериальной гипертензии
-    #    AG_sbp = case_when(
-    #      sbp_all < 130 ~ "n_level",
-    #      sbp_all >= 130 & sbp_all < 140 ~ "h_level",
-    #      sbp_all >= 140 & sbp_all < 160 ~ "AG1",
-    #      sbp_all >= 160 & sbp_all < 180 ~ "AG2",
-    #      sbp_all >= 180 ~ "AG3"
-    #    ),
-    #    AG_dbp = case_when(
-    #      dbp_all < 85 ~ "n_level",
-    #      dbp_all >= 85 & dbp_all < 90 ~ "h_level",
-    #     dbp_all >= 90 & dbp_all < 100 ~ "AG1",
-    #     dbp_all >= 100 & dbp_all < 110 ~ "AG2",
-    #      dbp_all >= 110 ~ "AG3"
-    #    ),
-    #    #Выбираем худшую АГ из двух
-    #    high_AG = case_when(
-    #      is.na(AG_sbp) & !is.na(AG_dbp) ~ AG_dbp, 
-    #      !is.na(AG_sbp) & is.na(AG_dbp) ~ AG_sbp, 
-    #      !is.na(AG_sbp) & !is.na(AG_dbp) ~ {
-    #        ifelse(
-    #          match(AG_sbp, level_order) > match(AG_dbp, level_order),
-    #          AG_sbp,
-    #          AG_dbp
-    #        )
-    #      },
-    #      TRUE ~ NA_character_)
-   )
-    
-    
-vis_all$stroke_v7 %>% str()
+      )),
+      sbp_v8 = rowMeans(select(
+        ., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)
+      ), na.rm = TRUE),
+      dbp_v8 = rowMeans(select(
+        ., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)
+      ), na.rm = TRUE)
+    )
 
-vis_all[vis_all$id == 333, "height_v8"] = 178 
-vis_all[vis_all$id == 410, "height_v8"] = 172
+
+# Исправление ошибок ввода 
+    
+ vis_all[vis_all$id == 333, "height_v8"] = 178
+ vis_all[vis_all$id == 410, "height_v8"] = 172
 vis_all[vis_all$id == 779, "height_v8"] = 180
 vis_all[vis_all$id == 779, "weight_v8"] = 115
 
-#write_rds(vis_all, "data/raw/vis_all.rds")
 ```
 
 
@@ -503,9 +470,9 @@ imputed_data_long$athero_index_v8 <- round((imputed_data_long$cholesterol_v8 - i
 ```{r}
 imputed_data_long <- imputed_data_long %>%
   select(.id, .imp, id, everything())
-colnames(imputed_data_long)
 
-saveRDS(as.mids(imputed_data_long), file = "data/raw/imputed_data_mids.rds")
+
+saveRDS(imputed_data_long, file = "data/raw/imputed_data_mids.rds")
 ```
 
 

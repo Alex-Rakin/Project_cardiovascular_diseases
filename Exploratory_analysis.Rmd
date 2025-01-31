@@ -1016,7 +1016,7 @@ ggsave(
 ```
 
 ## Visualisation BARplot
-```{r Visualisation BARplot, }
+```{r Visualisation BARplot, fig.height=16, fig.width=24}
 
 
 # барплоты для курильщиков и алкоголиков ДО ИМПУТАЦИИ
@@ -1065,15 +1065,15 @@ mutate(smoking = factor(smoking, levels = c("Non-smoker", "Current smoker"))) # 
 # график с долями
 bar_smoking_before_imp <- data_ratios_smok %>%
   ggplot() +
-  geom_col(aes(x = id_point, y = ratio, fill = smoking), position = "dodge") +
+  geom_col(aes(x = id_point, y = ratio, fill = smoking),col="black", position = "dodge") +
   labs(
     x = "id_point",
     y = "ratios",
     title = "Smoking dynamics by visit before data imputation (ratios)"
   ) +
   scale_y_continuous(labels = scales::percent) + 
-  scale_fill_manual(values = c("Current smoker" = "#B44922",
-                               "Non-smoker" = "#3A6B99"))+
+  scale_fill_manual(values = c("Current smoker" = "#DEB0D0",
+                               "Non-smoker" = "#86CA78"))+
     theme_custom
 
 #########################
@@ -1085,20 +1085,20 @@ data_ratios_alc <- data_barplot_before_imp %>%
   summarise(count = n(), .groups = "drop") %>%
   group_by(id_point) %>%
   mutate(ratio = count / sum(count)) %>%  # Вычисляем долю
-mutate(alcohol = factor(alcohol, levels = c("Yes", "No"))) # для порядка столбцов
+mutate(alcohol = factor(alcohol, levels = c("No", "Yes"))) # для порядка столбцов
 
 # график с долями
 bar_alcohol_before_imp <- data_ratios_alc %>%
   ggplot() +
-  geom_col(aes(x = id_point, y = ratio, fill = alcohol), position = "dodge") +
+  geom_col(aes(x = id_point, y = ratio, fill = alcohol),col="black", position = "dodge") +
   labs(
     x = "id_point",
     y = "ratios",
     title = "Alcohol dynamics by visit before data imputation (ratios)"
   ) +
-  scale_y_continuous(labels = scales::percent) +
-  scale_fill_manual(values = c("Yes" = "#B44922",
-                               "No" = "#3A6B99"))+
+  scale_y_continuous(labels = scales::percent, limits = c(0,1)) +
+  scale_fill_manual(values = c("Yes" = "#DEB0D0",
+                               "No" = "#86CA78"))+
     theme_custom
 
 
@@ -1122,15 +1122,15 @@ data_ratios_smok_aft <- imputed_data_longest_mean %>%
 # график с долями
 bar_smoking_aft_imp <- data_ratios_smok_aft %>%
   ggplot() +
-  geom_col(aes(x = id_point, y = ratio, fill = smoking), position = "dodge") +
+  geom_col(aes(x = id_point, y = ratio, fill = smoking), col="black",position = "dodge") +
   labs(
     x = "id_point",
     y = "ratios",
     title = "Smoking dynamics by visit after data imputation (ratios)"
   ) +
   scale_y_continuous(labels = scales::percent) + 
-  scale_fill_manual(values = c("Current smoker" = "#B44922",
-                               "Non-smoker" = "#3A6B99"))+
+  scale_fill_manual(values = c("Current smoker" = "#DEB0D0",
+                               "Non-smoker" = "#86CA78"))+
     theme_custom
 
 
@@ -1143,20 +1143,20 @@ data_ratios_alc_aft <- imputed_data_longest_mean %>%
   summarise(count = n(), .groups = "drop") %>%
   group_by(id_point) %>%
   mutate(ratio = count / sum(count)) %>%   # Вычисляем долю
-mutate(alcohol = factor(alcohol, levels = c("Yes", "No"))) # для порядка столбцов
+mutate(alcohol = factor(alcohol, levels = c("No", "Yes"))) # для порядка столбцов
 
 # график с долями
 bar_alcohol_aft_imp <- data_ratios_alc_aft  %>%
   ggplot() +
-  geom_col(aes(x = id_point, y = ratio, fill = alcohol), position = "dodge") +
+  geom_col(aes(x = id_point, y = ratio, fill = alcohol), col="black",position = "dodge") +
   labs(
     x = "id_point",
     y = "ratios",
     title = "Alcohol dynamics by visit after data imputation (ratios)"
   ) +
-  scale_y_continuous(labels = scales::percent) + 
-  scale_fill_manual(values = c("Yes" = "#B44922",
-                               "No" = "#3A6B99"))+
+  scale_y_continuous(labels = scales::percent, limits = c(0,1)) +
+  scale_fill_manual(values = c("Yes" = "#DEB0D0",
+                               "No" = "#86CA78"))+
     theme_custom
 
 
@@ -1164,8 +1164,8 @@ bar_alcohol_aft_imp <- data_ratios_alc_aft  %>%
 boxplot_all <- ggpubr::ggarrange(
   plotlist = list(
     bar_smoking_before_imp,
-    bar_alcohol_before_imp,
     bar_smoking_aft_imp,
+    bar_alcohol_before_imp,
     bar_alcohol_aft_imp
   ),
   ncol = 2,
@@ -1185,75 +1185,53 @@ ggsave(
 
 ```
 
-# Графики на  boxplot
-# "memoryloss_v8",
-#   "moca_v8",
-#   "mmse_v8",
-#   "fab_v8",
-#   "symboldigit_v8,
-#   "bdi_v8",
-#   "stsutiational_v8",
-#   "stpersonal_v8"
-# 
-# 
-# cg_grade_all (фактор!!!!) (Екатерина )  Интепрпетация
-
-# vis_all %>% select( %>% as.factor, moca_v8) %>% na.omit %>% 
-# ggplot()+
-#   geom_boxplot(aes(x=cognitiveimpairment_v8, y=moca_v8))
-
-
-# к графикам сделать анову КН и количесвтеными показателями
-# aov(moca_v8~ cg_grade_all)
-
 
 ## Всякое
 ```{r}
 # Проверка визитов
-vis_all %>% select(
-  mmse_v8,
-  moca_v8,
-  fab_v8,
-  stsutiational_v8,
-  stpersonal_v8,
-  symboldigit_v8,
-  bdi_v8,
-  mmse__cl,
-  -moca_cl,
-  cognitiveimpairment_cl,
-  memoryloss_cl
-) %>%  summarise(across(everything(), ~ sum(!is.na(.)))) %>% flextable() %>%
-  theme_box() %>%
-  align(align = "center", part = "all") %>%  save_as_html(
-    values = NULL,
-    path = "data/raw/проверка визитов.html",
-    lang = "en",
-    title = "&#32;"
-  )
+# vis_all %>% select(
+#   mmse_v8,
+#   moca_v8,
+#   fab_v8,
+#   stsutiational_v8,
+#   stpersonal_v8,
+#   symboldigit_v8,
+#   bdi_v8,
+#   mmse__cl,
+#   -moca_cl,
+#   cognitiveimpairment_cl,
+#   memoryloss_cl
+# ) %>%  summarise(across(everything(), ~ sum(!is.na(.)))) %>% flextable() %>%
+#   theme_box() %>%
+#   align(align = "center", part = "all") %>%  save_as_html(
+#     values = NULL,
+#     path = "data/raw/проверка визитов.html",
+#     lang = "en",
+#     title = "&#32;"
+#   )
+# 
+# vis_all %>% select(
+#   mmse_v8,
+#   moca_v8,
+#   fab_v8,
+#   stsutiational_v8,
+#   stpersonal_v8,
+#   symboldigit_v8,
+#   bdi_v8,
+#   mmse__cl,
+#   -moca_cl,
+#   cognitiveimpairment_cl,
+#   memoryloss_cl
+# ) %>% na.omit() %>% summarise(across(everything(), ~ sum(!is.na(.)))) %>% flextable() %>%
+#   theme_box() %>%
+#   align(align = "center", part = "all") %>%  save_as_html(
+#     values = NULL,
+#     path = "data/raw/проверка визитов без пропусков.html",
+#     lang = "en",
+#     title = "&#32;"
+#   )
+# 
 
-vis_all %>% select(
-  mmse_v8,
-  moca_v8,
-  fab_v8,
-  stsutiational_v8,
-  stpersonal_v8,
-  symboldigit_v8,
-  bdi_v8,
-  mmse__cl,
-  -moca_cl,
-  cognitiveimpairment_cl,
-  memoryloss_cl
-) %>% na.omit() %>% summarise(across(everything(), ~ sum(!is.na(.)))) %>% flextable() %>%
-  theme_box() %>%
-  align(align = "center", part = "all") %>%  save_as_html(
-    values = NULL,
-    path = "data/raw/проверка визитов без пропусков.html",
-    lang = "en",
-    title = "&#32;"
-  )
-
-
-# gtsummary::style_pvalue(p, 3)
 
 ```
 
