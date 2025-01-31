@@ -22,7 +22,7 @@ The following objectives were set in order to achieve the goal:
 ## Study design
 
 The initial study design was prospective cohort observational single-center study. It started in 1984 when 23 Moscow schools were randomly selected, and 1143 boys were enrolled (average age 11.9 ± 0.11 years old).
-Over 40 years of prospective study, participants underwent 8 medical examinations with different time intervals -- before graduation from school there was an annual followup (Visits 1-4), later this interval was increased to 4 years (Visit 5), 
+Over 40 years of prospective study, participants underwent 8 medical examinations with different time intervals -- before graduation from school there was an annual follow-up (Visits 1-4), later this interval was increased to 4 years (Visit 5), 
 and starting from Visit 6 the interval was 8 years. During the current visit (Visit 8) the average age of participants is 51 years old. 
 The main goal of initial prospective cohort study was to analyze risk factors for cardiovascular diseases from school age.
 
@@ -37,7 +37,7 @@ were noted as subjective cognitive decline. Apart from self-reported CI, complex
 
 If a participant reported no complaints and his cognitive tests' scores were ≥ 26 points for MoCA and / or ≥ 29 points for MMSE, his cognitive functions were considered normal (**'no CI'** group).
 
-If a participant reported memory loss but his cognitive performance was the same as in the prevoius case, he was diagnosed with **subjective cognitive impairment**.
+If a participant reported memory loss but his cognitive performance was the same as in the previous case, he was diagnosed with **subjective cognitive impairment**.
 
 If a participant reported memory loss and his cognitive tests' scores were < 26 points for MoCA and / or < 29 points for MMSE, he was diagnosed with **mild cognitive impairment**.
 
@@ -48,7 +48,7 @@ Individuals with subjective and mild cognitive impairment were merger into **'CI
 
 Statistical analysis was performed using R version 4.3.1 with RStudio 2023.06.1 Build 524. 
 After data preprocessing, exploratory data analysis (EDA), and descriptive statistics we created directed acyclic graph (DAG) to represent possible CI predictors. 
-Due to variety of used cognitive tests' scales we assessed their consistensy using PCA and McNemar's test. 
+Due to variety of used cognitive tests' scales we assessed their consistency using PCA and McNemar's test. 
 In order to compare scores for depression and anxiety in 'no CI' and 'CI' groups as well as overall cognitive performance with MRI data we performed ANOVA, Spearman correlation, and ordinal logistic regression. 
 To impute data on possible CI predictors we used MICE method for missing value imputation.
 The association between CI and other variables in dynamics was assessed with mixed-effects models.
