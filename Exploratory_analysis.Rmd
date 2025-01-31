@@ -23,6 +23,18 @@ library(BlandAltmanLeh) # для Bland-Altman plots
 
 library(gtsummary) # для описательной статистики
 
+
+theme_custom <- theme(
+    panel.background = element_rect(fill = "white"),
+    plot.title = element_text(size = 30, hjust = 0.5),
+    plot.subtitle = element_text(size = 25, hjust = 0.5),
+    strip.text = element_text(size = 20),
+    axis.text = element_text(size = 20),
+    axis.title = element_text(size = 25),
+    legend.title = element_text(size = 25),
+    legend.text = element_text(size = 20)
+  )
+
 ```
 
 ## Load dataset
@@ -91,7 +103,7 @@ vis_all <- vis_all %>%
     across(c(smoking_v7) , function(x)
       x %>% factor(
         levels = c(1, 3, 2),
-        labels = c("Current smoker", "Non-smoker", "Current smoker")
+        labels = c("Current smoker", "Non-smoker", "Non-smoker") # "Non-smoker"
       )),
     across(c(alcohol_v5, alcohol_v6, alcohol_v8) , function(x)
       x %>% factor(levels = c(1, 2),
@@ -377,7 +389,7 @@ a2 %>%  save_as_html( values = NULL, path ="data/raw/fltab_numeric.html", lang =
 ##составление корреляционной матрицы
 ```{r, fig.width=12, fig.height=12}
 
-Когнитивные показатели в PCA
+# Когнитивные показатели в PCA
 
 data02 <- vis_all %>% select(
   id, tricepskinfold_v7, weight_v7, weight_v8, smoking_v8, alcohol_v8, cad_v8, cg_imp_all, height_v8, cholesterol_v8, hdl_v8, tg_v8, ldl_v8, vldl_v8
@@ -783,32 +795,11 @@ ggplot(heatmap_data, aes(x = variable1, y = variable2, fill = p.value)) +
 ```
 
 
-##Visualisation
-```{r}
-# Графики на  boxplot
-# "memoryloss_v8",
-#   "moca_v8",
-#   "mmse_v8",
-#   "fab_v8",
-#   "symboldigit_v8,
-#   "bdi_v8",
-#   "stsutiational_v8",
-#   "stpersonal_v8"
-# 
-# 
-# cg_grade_all (фактор!!!!) (Екатерина )  Интепрпетация
-
-# vis_all %>% select( %>% as.factor, moca_v8) %>% na.omit %>% 
-# ggplot()+
-#   geom_boxplot(aes(x=cognitiveimpairment_v8, y=moca_v8))
+## Visualisation boxplots
+```{r Visualisation_boxplots, fig.height=16, fig.width=30}
 
 
-# к графикам сделать анову КН и количесвтеными показателями
-# aov(moca_v8~ cg_grade_all)
 
-
-# vis_all   Графики индивидуальной динамики показателей   (индекс атарогенности, , ИМТ,   давление, пульс,  ) ДО ИМПУТАЦИИ
-# барплоты для курильщиков и алкоголиков ДО ИМПУТАЦИИ
  
 vis_all$bmi_v1 <- round(vis_all$weight_v1 / ((vis_all$height_v1 / 100) ^ 2), 3)
 vis_all$sad_v1 <- round((1 / 3 * vis_all$sbp_v1) + (2 / 3 * vis_all$dbp_v1), 3)
@@ -851,29 +842,236 @@ data_spagetty_before_imp <- vis_all %>% select(id, starts_with(c("bmi",  "athero
   )
 
 
-
-data_spagetty_before_imp %>% filter(!is.na(bmi)) %>% ggplot() +
-  geom_line(aes(x = id_point, y = bmi, group = id),
+# BMI 
+boxplot_BMI_before_imp <-
+  data_spagetty_before_imp %>%
+  filter(!is.na(bmi)) %>%
+  ggplot(aes(x = id_point, y = bmi)) +
+  geom_line(aes(group = id),
             col = "grey50",
             alpha = 0.4) +
-  theme_bw() +
-  geom_boxplot(aes(x = id_point, y = bmi),
-               fill = "#DEB0D0",
-               alpha = 0.8, 
-               outlier.size = 0.5)
+  theme_custom  +
+  geom_boxplot(
+    fill = "#DEB0D0",
+    alpha = 0.8,
+    outlier.size = 0.5  ) +
+  labs(title = "BMI dynamics by visit before data imputation")
 
-Динамика ИМП по визитам
+boxplot_BMI_before_imp
 
-
-# mputed_data_longest_mean Графики индивидуальной динамики показателей  Спагетти (светлосерый, а потом  боксплоты)  (индекс атарогенности, , ИМТ,   давление, пульс,  ) ПОСЛЕ ИМПУТАЦИИ
-# барплоты для курильщиков и алкоголиков ПОСЛЕ ИМПУТАЦИИ
-
+ggsave("data/pics/boxplot_BMI_before_imp.png", plot = boxplot_BMI_before_imp,height = 8, width = 12)
 
 
+# SAD_before_imp
+boxplot_SAD_before_imp <-  data_spagetty_before_imp %>%
+  filter(!is.na(sad)) %>%
+  ggplot(aes(x = id_point, y = sad)) +
+  geom_line(aes( group = id),
+            col = "grey50",
+            alpha = 0.4) +
+  theme_custom  +
+  geom_boxplot(
+    fill = "#DEB0D0",
+    alpha = 0.8,
+    outlier.size = 0.5
+  ) +
+  labs(title = "SAD dynamics by visit before data imputation")
+
+boxplot_SAD_before_imp
+
+ggsave(
+  "data/pics/boxplot_SAD_before_imp.png",
+  plot = boxplot_SAD_before_imp,
+  height = 8,
+  width = 12
+)
+
+
+# athero_index_before_imp
+boxplot_athero_index_before_imp <-  data_spagetty_before_imp %>%
+  filter(!is.na(athero_index)) %>%
+  ggplot(aes(x = id_point, y = athero_index)) +
+  geom_line(aes( group = id),
+            col = "grey50",
+            alpha = 0.4) +
+  theme_custom  +
+  geom_boxplot(
+    fill = "#DEB0D0",
+    alpha = 0.8,
+    outlier.size = 0.5
+  ) +
+  labs(title = "Atherogenic index dynamics by visit before data imputation")
+
+boxplot_athero_index_before_imp
+
+ggsave(
+  "data/pics/boxplot_athero_index_before_imp.png",
+  plot = boxplot_athero_index_before_imp,
+  height = 8,
+  width = 12
+)
 
 
 
+
+
+
+
+
+
+imputed_data_longest_mean <- read_rds( "data/raw/imputed_data_longest_mean.rds") 
+
+# BMI_after_imp
+boxplot_BMI_after_imp <-
+  imputed_data_longest_mean %>%
+  filter(!is.na(bmi)) %>%
+  ggplot(aes(x = id_point, y = bmi)) +
+  geom_line(aes(group = id),
+            col = "grey50",
+            alpha = 0.4) +
+  theme_custom  +
+  geom_boxplot(
+    fill = "#86CA78",
+    alpha = 0.8,
+    outlier.size = 0.5  ) +
+  labs(title = "BMI dynamics by visit after data imputation")
+
+boxplot_BMI_after_imp
+
+ggsave("data/pics/boxplot_BMI_after_imp.png", plot = boxplot_BMI_after_imp,height = 8, width = 12)
+
+
+# SAD_after_imp
+boxplot_SAD_after_imp <-  imputed_data_longest_mean %>%
+  filter(!is.na(sad)) %>%
+  ggplot(aes(x = id_point, y = sad)) +
+  geom_line(aes( group = id),
+            col = "grey50",
+            alpha = 0.4) +
+  theme_custom  +
+  geom_boxplot(
+    fill = "#86CA78",
+    alpha = 0.8,
+    outlier.size = 0.5
+  ) +
+  labs(title = "SAD dynamics by visit after data imputation")
+
+boxplot_SAD_after_imp
+
+ggsave(
+  "data/pics/boxplot_SAD_after_imp.png",
+  plot = boxplot_SAD_after_imp,
+  height = 8,
+  width = 12
+)
+
+
+# athero_index_after_imp
+boxplot_athero_index_after_imp <-  imputed_data_longest_mean %>%
+  filter(!is.na(athero_index)) %>%
+  ggplot(aes(x = id_point, y = athero_index)) +
+  geom_line(aes( group = id),
+            col = "grey50",
+            alpha = 0.4) +
+  theme_custom  +
+  geom_boxplot(
+    fill = "#86CA78",
+    alpha = 0.8,
+    outlier.size = 0.5
+  ) +
+  labs(title = "Atherogenic index dynamics by visit after data imputation")
+
+boxplot_athero_index_after_imp
+
+ggsave(
+  "data/pics/boxplot_athero_index_after_imp.png",
+  plot = boxplot_athero_index_after_imp,
+  height = 8,
+  width = 12
+)
+
+# Все графики вместе
+boxplot_all <- ggpubr::ggarrange(
+  plotlist = list(
+    boxplot_BMI_before_imp,
+    boxplot_SAD_before_imp,
+    boxplot_athero_index_before_imp ,
+    boxplot_BMI_after_imp,
+    boxplot_SAD_after_imp ,
+    boxplot_athero_index_after_imp 
+  ),
+  ncol = 3,
+  nrow = 2,
+  heights = c(1, 1)
+)
+
+boxplot_all
+
+ggsave(
+  "data/pics/boxplot_all.png",
+  plot = boxplot_all,
+  height = 20,
+  width = 30
+)
 ```
+
+## Visualisation BARplot
+```{r Visualisation BARplot, }
+
+
+# барплоты для курильщиков и алкоголиков ДО ИМПУТАЦИИ
+data_barplot_before_imp <- vis_all %>% select(id, starts_with(c("smoki", "alco"))) %>% 
+
+  pivot_longer(
+    cols = -c(id),
+    names_pattern = "(.+)_(.+)",
+    names_to = c(".value", "id_point")
+  ) %>% str()
+
+
+
+
+
+
+# Подсчет количества значений smoking, разбитых по группам id_point
+data_counts <- data_barplot_before_imp %>% filter(!is.na(smoking)) %>% 
+  group_by(id_point, smoking) %>%
+  summarise(count = n(), .groups = "drop")
+
+# Визуализация данных
+data_counts %>%
+  ggplot() +
+  geom_col(aes(x = id_point, y = count, fill = smoking), position = "dodge") +
+  labs(
+    x = "id_point",
+    
+    title = "Smoking dynamics by visit before data imputation"
+  ) +
+  theme_custom
+
+# барплоты для курильщиков и алкоголиков ДО ИМПУТАЦИИ
+```
+
+# Графики на  boxplot
+# "memoryloss_v8",
+#   "moca_v8",
+#   "mmse_v8",
+#   "fab_v8",
+#   "symboldigit_v8,
+#   "bdi_v8",
+#   "stsutiational_v8",
+#   "stpersonal_v8"
+# 
+# 
+# cg_grade_all (фактор!!!!) (Екатерина )  Интепрпетация
+
+# vis_all %>% select( %>% as.factor, moca_v8) %>% na.omit %>% 
+# ggplot()+
+#   geom_boxplot(aes(x=cognitiveimpairment_v8, y=moca_v8))
+
+
+# к графикам сделать анову КН и количесвтеными показателями
+# aov(moca_v8~ cg_grade_all)
 
 
 ## Всякое
@@ -923,6 +1121,7 @@ vis_all %>% select(
 
 
 # gtsummary::style_pvalue(p, 3)
+
 ```
 
  

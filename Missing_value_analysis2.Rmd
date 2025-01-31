@@ -80,7 +80,7 @@ vis_all <- vis_all %>%
     across(c(smoking_v7) , function(x)
       x %>% factor(
         levels = c(1, 3, 2),
-        labels = c("Current smoker", "Non-smoker", "Current smoker")
+        labels = c("Current smoker", "Non-smoker", "Non-smoker")  # "Non-smoker"
       )),
     across(c(alcohol_v5, alcohol_v6, alcohol_v8) , function(x)
       x %>% factor(levels = c(1, 2),
