@@ -42,12 +42,9 @@ vis08 <- vis08 %>%
 
 ```{r}
 vis_list <- list(vis01, vis02, vis03, vis04, vis05, vis06, vis07, vis08, ci_new) # убрал ci_fun
-
 vis_all <- reduce(vis_list, full_join, by = "id")
 
-# vis_all <- vis_all %>% 
-#   select(id, order(names(.)))
-
+# Удаление дублей
 vis_all <- vis_all %>%
   group_by(id) %>%
   filter(!(id == 548 & row_number() == 2),
@@ -56,15 +53,9 @@ vis_all <- vis_all %>%
   select(id, everything())
 
 write_csv(vis_all, "data/raw/vis_all.csv" ) 
-
 ```
 
 ## Mutate in Factor
-
-```{r}
-#Определяем ранги степеней АГ
-#level_order <- c("n_level", "h_level", "AG1", "AG2", "AG3")
-```
 
 ```{r}
 vis_all <- vis_all %>%
@@ -306,10 +297,7 @@ vis_all$stroke_v7 %>% str()
 
 #write_rds(vis_all, "data/raw/vis_all.rds")
 ```
-```{r}
-#vis_all <- readRDS("data/raw/vis_all.rds")
 
-```
 
 ```{r, echo = FALSE}
 #Чтение данных
@@ -319,8 +307,11 @@ vis_all$stroke_v7 %>% str()
 vis_all <- vis_all %>%
   mutate(sbp_v8 = rowMeans(select(., c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)), na.rm = TRUE),
          dbp_v8 = rowMeans(select(., c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)), na.rm = TRUE))
+# Усредняем 4 замера роста
+vis_all <- vis_all %>%
+  mutate(height_v58 = rowMeans(select(., c(height_v5, height_v6, height_v7, height_v8)), na.rm = TRUE)) %>%
+  select(id, everything(), -height_v5, -height_v6, -height_v7, -height_v8)
 ```
-
 
 ```{r}
 #Анализ пропусков
@@ -409,14 +400,15 @@ imputed_data <- mice(
 )
 
 ```
+
 ```{r}
 # Сохранение результатов импутации
-saveRDS(imputed_data, file = "data/raw/imputed_data_rawmids.rds")
+saveRDS(imputed_data, file = "data/raw/imputed_data_mids_raw.rds")
 ```
 
 ```{r}
 # Загрузка результатов импутации
-imputed_data <- readRDS("data/raw/imputed_data_rawmids.rds")
+imputed_data <- readRDS("data/raw/imputed_data_mids_raw.rds")
 ```
 
 ```{r}
@@ -449,6 +441,7 @@ md.pattern(filtered_vis_all_na, rotate.names = TRUE)
 
 ```{r}
 colnames(imputed_data_1)
+skim(imputed_data_1)
 ```
 
 ```{r, eval = FALSE, include = FALSE}
@@ -477,19 +470,19 @@ imputed_data_long$bmi_v4 <- round(imputed_data_long$weight_v4 / ((imputed_data_l
 imputed_data_long$sad_v4 <- round((1 / 3 * imputed_data_long$sbp_v4) + (2 / 3 * imputed_data_long$dbp_v4), 3)
 imputed_data_long$athero_index_v4 <- round((imputed_data_long$cholesterol_v4 - imputed_data_long$hdl_v4) / imputed_data_long$hdl_v4, 3)
 
-imputed_data_long$bmi_v5 <- round(imputed_data_long$weight_v5 / ((imputed_data_long$height_v5 / 100) ^ 2), 3)
+imputed_data_long$bmi_v5 <- round(imputed_data_long$weight_v5 / ((imputed_data_long$height_v58 / 100) ^ 2), 3)
 imputed_data_long$sad_v5 <- round((1 / 3 * imputed_data_long$sbp_v5) + (2 / 3 * imputed_data_long$dbp_v5), 3)
 imputed_data_long$athero_index_v5 <- round((imputed_data_long$cholesterol_v5 - imputed_data_long$hdl_v5) / imputed_data_long$hdl_v5, 3)
 
-imputed_data_long$bmi_v6 <- round(imputed_data_long$weight_v6 / ((imputed_data_long$height_v6 / 100) ^ 2), 3)
+imputed_data_long$bmi_v6 <- round(imputed_data_long$weight_v6 / ((imputed_data_long$height_v58 / 100) ^ 2), 3)
 imputed_data_long$sad_v6 <- round((1 / 3 * imputed_data_long$sbp_v6) + (2 / 3 * imputed_data_long$dbp_v6), 3)
 imputed_data_long$athero_index_v6 <- round((imputed_data_long$cholesterol_v6 - imputed_data_long$hdl_v6) / imputed_data_long$hdl_v6, 3)
 
-imputed_data_long$bmi_v7 <- round(imputed_data_long$weight_v7 / ((imputed_data_long$height_v7 / 100) ^ 2), 3)
+imputed_data_long$bmi_v7 <- round(imputed_data_long$weight_v7 / ((imputed_data_long$height_v58 / 100) ^ 2), 3)
 imputed_data_long$sad_v7 <- round((1 / 3 * imputed_data_long$sbp_v7) + (2 / 3 * imputed_data_long$dbp_v7), 3)
 imputed_data_long$athero_index_v7 <- round((imputed_data_long$cholesterol_v7 - imputed_data_long$hdl_v7) / imputed_data_long$hdl_v7, 3)
 
-imputed_data_long$bmi_v8 <- round(imputed_data_long$weight_v8 / ((imputed_data_long$height_v8 / 100) ^ 2), 3)
+imputed_data_long$bmi_v8 <- round(imputed_data_long$weight_v8 / ((imputed_data_long$height_v58 / 100) ^ 2), 3)
 imputed_data_long$sad_v8 <- round((1 / 3 * imputed_data_long$sbp_v8) + (2 / 3 * imputed_data_long$dbp_v8), 3)
 imputed_data_long$athero_index_v8 <- round((imputed_data_long$cholesterol_v8 - imputed_data_long$hdl_v8) / imputed_data_long$hdl_v8, 3)
 
@@ -508,6 +501,7 @@ colnames(imputed_data_long)
 
 saveRDS(as.mids(imputed_data_long), file = "data/raw/imputed_data_mids.rds")
 ```
+
 
 # Ещё длиннее формат данных
 ```{r}
