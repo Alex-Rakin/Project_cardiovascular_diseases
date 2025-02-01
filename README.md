@@ -36,7 +36,7 @@ If a participant reported no complaints and his cognitive tests' scores were ≥
 
 If a participant reported memory loss but his cognitive performance was the same as in the previous case, he was diagnosed with **subjective cognitive impairment**.
 
-If a participant reported memory loss and his cognitive tests' scores were < 26 points for MoCA and / or < 29 points for MMSE, he was diagnosed with **moderate cognitive impairment**.
+If a participant reported memory loss and his cognitive tests' scores were < 26 points for MoCA and / or < 29 points for MMSE, he was diagnosed with **mild cognitive impairment**.
 
 
 
