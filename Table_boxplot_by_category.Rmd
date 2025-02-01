@@ -83,7 +83,7 @@ print(table1, showAllLevels = TRUE, smd = TRUE)
 table1_df <- print(table1, showAllLevels = TRUE, smd = TRUE, printToggle = FALSE)
 table1_df <- table1_df[, !names(table1_df) %in% c("test", "SMD", "Variable")]
 # Сохранение таблицы в CSV
-write.csv2(table1_df, "data/raw/table1_rang1.csv", row.names = TRUE)
+# write.csv2(table1_df, "data/raw/table1_rang1.csv", row.names = TRUE)
 
 ```
 
