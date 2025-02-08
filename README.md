@@ -102,7 +102,7 @@ These findings suggest that memory and executive function variables predominantl
 | Spielberger-Hanin scale of reactive anxiety (SRPA) (points)	| 35.72 (8.01)	| 38.15 (8.38)	| 34.17 (6.86)	| 0.173 |
 | Spielberger-Hanin scale of personal anxiety (SRPA) (points)	| 38.76 (7.92)	| 40.15 (9.09)	| 42.00 (6.90)	| 0.325 |
 | Beck Depression Inventory (BDI) (points)	|  6.67 (4.92)	|  8.68 (5.61)	|  7.69 (5.27)	| 0.095 |
-
+**Table 1. Comparison of scores for neuropsychological tests in CI groups**
 
 | **MRI data** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
 | :---:        |     :---:      |    :---:      |    :---:      |    :---:      |
@@ -114,6 +114,7 @@ These findings suggest that memory and executive function variables predominantl
 | Lacunes  |	     3 (2.48%) 	|     0 (0.00%) 	 |    0 (0.0) 	| 0.459 |
 | Subcortical white matter infarcts	 |    0 (0.00%) 	 |    0 (0.00%) 	 |    2 (13.33%) 	| <0.001 |
 | Hippocampal lesions	 |    4 (3.31%) 	  |   0 (0.00%) 	|     0 (0.00%) |	 0.352	|
+**Table 2. Associations between MRI data and CI groups**
 
 
 | **Endothelium function and arterial stiffness** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
@@ -139,9 +140,10 @@ These findings suggest that memory and executive function variables predominantl
 | Central systolic pressure (predicted) (mmHg)	| 130.95 (16.54)	| 128.24 (20.43)	| 130.00 (17.16)	| 0.709 |
 | Time of maximum rate of capillary blood filling (ms)	| 39.44 (6.31)	| 39.13 (4.67)	| 38.31 (3.47)	| 0.786 |
 | Pulse wave amplitude	|  3.02 (0.89)	|  3.14 (0.73)	|  3.26 (0.81)	| 0.517 |
+**Table 3. Associations between clinical data and CI groups**
 
 
-To compare scores for neuropsychological assessment in CI groups and the associations between cognitive function and MRI data, we performed ANOVA analysis. Groups were compared using the Kruskal-Wallis test for continuous variables and Fisher’s exact test for categorical variables.
+To compare scores for neuropsychological assessment in CI groups and the associations between cognitive function and MRI and clinical data, we performed ANOVA analysis. Groups were compared using the Kruskal-Wallis test for continuous variables and Fisher’s exact test for categorical variables.
 
 
 ### Missing value imputation method (MICE)
