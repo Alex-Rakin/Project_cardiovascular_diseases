@@ -176,15 +176,15 @@ The association between CI and variables from previous visits in dynamics was as
 
 The LMM analysis revealed that none of the included cardiovascular parameters demonstrated a significant association with cognitive or psychological outcomes. Specifically:
 
-1) Systolic Blood Pressure (Fig.X): No statistically significant relationship was found between SBP across visits and cognitive outcomes, as indicated by non-significant F-values (all p > 0.05).
+1) Systolic Blood Pressure (Fig.X): No statistically significant relationship was found between SBP across visits and cognitive outcomes, as indicated by non-significant F-values (all p>0.05).
 
-2) Diastolic Blood Pressure (Fig.X): Similar to SBP, DBP did not show any meaningful association with CI or psychological measures over time (all p > 0.05).
+2) Diastolic Blood Pressure (Fig.X): Similar to SBP, DBP did not show any meaningful association with CI or psychological measures over time (all p>0.05).
 
-3) Pulse(Fig.X): The analysis did not detect any significant effect of pulse rate on cognitive function or psychological outcomes (all p > 0.05).
+3) Pulse(Fig.X): The analysis did not detect any significant effect of pulse rate on cognitive function or psychological outcomes (all p>0.05).
 
-4) Atherogenic Coefficient(Fig.X): No significant associations were observed between the atherogenic coefficient and cognitive impairment, suggesting no detectable impact of lipid profile dynamics on cognitive status (all p > 0.05).
+4) Atherogenic Coefficient (Fig.X): No significant associations were observed between the atherogenic coefficient and cognitive impairment, suggesting no detectable impact of lipid profile dynamics on cognitive status (all p>0.05).
 
-5) Body Mass Index (Fig.X): Changes in BMI over time were not significantly linked to cognitive or psychological outcomes (all p > 0.05).
+5) Body Mass Index (Fig.X): Changes in BMI over time were not significantly linked to cognitive or psychological outcomes (all p>0.05).
 
 These findings suggest that fluctuations in cardiovascular parameters and metabolic factors over time do not significantly contribute to cognitive impairment in this cohort. The results indicate that other factors may play a more prominent role in the progression of cognitive decline, warranting further investigation.
 
