@@ -80,6 +80,67 @@ These findings suggest that memory and executive function variables predominantl
 
 ### ANOVA, Kruskal-Wallis test, Fisher’s exact test
 
+| **Neuropsychological testing** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
+| :---:        |     :---:      |    :---:      |    :---:      |    :---:      |
+|    |  n=121 (68%)    |   n=42 (24%)  | n=15 (8%) | |
+| PVLT Short Delay Free Recall (words)	|  9.94 (1.54)	 | 9.54 (1.63)	|  9.40 (1.84)	| 0.220 |
+| PVLT Short Delay Cued Recall (words)	|  1.89 (1.41)	|  2.32 (1.60)	|  2.47 (1.77)	| 0.149 |
+| PVLT Short Delay Summary (words)	| 11.84 (0.45)	| 11.85 (0.36)	| 11.87 (0.35)	| 0.973 |
+| PVLT Long Delay Free Recall (words)	|  9.48 (1.96)	|  9.39 (1.83)	|  8.00 (1.85)	| 0.021 |
+| PVLT Long Delay Free Recall (words)	 | 2.27 (1.74)	|  2.46 (1.82)	|  3.80 (1.93)	| 0.008 |
+| PVLT Long Delay Summary (words)	| 11.75 (0.65)	| 11.85 (0.53)	| 11.80 (0.41)	| 0.646 |
+| Verbal Association Technique (literal) (words)	| 13.67 (4.53)	| 13.12 (4.83)	| 11.00 (5.11)	| 0.110 |
+| Verbal Association Technique (categorical) (words)	| 19.81 (5.33)	| 19.71 (5.17)	| 15.93 (4.27)	| 0.026 |
+| Münsterberg Test (words)	| 16.96 (4.44)	| 18.80 (4.60)	| 16.79 (5.60)	| 0.089 |
+| Benton Visual Retention Test (poins)	| 13.12 (1.40)	| 13.45 (1.38)	| 11.60 (1.35) | <0.001 |
+| Clock Test (points)	|  9.53 (1.00)	|  9.71 (0.51)	| 8.57 (1.70)	| 0.001 |
+| Cube Drawing Test (points)	|  2.85 (0.40)	|  2.90 (0.30)	|  2.57 (0.65)	| 0.029 |
+| Symbol Digit Modalities Test (SDMT) (points)	| 45.13 (8.27)	| 47.23 (7.67)	| 43.07 (8.59)	| 0.191 |
+| Montreal Cognitive Assessment (MoCA) (points)	| 28.78 (1.09)	| 28.84 (1.10)	| 25.83 (1.99)	|<0.001 |
+| Mini–Mental State Examination (MMSE) (points)	| 28.22 (1.30)	| 28.15 (1.52)	| 25.10 (1.10)	|<0.001 |
+| Frontal Assessment Battery (FAB) (points)	| 17.32 (1.05)	| 17.20 (1.11)	| 16.15 (1.46)	| 0.002 |
+| Spielberger-Hanin scale of reactive anxiety (SRPA) (points)	| 35.72 (8.01)	| 38.15 (8.38)	| 34.17 (6.86)	| 0.173 |
+| Spielberger-Hanin scale of personal anxiety (SRPA) (points)	| 38.76 (7.92)	| 40.15 (9.09)	| 42.00 (6.90)	| 0.325 |
+| Beck Depression Inventory (BDI) (points)	|  6.67 (4.92)	|  8.68 (5.61)	|  7.69 (5.27)	| 0.095 |
+
+
+| **MRI data** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
+| :---:        |     :---:      |    :---:      |    :---:      |    :---:      |
+|    |  n=121 (68%)    |   n=42 (24%)  | n=15 (8%) | |
+| Several vascular lesions 	  |  48 (39.67%) 	|    14 (33.33%) 	|     7 (46.67%) 	| 0.436 |
+| Multiple vascular lesions 	|    20 (16.53%) 	|     6 (14.29%) 	|     3 (20.00%) 	| 0.800 |
+| Perivascular spaces (PV spaces) enlargement	 |   17 (14.05%) 	|     6 (14.29%) 	 |    2 (13.33%) 	| 0.980 |
+| Cerebrovascular fluid (CVF) spaces enlargement	|    22 (18.18%) 	|    10 (23.81%) 	 |    3 (20.00%) |	 0.867 |
+| Lacunes  |	     3 (2.48%) 	|     0 (0.00%) 	 |    0 (0.0) 	| 0.459 |
+| Subcortical white matter infarcts	 |    0 (0.00%) 	 |    0 (0.00%) 	 |    2 (13.33%) 	| <0.001 |
+| Hippocampal lesions	 |    4 (3.31%) 	  |   0 (0.00%) 	|     0 (0.00%) |	 0.352	|
+
+
+| **Endothelium function and arterial stiffness** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
+| :---:        |     :---:      |    :---:      |    :---:      |    :---:      |
+|    |  n=121 (68%)    |   n=42 (24%)  | n=15 (8%) | |
+| Celermajer test (%)	|  7.35 (3.68)	|  7.09 (3.65)	|  7.32 (2.35)	| 0.925 |
+| Pharmacological test index (amplitude)	|  1.90 (0.68)	|  1.90 (0.43)	|  1.75 (1.56)	| 0.763 |
+| Pharmacological test index (phase)	| -7.02 (5.23)	| -8.02 (6.48)	| -6.15 (3.73) |	0.467 |
+| Heart rate, beats/min	| 70.29 (10.71)	| 67.53 (12.44)	| 76.46 (14.90)	| 0.054 |
+| Augmentation index adjusted to 75 bpm (%)	|  4.23 (12.26)	|  2.86 (10.90)	 | 9.42 (9.66)	| 0.223 |
+| Vascular age (years)	| 50.10 (11.01)	| 48.50 (7.59)	| 53.85 (8.88)	| 0.264 |
+| Oxygen saturation (%)	| 94.55 (2.24)	| 94.91 (1.59)	| 93.70 (1.43)	| 0.194 |
+| Augmentation index (peripheral) (%)	|  6.94 (16.38)	|  6.65 (13.01)	|  7.89 (10.45)	| 0.969 |
+| Stiffness index (m/s)	 | 7.91 (0.85)	|  7.89 (0.68)	|  8.19 (0.90)	| 0.476 |
+| Ejection duration (%)	| 35.09 (4.25)	| 34.32 (4.27)	| 35.08 (5.84)	| 0.637 |
+| Alternative vascular stiffness index (m/s)	|  8.03 (1.70)	|  7.62 (1.69)	| 10.02 (3.36)	|<0.001 |
+| Reflection index (%)	| 32.97 (13.06)	| 29.89 (8.90)	| 34.42 (11.69)	| 0.33 |
+| Ejection duration (ms)	| 302.33 (20.74)	| 307.97 (26.11)	| 278.92 (29.80)	| <0.001 |
+| Pulse wave duration (ms)	| 873.28 (128.86)	| 914.61 (154.97)	| 815.15 (169.59)	| 0.068 |
+| Time to 1st peak (peripheral) (ms)	| 112.88 (9.87)	| 110.21 (19.50)	| 106.92 (18.58)	| 0.223 |
+| Time to 2nd peak (peripheral) (ms)	| 227.05 (20.22)	| 233.32 (24.52)	| 206.62 (27.89)	| 0.001 |
+| dTpp (ms)	| 113.93 (19.61)	| 120.47 (21.70)	|  96.62 (26.18)	|0.002 |
+| Central systolic pressure (predicted) (mmHg)	| 130.95 (16.54)	| 128.24 (20.43)	| 130.00 (17.16)	| 0.709 |
+| Time of maximum rate of capillary blood filling (ms)	| 39.44 (6.31)	| 39.13 (4.67)	| 38.31 (3.47)	| 0.786 |
+| Pulse wave amplitude	|  3.02 (0.89)	|  3.14 (0.73)	|  3.26 (0.81)	| 0.517 |
+
+
 To compare scores for neuropsychological assessment in CI groups and the associations between cognitive function and MRI data, we performed ANOVA analysis. Groups were compared using the Kruskal-Wallis test for continuous variables and Fisher’s exact test for categorical variables.
 
 
