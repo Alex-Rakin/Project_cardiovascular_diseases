@@ -23,21 +23,22 @@ The following objectives were set in order to achieve the goal:
 
 The initial study design was prospective cohort observational single-center study. It started in 1984 when 23 Moscow schools were randomly selected, and 1143 boys were enrolled (average age 11.9, SD 0.11).
 Over 40 years of prospective study, participants underwent 8 medical examinations with different time intervals -- before graduation from school there was an annual follow-up (Visits 1-4), later this interval was increased to 4 years (Visit 5), 
-and starting from Visit 6 the interval was 8 years. During the current visit (Visit 8) the average age of participants was 50.9 years old (SD 0.7).
+and starting from Visit 6 the interval was 8 years. During the current visit (Visit 8) the average age of participants was 50.9 years old (SD 0.70).
 The main goal of initial prospective cohort study was to analyze risk factors for cardiovascular diseases from school age.
 
 We decided to focus on cognitive performance that was assessed only during the current visit (Visit 8). Thus, the design of our final project was changed to case-control and cross-sectional.
 In order to study association of cognitive performance and variables from previous visits (Visit 1-7) we chose case-control design.
 There were also some variables describing MRI data and depression / anxiety inventories that were also performed on the current visit, thus, their association suggested cross-sectional design.
 
-It is also worth mentioning to describe the algorithm for assessing cognitive performance. Participants were able to make self-reports about their cognitive decline -- memory loss -- and its duration in years. These complaints were noted as subjective cognitive decline. Apart from self-reported CI, complex neuropsychological testing was performed by a neurologist and included Montreal Cognitive Assessment (MoCA) and / or Mini–Mental State Examination (MMSE) used as screening assessment, Frontal Assessment Battery (FAB) for evaluating frontal lobe functions (executive functions), Symbol Digit Modalities Test (SDMT) for assessing temporal and occipital lobes functions (sustained attention, processing speed), and several more tests. Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-Hanin scale of reactive and personal anxiety (SRPA) in order to study their emotional and affective sphere.
+During the current visit (Visit 8) participants underwent complex medical examination that included photoplethysmography using the Angioscan-01 computer appliance (Angioscan, Russia), 
+ultrasound imaging of the main arteries (including determination of flow-mediated vasodilation (FMD)) using a Philips iE33 XMATRIX ultrasound system (Netherlands), 
+applanation tonometry using SphygmoCor (AtCor Medical, West Ryde, NSW, Australia), Complete blood count and biochemical tests, office blood pressure (BP) measurement, magnetic resonance imaging (MRI), 
+and neuropsychological testing.
 
-If a participant reported no complaints and his cognitive tests' scores were ≥ 26 points for MoCA and / or ≥ 29 points for MMSE, his cognitive functions were considered normal (**'no CI'** group).
+The diagnostic algorithm for CI consisted of self-reported cognitive decline (complaints about memory loss and its duration in years) and complex neuropsychological testing (Montreal Cognitive Assessment (MoCA), 
+Mini–Mental State Examination (MMSE), Frontal Assessment Battery (FAB), Symbol Digit Modalities Test (SDMT), and several more tests). If a participant reported no complaints and his cognitive tests' scores were ≥26 points for MoCA and/or ≥29 points for MMSE, his cognitive performance was considered normal (**'No CI'** group). If a participant reported memory loss but his cognitive performance was normal, he was diagnosed with **subjective CI**. If a participant reported memory loss and his cognitive tests' scores were <26 points for MoCA and/or <29 points for MMSE, he was diagnosed with **mild CI**. 
 
-If a participant reported memory loss but his cognitive performance was the same as in the previous case, he was diagnosed with **subjective cognitive impairment**.
-
-If a participant reported memory loss and his cognitive tests' scores were < 26 points for MoCA and / or < 29 points for MMSE, he was diagnosed with **mild cognitive impairment**.
-
+Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-Hanin scale of reactive and personal anxiety (SRPA).
 
 
 ## Methods
