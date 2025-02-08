@@ -36,7 +36,7 @@ applanation tonometry using SphygmoCor (AtCor Medical, West Ryde, NSW, Australia
 and neuropsychological testing.
 
 The diagnostic algorithm for CI consisted of self-reported cognitive decline (complaints about memory loss and its duration in years) and complex neuropsychological testing (Montreal Cognitive Assessment (MoCA), 
-Mini–Mental State Examination (MMSE), Frontal Assessment Battery (FAB), Symbol Digit Modalities Test (SDMT), and several more tests). If a participant reported no complaints and his cognitive tests' scores were ≥26 points for MoCA and/or ≥29 points for MMSE, his cognitive performance was considered normal (**'No CI'** group). If a participant reported memory loss but his cognitive performance was normal, he was diagnosed with **subjective CI**. If cognitive tests' scores were <26 points for MoCA and/or <29 points for MMSE, a participant was diagnosed with **mild CI**. 
+Mini–Mental State Examination (MMSE), Frontal Assessment Battery (FAB), Symbol Digit Modalities Test (SDMT), 12-word Philadelphia Verbal Learning Test (PVLT), Verbal Association Technique (literal and categorical), Münsterberg Test, Benton Visual Retention Test, Clock Test, and Cube Drawing Test). If a participant reported no complaints and his cognitive tests' scores were ≥26 points for MoCA and/or ≥29 points for MMSE, his cognitive performance was considered normal (**'No CI'** group). If a participant reported memory loss but his cognitive performance was normal, he was diagnosed with **subjective CI**. If cognitive tests' scores were <26 points for MoCA and/or <29 points for MMSE, a participant was diagnosed with **mild CI**. 
 
 Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-Hanin scale of reactive and personal anxiety (SRPA).
 
@@ -83,6 +83,7 @@ These findings suggest that memory and executive function variables predominantl
 | **Neuropsychological testing** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
 | :---:        |     :---:      |    :---:      |    :---:      |    :---:      |
 |    |  n=121 (68%)    |   n=42 (24%)  | n=15 (8%) | |
+| 12-word Philadelphia Verbal Learning Test (PVLT) | | | | |
 | PVLT Short Delay Free Recall (words)	|  9.94 (1.54)	 | 9.54 (1.63)	|  9.40 (1.84)	| 0.220 |
 | PVLT Short Delay Cued Recall (words)	|  1.89 (1.41)	|  2.32 (1.60)	|  2.47 (1.77)	| 0.149 |
 | PVLT Short Delay Summary (words)	| 11.84 (0.45)	| 11.85 (0.36)	| 11.87 (0.35)	| 0.973 |
