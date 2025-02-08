@@ -44,21 +44,40 @@ If a participant reported memory loss and his cognitive tests' scores were < 26 
 
 Statistical analysis was performed using R version 4.3.1 with RStudio 2023.06.1 Build 524. 
 After data preprocessing, exploratory data analysis (EDA), and descriptive statistics we created directed acyclic graph (DAG) to represent possible CI predictors. 
-Due to variety of used cognitive tests' scales we assessed their consistency using PCA and McNemar's test. 
+Due to the variety of used cognitive tests' scales we assessed their consistency using PCA and McNemar's test. 
 In order to compare scores for depression and anxiety in 'no CI' and 'CI' groups as well as overall cognitive performance with MRI data we performed ANOVA, Spearman correlation, and ordinal logistic regression. 
-To impute data on possible CI predictors we used MICE method for missing value imputation.
+To impute data on possible CI predictors we used the MICE method for missing value imputation.
 The association between CI and other variables in dynamics was assessed with mixed-effects models.
 
 ## Results
 
-### Subheading 1
+### Descriptive statistics
 
-### Subheading 2
 
-### Subheading 3
+
+### PCA and McNemar's test
+
+The consistency of cognitive tests’ scales was assessed using PCA and McNemar's test.
+
+
+### ANOVA, Kruskal-Wallis test, Fisher’s exact test
+
+To compare scores for neuropsychological assessment in CI groups and the associations between cognitive function and MRI data, we performed ANOVA analysis. Groups were compared using the Kruskal-Wallis test for continuous variables and Fisher’s exact test for categorical variables.
+
+
+### Missing value imputation method (MICE)
+
+In order to impute data on CI predictors from previous visits (1-7) we applied missing value imputation method (MICE).
+
+
+### Mixed-effects models
+
+The association between CI and variables from previous visits in dynamics was assessed using mixed-effects models. We used clinical data regarding cardiovascular system (systolic and diastolic blood pressure (SBP and DBP respectively) and pulse), atherogenic coefficient ((total cholesterol -- high-density lipoprotein cholesterol (HDLc))/HDLc), and body mass index (BMI) (weight (kg)/height^2 (meters)).
 
 
 ## Conclusions
+
+
 
 ## Limitations
 * Single-center study
