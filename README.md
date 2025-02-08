@@ -36,7 +36,7 @@ applanation tonometry using SphygmoCor (AtCor Medical, West Ryde, NSW, Australia
 and neuropsychological testing.
 
 The diagnostic algorithm for CI consisted of self-reported cognitive decline (complaints about memory loss and its duration in years) and complex neuropsychological testing (Montreal Cognitive Assessment (MoCA), 
-Mini–Mental State Examination (MMSE), Frontal Assessment Battery (FAB), Symbol Digit Modalities Test (SDMT), and several more tests). If a participant reported no complaints and his cognitive tests' scores were ≥26 points for MoCA and/or ≥29 points for MMSE, his cognitive performance was considered normal (**'No CI'** group). If a participant reported memory loss but his cognitive performance was normal, he was diagnosed with **subjective CI**. If a participant reported memory loss and his cognitive tests' scores were <26 points for MoCA and/or <29 points for MMSE, he was diagnosed with **mild CI**. 
+Mini–Mental State Examination (MMSE), Frontal Assessment Battery (FAB), Symbol Digit Modalities Test (SDMT), and several more tests). If a participant reported no complaints and his cognitive tests' scores were ≥26 points for MoCA and/or ≥29 points for MMSE, his cognitive performance was considered normal (**'No CI'** group). If a participant reported memory loss but his cognitive performance was normal, he was diagnosed with **subjective CI**. If cognitive tests' scores were <26 points for MoCA and/or <29 points for MMSE, a participant was diagnosed with **mild CI**. 
 
 Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-Hanin scale of reactive and personal anxiety (SRPA).
 
