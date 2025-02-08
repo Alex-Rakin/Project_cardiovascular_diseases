@@ -59,6 +59,26 @@ The association between CI and other variables in dynamics was assessed with mix
 
 The consistency of cognitive tests’ scales was assessed using PCA and McNemar's test.
 
+ 
+Figure X.PCA Variable Correlation
+
+
+ 
+Figure X. Contribution of Variables to the First Principal Component (Dim-1)
+
+
+ 
+Figure X. Contribution of Variables to the Second Principal Component (Dim-2)
+
+
+Principal Component Analysis (PCA) was conducted to identify the key contributors to the variance in cognitive function indicators. The first principal component (PC1) explained 29.6% of the total variance, while the second principal component (PC2) accounted for 25.3% (Fig. X). Together, these components captured more than 50% of the total variance in the dataset.
+
+The variable contribution plot for PC1 (Fig. X) revealed that stpersonal_v8, moca_v8, and mmse_v8 were the primary contributors to this dimension, indicating their strong influence on the overall variance structure. In contrast, symboldigit_v8, fab_v8, and benton_v8 had notably lower contributions, suggesting they played a lesser role in defining PC1.
+
+Similarly, in PC2 (Fig. X), the highest contributing variables were stsutiational_v8, moca_v8, and stpersonal_v8, reinforcing the importance of executive and memory-related cognitive functions in shaping this component. On the other hand, symboldigit_v8 exhibited the lowest contribution to PC2, implying a relatively minor role in explaining variance in this dimension.
+
+These findings suggest that memory and executive function variables predominantly drive the variance observed in cognitive performance across participants, while other cognitive tests contribute less significantly to the principal components.
+
 
 ### ANOVA, Kruskal-Wallis test, Fisher’s exact test
 
@@ -74,6 +94,35 @@ In order to impute data on CI predictors from previous visits (1-7) we applied m
 
 The association between CI and variables from previous visits in dynamics was assessed using mixed-effects models. We used clinical data regarding cardiovascular system (systolic and diastolic blood pressure (SBP and DBP respectively) and pulse), atherogenic coefficient ((total cholesterol-high-density lipoprotein cholesterol (HDLc))/HDLc), and body mass index (BMI) (weight (kg)/height^2 (meters)).
 
+ 
+Figure X. LMM results for systolic blood pressure data.
+
+ 
+Figure X. LMM results for pulse data.
+
+ 
+Figure X. LMM results for diastolic blood pressure data.
+
+ 
+Figure X. LMM results for Body Mass Index data.
+
+ 
+Figure X. LMM results for atherogenic coefficient data.
+
+
+The LMM analysis revealed that none of the included cardiovascular parameters demonstrated a significant association with cognitive or psychological outcomes. Specifically:
+
+1) Systolic Blood Pressure (Fig.X): No statistically significant relationship was found between SBP across visits and cognitive outcomes, as indicated by non-significant F-values (all p > 0.05).
+
+2) Diastolic Blood Pressure (Fig.X): Similar to SBP, DBP did not show any meaningful association with CI or psychological measures over time (all p > 0.05).
+
+3) Pulse(Fig.X): The analysis did not detect any significant effect of pulse rate on cognitive function or psychological outcomes (all p > 0.05).
+
+4) Atherogenic Coefficient(Fig.X): No significant associations were observed between the atherogenic coefficient and cognitive impairment, suggesting no detectable impact of lipid profile dynamics on cognitive status (all p > 0.05).
+
+5) Body Mass Index (Fig.X): Changes in BMI over time were not significantly linked to cognitive or psychological outcomes (all p > 0.05).
+
+These findings suggest that fluctuations in cardiovascular parameters and metabolic factors over time do not significantly contribute to cognitive impairment in this cohort. The results indicate that other factors may play a more prominent role in the progression of cognitive decline, warranting further investigation.
 
 ## Conclusions
 
