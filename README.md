@@ -60,17 +60,14 @@ The association between CI and other variables in dynamics was assessed with mix
 
 The consistency of cognitive tests’ scales was assessed using PCA and McNemar's test.
 
- 
-Figure X.PCA Variable Correlation
+![Figure X. PCA Variable Correlation](data/pics/pic_4.png "Заголовок изображения")
+**Figure X. PCA Variable Correlation**
 
+![Figure X. Contribution of Variables to the First Principal Component (Dim-1)](data/pics/pic_1.png "Заголовок изображения")
+**Figure X. Contribution of Variables to the First Principal Component (Dim-1)**
 
- 
-Figure X. Contribution of Variables to the First Principal Component (Dim-1)
-
-
- 
-Figure X. Contribution of Variables to the Second Principal Component (Dim-2)
-
+![Figure X. Contribution of Variables to the Second Principal Component (Dim-2)](data/pics/pic_2.png "Заголовок изображения")
+**Figure X. Contribution of Variables to the Second Principal Component (Dim-2)**
 
 Principal Component Analysis (PCA) was conducted to identify the key contributors to the variance in cognitive function indicators. The first principal component (PC1) explained 29.6% of the total variance, while the second principal component (PC2) accounted for 25.3% (Fig. X). Together, these components captured more than 50% of the total variance in the dataset.
 
@@ -95,21 +92,20 @@ In order to impute data on CI predictors from previous visits (1-7) we applied m
 
 The association between CI and variables from previous visits in dynamics was assessed using mixed-effects models. We used clinical data regarding cardiovascular system (systolic and diastolic blood pressure (SBP and DBP respectively) and pulse), atherogenic coefficient ((total cholesterol-high-density lipoprotein cholesterol (HDLc))/HDLc), and body mass index (BMI) (weight (kg)/height^2 (meters)).
 
- 
-Figure X. LMM results for systolic blood pressure data.
+![Figure X. LMM results for systolic blood pressure data](data/pics/LMM_analysis/ft_sbp.png "Заголовок изображения")
+**Figure X. LMM results for systolic blood pressure data**
 
- 
-Figure X. LMM results for pulse data.
+![Figure X. LMM results for pulse data](data/pics/LMM_analysis/ft_pulse.png "Заголовок изображения")
+**Figure X. LMM results for pulse data**
 
- 
-Figure X. LMM results for diastolic blood pressure data.
+![Figure X. LMM results for diastolic blood pressure data](data/pics/LMM_analysis/ft_dbp.png "Заголовок изображения")
+**Figure X. LMM results for diastolic blood pressure data**
 
- 
-Figure X. LMM results for Body Mass Index data.
+![Figure X. LMM results for Body Mass Index data](data/pics/LMM_analysis/ft_bmi.png "Заголовок изображения")
+**Figure X. LMM results for Body Mass Index data**
 
- 
-Figure X. LMM results for atherogenic coefficient data.
-
+![Figure X. LMM results for atherogenic coefficient data](data/pics/LMM_analysis/ft_athero_index.png "Заголовок изображения")
+**Figure X. LMM results for atherogenic coefficient data**
 
 The LMM analysis revealed that none of the included cardiovascular parameters demonstrated a significant association with cognitive or psychological outcomes. Specifically:
 
