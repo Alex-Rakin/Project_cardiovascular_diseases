@@ -1,0 +1,370 @@
+---
+title: "01 Create dataset"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse) # Основной пакет
+library(readxl) # для чтения файлов экселя xls xlsx
+library(skimr)  # для описательной статистики
+library(writexl)  # для записи файлов экселя xls xlsx
+library(corrr) # для составления корреляционной матрицы
+library(pheatmap) # для постройки хитмэпа
+library(flextable) # для красивых таблиц
+library(ggExtra) # для соединения графиков
+library(ggpubr) # для соединения графиков
+library(GGally)
+library(corrplot)
+library(mice)
+library(lme4)
+library(broom.mixed)
+library(BlandAltmanLeh) # для Bland-Altman plots
+
+library(gtsummary) # для описательной статистики
+
+
+theme_custom <- theme(
+    panel.background = element_rect(fill = "white"),
+    plot.title = element_text(size = 30, hjust = 0.5),
+    plot.subtitle = element_text(size = 25, hjust = 0.5),
+    strip.text = element_text(size = 20),
+    axis.text = element_text(size = 20),
+    axis.title = element_text(size = 25),
+    legend.title = element_text(size = 25),
+    legend.text = element_text(size = 20)
+  )
+
+```
+
+## Load dataset
+```{r Load_dataset}
+vis01 <- read_excel("data/originals/Visit1.xls") %>% round(digits = 3)
+vis02 <- read_excel("data/originals/Visit2.xls") %>% round(digits = 3)
+vis03 <- read_excel("data/originals/Visit3.xls") %>% round(digits = 3)
+vis04 <- read_excel("data/originals/Visit4.xls") %>% round(digits = 3)
+vis05 <- read_excel("data/originals/Visit5.xls") %>% round(digits = 3)
+vis06 <- read_excel("data/originals/Visit6.xls") %>% round(digits = 3)
+vis07 <- read_excel("data/originals/Visit7.xls") %>% round(digits = 3)
+vis08 <- read_excel("data/originals/Visit8(current).xls") 
+ci_new <- read_excel("data/originals/CI_new.xls")
+ci_fun <- read_excel("data/originals/cognitivefunctions.xls")
+
+
+vis08 <- vis08 %>% 
+  mutate(across(where(is.character), ~as.numeric(.)),
+         across(where(is.double), ~as.numeric(.))) 
+
+```
+
+
+## Bind datasets
+
+```{r Bind_datasets}
+vis_list <- list(vis01, vis02, vis03, vis04, vis05, vis06, vis07, vis08, ci_new) # убрал ci_fun
+
+vis_all <- reduce(vis_list, full_join, by = "id")
+
+# vis_all <- vis_all %>% 
+#   select(id, order(names(.)))
+
+vis_all <- vis_all %>%
+  group_by(id) %>%
+  filter(!(id == 548 & row_number() == 2),
+         !(id == 580 & row_number() == 2)) %>%
+  ungroup() 
+
+# Исправление ошибок ввода 
+ vis_all[vis_all$id == 333, "height_v8"] = 178
+ vis_all[vis_all$id == 410, "height_v8"] = 172
+vis_all[vis_all$id == 779, "height_v8"] = 180
+vis_all[vis_all$id == 779, "weight_v8"] = 115
+
+ 
+
+```
+
+## Mutate in Factor
+
+
+```{r processing_dataset}
+vis_all <- vis_all %>%
+  mutate(
+    across(c(smoking_v1, smoking_v2, smoking_v3, smoking_v4, smoking_v5) , function(x)
+      x %>% factor(
+        levels = c(1, 2),
+        labels = c("Current smoker", "Non-smoker")
+      )),
+    across(c(smoking_v6, smoking_v8) , function(x)
+      x %>% factor(
+        levels = c(1, 3, 2),
+        labels = c("Current smoker", "Non-smoker", "Non-smoker") # изменил  "Former smoker" на "Current smoker"
+      )),
+    across(c(smoking_v7) , function(x)
+      x %>% factor(
+        levels = c(1, 3, 2),
+        labels = c("Current smoker", "Non-smoker", "Non-smoker") # "Non-smoker"
+      )),
+    across(c(alcohol_v5, alcohol_v6, alcohol_v8) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
+    across(c(alcohol_v7) , function(x)
+      x %>% factor(
+        levels = c(1, 2, 3, 4, 5, 6, 7),
+        labels = c("Yes", "Yes", "Yes", "Yes", "No", "No", "No")
+      )),
+    across(c(education_v7) , function(x)
+      x %>% factor(
+        levels = c(1, 2, 3, 4, 5),
+        labels = c(
+          "Completed higher education",
+          "Incomplete higher education",
+          "Secondary specialized education",
+          "Secondary education",
+          "Incomplete secondary education"
+        )
+      )),
+    across(c(education_v8) , function(x)
+      x %>% factor(
+        levels = c(1, 2, 3, 4, 5, 6),
+        labels = c(
+          "Academic degree",
+          "Completed higher education",
+          "Incomplete higher education",
+          "Secondary specialized education",
+          "Secondary education",
+          "Incomplete secondary education"
+        )
+      )),
+    highbp_v7 = if_else(highbp_v7 == 9,  NA, highbp_v7),
+    across(c(highbp_v7) , function(x)
+      x %>% factor(
+        levels = c(1, 2),
+        labels = c("Yes", "No")
+      )),
+    highbp_v8 = if_else(highbp_v8 == 3,  NA, highbp_v8),
+    across(c(highbp_v8) , function(x)
+      x %>% factor(
+        levels = c(1, 2),
+        labels = c("Yes", "No")
+      )),
+    across(c(drugs_v7, drugs_v8) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
+    across(c(drugs_v7, drugs_v8) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
+    cad_v7 = if_else(cad_v7 == 9,  NA, cad_v7),
+    across(c(cad_v7) , function(x)
+      x %>% factor(
+        levels = c(1, 2),
+        labels = c("Yes", "No")
+      )),
+    cad_v8 = if_else(cad_v8 == 3,  NA, cad_v8),
+    across(c(cad_v8) , function(x)
+      x %>% factor(
+        levels = c(1, 2),
+        labels = c("Yes", "No")
+      )),
+    across(c(
+      stroke_v7,
+      braininjury_v7,
+      diabetes_v7,
+      renald_v7,
+      pulmonaryd_v7,
+      gastrod_v7,
+      allergy_v7,
+      inflammation_v7,
+      fcad_v7,
+      fah_v7,
+      fstroke_v7,
+      fdiabetes_v7,
+      mcad_v7,
+      mah_v7,
+      mstroke_v7,
+      mdiabetes_v7
+    ) , function(x)
+      x = ifelse(x == 9, NA, x)),
+    
+    across(c(
+      stroke_v7,
+      braininjury_v7,
+      diabetes_v7,
+      renald_v7,
+      pulmonaryd_v7,
+      gastrod_v7,
+      allergy_v7,
+      inflammation_v7,
+      fcad_v7,
+      fah_v7,
+      fstroke_v7,
+      fdiabetes_v7,
+      mcad_v7,
+      mah_v7,
+      mstroke_v7,
+      mdiabetes_v7
+    ) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
+    across(c(
+      stroke_v8,
+      braininjury_v8,
+      diabetes_v8,
+      renald_v8,
+      pulmonaryd_v8,
+      gastrod_v8,
+      allergy_v8,
+      inflammation_v8,
+      blood_v8,
+      fcad_v8,
+      fah_v8,
+      fstroke_v8,
+      fdiabetes_v8,
+      mcad_v8,
+      mah_v8,
+      mstroke_v8,
+      mdiabetes_v8
+    ) , function(x)
+      x = ifelse(x == 3, NA, x)),
+    across(c(
+      stroke_v8,
+      braininjury_v8,
+      diabetes_v8,
+      renald_v8,
+      pulmonaryd_v8,
+      gastrod_v8,
+      allergy_v8,
+      inflammation_v8,
+      blood_v8,
+      fcad_v8,
+      fah_v8,
+      fstroke_v8,
+      fdiabetes_v8,
+      mcad_v8,
+      mah_v8,
+      mstroke_v8,
+      mdiabetes_v8
+    ) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Yes", "No"))),
+    diabetestype_v7 = if_else(diabetestype_v7 == 9,  NA, diabetestype_v7),
+    across(c(diabetestype_v7) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Type I", "Type II"))),
+    diabetestype_v8 = if_else(diabetestype_v8 == 3,  NA, diabetestype_v8),
+    across(c(diabetestype_v8) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Type I", "Type II"))),
+    across(c(fliving_v7, fliving_v8, mliving_v7, mliving_v8) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Alive", "Dead"))),
+    across(c(fliving_v7, fliving_v8, mliving_v7, mliving_v8) , function(x)
+      x %>% factor(levels = c(1, 2),
+                   labels = c("Alive", "Dead"))),
+    
+    
+    across(c(fcause_v7, fcause_v8, mcause_v7, mcause_v8) , function(x)
+      x = ifelse(x == 6, NA, x)),
+    across(c(fcause_v7, fcause_v8, mcause_v7, mcause_v8) , function(x)
+      x %>% factor(
+        levels = c(1, 2, 3 , 4, 5),
+        labels = c(
+          "Heart attack",
+          "Stroke",
+          "Cancer",
+          "Chronic diseases",
+          "Accident"
+        )
+      )),
+
+    
+    memoryloss_v8 = ifelse(memoryloss_v8 == 2, 0, 1),
+    moca_bin = ifelse(moca_v8 < 26, 1, 0),
+    mmse_bin = ifelse(mmse_v8 < 29, 1, 0),
+    fab_bin = ifelse(fab_v8 < 16, 1, 0),
+    symboldigit_bin = ifelse(symboldigit_v8 < 45, 1, 0),
+    bdi_bin = ifelse(bdi_v8 > 13, 1, 0),
+    stsutiational_bin = ifelse(stsutiational_v8 > 30, 1, 0),
+    stpersonal_bin = ifelse(stpersonal_v8 > 30, 1, 0)
+  )
+
+# Перевод результата анализа холестерина  из (ммоль /л) в (мг/дл)
+vis_all$cholesterol_v8 <- vis_all$cholesterol_v8 / 0.026  
+ vis_all$hdl_v8 <- vis_all$hdl_v8/ 0.026
+    
+
+ 
+ vis_all$sbp_v8 <- rowMeans(select(
+        vis_all, c(sbp1_v8, sbp2_v8, sbp3_v8, smadsastotal_v8)
+      ), na.rm = TRUE)
+ 
+      vis_all$dbp_v8 = rowMeans(select(
+        vis_all, c(dbp1_v8, dbp2_v8, dbp3_v8, smaddadtotal_v8)
+      ), na.rm = TRUE)
+    
+
+vis_all$bmi_v1 <- round(vis_all$weight_v1 / ((vis_all$height_v1 / 100) ^ 2), 3)
+vis_all$sad_v1 <- round((1 / 3 * vis_all$sbp_v1) + (2 / 3 * vis_all$dbp_v1), 3)
+vis_all$athero_index_v1 <- round((vis_all$cholesterol_v1 - vis_all$hdl_v1) / vis_all$hdl_v1, 3)
+
+vis_all$bmi_v2 <- round(vis_all$weight_v2 / ((vis_all$height_v2 / 100) ^ 2), 3)
+vis_all$sad_v2 <- round((1 / 3 * vis_all$sbp_v2) + (2 / 3 * vis_all$dbp_v2), 3)
+vis_all$athero_index_v2 <- round((vis_all$cholesterol_v2 - vis_all$hdl_v2) / vis_all$hdl_v2, 3)
+
+vis_all$bmi_v3 <- round(vis_all$weight_v3 / ((vis_all$height_v3 / 100) ^ 2), 3)
+vis_all$sad_v3 <- round((1 / 3 * vis_all$sbp_v3) + (2 / 3 * vis_all$dbp_v3), 3)
+vis_all$athero_index_v3 <- round((vis_all$cholesterol_v3 - vis_all$hdl_v3) / vis_all$hdl_v3, 3)
+
+vis_all$bmi_v4 <- round(vis_all$weight_v4 / ((vis_all$height_v4 / 100) ^ 2), 3)
+vis_all$sad_v4 <- round((1 / 3 * vis_all$sbp_v4) + (2 / 3 * vis_all$dbp_v4), 3)
+vis_all$athero_index_v4 <- round((vis_all$cholesterol_v4 - vis_all$hdl_v4) / vis_all$hdl_v4, 3)
+
+vis_all$bmi_v5 <- round(vis_all$weight_v5 / ((vis_all$height_v5 / 100) ^ 2), 3)
+vis_all$sad_v5 <- round((1 / 3 * vis_all$sbp_v5) + (2 / 3 * vis_all$dbp_v5), 3)
+vis_all$athero_index_v5 <- round((vis_all$cholesterol_v5 - vis_all$hdl_v5) / vis_all$hdl_v5, 3)
+
+vis_all$bmi_v6 <- round(vis_all$weight_v6 / ((vis_all$height_v6 / 100) ^ 2), 3)
+vis_all$sad_v6 <- round((1 / 3 * vis_all$sbp_v6) + (2 / 3 * vis_all$dbp_v6), 3)
+vis_all$athero_index_v6 <- round((vis_all$cholesterol_v6 - vis_all$hdl_v6) / vis_all$hdl_v6, 3)
+
+vis_all$bmi_v7 <- round(vis_all$weight_v7 / ((vis_all$height_v7 / 100) ^ 2), 3)
+vis_all$sad_v7 <- round((1 / 3 * vis_all$sbp_v7) + (2 / 3 * vis_all$dbp_v7), 3)
+vis_all$athero_index_v7 <- round((vis_all$cholesterol_v7 - vis_all$hdl_v7) / vis_all$hdl_v7, 3)
+
+vis_all$bmi_v8 <- round(vis_all$weight_v8 / ((vis_all$height_v8 / 100) ^ 2), 3)
+vis_all$sad_v8 <- round((1 / 3 * vis_all$sbp_v8) + (2 / 3 * vis_all$dbp_v8), 3)
+vis_all$athero_index_v8 <- round((vis_all$cholesterol_v8 - vis_all$hdl_v8) / vis_all$hdl_v8, 3)
+
+#  Переменная исхода  
+# 0 - no CI’ group 
+# 1 subjective CI’ group
+# 2  mild CI’ group
+vis_all$cg_test <- ifelse(vis_all$mmse_bin==1 | vis_all$moca_bin ==1, 1, 0 )
+
+
+vis_all$cg_imp_all <-  case_when(
+  vis_all$cg_test == 1 ~ 2,
+   (vis_all$cg_test == 0 | is.na(vis_all$cg_test)) & vis_all$memoryloss_v8 ==1  ~ 1,
+   (vis_all$cg_test == 0 | is.na(vis_all$cg_test) )& vis_all$memoryloss_v8 ==0  ~ 0,
+  vis_all$cg_test == 0  & (vis_all$memoryloss_v8 ==0 |is.na(vis_all$memoryloss_v8))~ 0,
+  .default = NA
+) %>% as.factor()
+
+write_rds(vis_all, "data/raw/vis_all.rds")
+write_csv(vis_all, "data/raw/vis_all.csv" )
+```
+
+```{r}
+vis_all %>% select(id, cg_test, memoryloss_v8,memoryloss_cl, cognitiveimpairment_cl, cg_imp_all)
+
+vis_all %>%  mutate(
+  cg_imp_all = ifelse(is.na(vis_all$cg_test) & is.na(vis_all$memoryloss_v8), NA, cg_imp_all)
+)  %>% 
+  mutate(cg_imp_all= as.factor(cg_imp_all)) %>%
+  group_by(cg_imp_all) %>%
+  summarise(n = n()) %>%
+  mutate(percent = n/sum(n) * 100)
+```
+
+
+

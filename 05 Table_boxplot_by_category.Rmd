@@ -1,0 +1,94 @@
+---
+title: "Groups comparison "
+date: ""
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(tableone)
+library(ggplot2)
+library(reshape2)
+library(tidyr)
+```
+
+```{r outcome, echo=F} 
+
+
+data <- readRDS("data/raw/vis_all.rds")
+
+
+```
+
+ 
+```{r table, fig.width=100, echo=F}
+# Укажем переменные для анализа (исключаем ID и group)
+vars <- c("wordsimmediate_v8", "wordsimmediatehint_v8", "wordsimmediatetotal_v8", "wordsdelayed_v8", 
+          "wordsdelayedhint_v8", "wordsdelayedtotal_v8", "litass_v8", "catass_v8", "munsterberg_v8", "benton_v8", 
+          "clock_v8", "cube_v8", "tmtatime_v8", "tmtamistakes_v8", "tmtbtime_v8", "tmtbmistakes_v8", "symboldigit_v8", 
+          "mmse_v8", "moca_v8", "fab_v8", "stsutiational_v8", "stpersonal_v8", "bdi_v8", "mriseverallesions_v8", 
+          "mrimultiplelesions_v8", "mriperivascularspaces_v8", "mricsfspaces_v8", "mrilacunes_v8", 
+          "mristroke_v8", "mrihippocampus_v8")  
+
+# Разделяем переменные по типу данных
+categorical_vars <- c("mriseverallesions_v8", "mrimultiplelesions_v8", "mriperivascularspaces_v8", "mricsfspaces_v8", "mrilacunes_v8", 
+          "mristroke_v8", "mrihippocampus_v8")
+continuous_vars <- c("wordsimmediate_v8", "wordsimmediatehint_v8", "wordsimmediatetotal_v8", "wordsdelayed_v8", 
+          "wordsdelayedhint_v8", "wordsdelayedtotal_v8", "litass_v8", "catass_v8", "munsterberg_v8", "benton_v8", 
+          "clock_v8", "cube_v8", "tmtatime_v8", "tmtamistakes_v8", "tmtbtime_v8", "tmtbmistakes_v8", "symboldigit_v8", 
+          "mmse_v8", "moca_v8", "fab_v8", "stsutiational_v8", "stpersonal_v8", "bdi_v8")
+
+# Создаем таблицу 1
+table1 <- CreateTableOne(
+  vars = vars, 
+  strata = "cg_imp_all", 
+  data = data, 
+  factorVars = categorical_vars,  # Указываем категориальные переменные
+  test = TRUE  # Автоматический расчет тестов (включая тест Вилкоксона для числовых)
+)
+
+# Отображение таблицы
+print(table1, showAllLevels = TRUE, smd = TRUE)
+
+# Преобразование таблицы в data.frame
+table1_df <- print(table1, showAllLevels = TRUE, smd = TRUE, printToggle = FALSE)
+table1_df <- table1_df[, !names(table1_df) %in% c("test", "SMD", "Variable")]
+table1_df
+# Сохранение таблицы в CSV
+write.csv2(table1_df, "data/raw/table1_rang1.csv", row.names = TRUE)
+
+```
+
+```{r VIS, echo=F}
+# Бокс-плоты
+vars <- c( "moca_v8", "mmse_v8", "fab_v8", "symboldigit_v8", "bdi_v8", "stsutiational_v8", "stpersonal_v8", "benton_v8")
+
+data_long <- melt(data, id.vars = "cg_imp_all", measure.vars = vars)
+data_long <- data_long %>% filter(!is.na(cg_imp_all))
+
+variable_names <- c(
+                    "moca_v8" = "MoCA",
+                    "mmse_v8" = "MMSE",
+                    "fab_v8" = "FAB",
+                    "symboldigit_v8" = "Symbol Digit",
+                    "bdi_v8" = "BDI",
+                    "stsutiational_v8" = "Situational",
+                    "stpersonal_v8" = "Personal",
+                    "benton_v8" = "Benton Test")
+
+
+ggplot(data_long, aes(x = factor(cg_imp_all), y = value, fill = factor(cg_imp_all))) +
+  geom_boxplot() +
+  facet_wrap(~ variable, scales = "free_y", labeller = labeller(variable = variable_names)) + 
+  scale_fill_manual(values = c("grey90", "#DEB0D0", "#DEB0D0", "grey90"), 
+                    labels = c("No Cognitive Impairments", "Subjective Cognitive Impairments", "mild Cognitive Impairments", NA)) +  
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none") + 
+  labs(x = "CI Category", y = "Values", 
+       title = "Boxplots for Different Variables Stratified by Cognitive Impairment Category") + 
+  scale_x_discrete(labels = c("No CI", "Subjective CI", "Mild CI"))
+
+
+```
