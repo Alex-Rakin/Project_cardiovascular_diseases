@@ -22,8 +22,7 @@ The following objectives were set in order to achieve the goal:
 ## Study design
 
 The initial study design was prospective cohort observational single-center study. It started in 1984 when 23 Moscow schools were randomly selected, and 1143 boys were enrolled (average age 11.9, SD 0.11).
-Over 40 years of prospective study, participants underwent 8 medical examinations with different time intervals -- before graduation from school there was an annual follow-up (Visits 1-4), later this interval was increased to 4 years (Visit 5), 
-and starting from Visit 6 the interval was 8 years. During the current visit (Visit 8) the average age of participants was 50.9 years (SD 0.70).
+Over 40 years of prospective study, participants underwent 8 medical examinations with different time intervals – before graduation from school there was an annual follow-up (Visits 1-4), later this interval was increased to 4 years (Visit 5), and starting from Visit 6 the interval was 8 years. During the current visit (Visit 8) the average age of participants was 50.9 years (SD 0.70).
 The main goal of initial prospective cohort study was to analyze risk factors for cardiovascular diseases from school age.
 
 We decided to focus on cognitive performance that was assessed only during the current visit (Visit 8). Thus, the design of our final project was changed to case-control and cross-sectional.
@@ -37,7 +36,7 @@ and neuropsychological testing.
 
 The diagnostic algorithm for CI consisted of self-reported cognitive decline (complaints about memory loss and its duration in years) and complex neuropsychological testing (12-word Philadelphia Verbal Learning Test (PVLT), Verbal Association Technique (literal and categorical), Münsterberg Test, Benton Visual Retention Test, Clock Test, and Cube Drawing Test, Trail-Making Test A and B, Symbol Digit Modalities Test (SDMT), Montreal Cognitive Assessment (MoCA), Mini–Mental State Examination (MMSE), and Frontal Assessment Battery (FAB)). If a participant reported no complaints and his cognitive tests' scores were ≥26 points for MoCA and/or ≥29 points for MMSE, his cognitive performance was considered normal (**'No CI'** group). If a participant reported memory loss but his cognitive performance was normal, he was diagnosed with **subjective CI**. If cognitive tests' scores were <26 points for MoCA and/or <29 points for MMSE, a participant was diagnosed with **mild CI**. 
 
-Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-Hanin scale of reactive and personal anxiety (SRPA).
+Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-Hanin scale of reactive and personal anxiety (SRPA) in order to study their emotional and affective sphere.
 
 
 ## Methods
