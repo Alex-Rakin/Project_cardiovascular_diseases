@@ -52,8 +52,9 @@ The association between CI and other variables in dynamics was assessed with mix
 
 ### Exploratory data analysis (EDA)
 
-![изображение](https://github.com/user-attachments/assets/fdb375a5-f815-4892-b152-7970e9994718)
+![Figure X. Distribution of cognitive test variables by outcome ('No CI', 'Subjective CI', and 'Mild CI' groups)](data/pics/boxplot_cognitive_test_by_groups.jpg "Заголовок изображения")
 
+**Figure X. Distribution of cognitive test variables by outcome ('No CI', 'Subjective CI', and 'Mild CI' groups)**
 
 ### Descriptive statistics
 
