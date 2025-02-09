@@ -87,7 +87,7 @@ These findings suggest that memory and executive function variables predominantl
 | PVLT Short Delay Cued Recall (words)	|  1.82 (1.37) | 2.30 (1.65) |  3.07 (1.46) | <0.001 | 0.564 |
 | PVLT Short Delay Summary (words)	| 11.84 (0.45) | 11.84 (0.37) | 11.90 (0.31) | 0.783 | 0.115 |
 | PVLT Long Delay Free Recall (words)	|9.56 (1.96) | 9.54 (1.73) |  8.23 (1.77) | 0.003 | 0.488 |
-| PVLT Long Delay Free Recall (words)	 | 2.20 (1.73) | 2.30 (1.70) | 3.63 (1.79) | <0.001 | 0.547 |
+| PVLT Long Delay Cued Recall (words)	 | 2.20 (1.73) | 2.30 (1.70) | 3.63 (1.79) | <0.001 | 0.547 |
 | PVLT Long Delay Summary (words)	| 11.75 (0.65) | 11.84 (0.55) | 11.87 (0.35) | 0.552 | 0.140 |
 | Verbal Association Technique (literal) (words)	| 13.90 (4.43) | 13.16 (4.59) | 10.87 (5.14) | 0.006 | 0.422 |
 | Verbal Association Technique (categorical) (words)	| 20.02 (5.31) | 19.51 (5.40) | 16.59 (3.95) | 0.006 | 0.483 |
