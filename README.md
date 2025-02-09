@@ -44,11 +44,16 @@ Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-H
 Statistical analysis was performed using R version 4.3.1 with RStudio 2023.06.1 Build 524. 
 After data preprocessing, exploratory data analysis (EDA), and descriptive statistics we created directed acyclic graph (DAG) to represent possible CI predictors. 
 Due to the variety of used cognitive tests' scales we assessed their consistency using PCA and McNemar's test. 
-In order to compare scores for depression and anxiety in 'no CI' and 'CI' groups as well as overall cognitive performance with MRI data we performed ANOVA, Spearman correlation, and ordinal logistic regression. 
+In order to compare scores for depression and anxiety in 'no CI' and 'CI' groups as well as overall cognitive performance with MRI data we performed ANOVA, Kruskal-Wallis test, Fisher’s exact test, and ordinal logistic regression. 
 To impute data on possible CI predictors we used the MICE method for missing value imputation.
 The association between CI and other variables in dynamics was assessed with mixed-effects models.
 
 ## Results
+
+### Exploratory data analysis (EDA)
+
+![изображение](https://github.com/user-attachments/assets/fdb375a5-f815-4892-b152-7970e9994718)
+
 
 ### Descriptive statistics
 
