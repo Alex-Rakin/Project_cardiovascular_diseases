@@ -80,42 +80,46 @@ These findings suggest that memory and executive function variables predominantl
 
 ### ANOVA, Kruskal-Wallis test, Fisher’s exact test
 
-| **Neuropsychological testing** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
-| :---:        |     :---:      |    :---:      |    :---:      |    :---:      |
+| **Neuropsychological testing** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** | **SMD** |
+| :---:        |     :---:      |    :---:      |    :---:      |    :---:      | :---: |
 |    |  n=121 (68%)    |   n=42 (24%)  | n=15 (8%) | |
 | 12-word Philadelphia Verbal Learning Test (PVLT) | | | | |
-| PVLT Short Delay Free Recall (words)	|  9.94 (1.54)	 | 9.54 (1.63)	|  9.40 (1.84)	| 0.220 |
-| PVLT Short Delay Cued Recall (words)	|  1.89 (1.41)	|  2.32 (1.60)	|  2.47 (1.77)	| 0.149 |
-| PVLT Short Delay Summary (words)	| 11.84 (0.45)	| 11.85 (0.36)	| 11.87 (0.35)	| 0.973 |
-| PVLT Long Delay Free Recall (words)	|  9.48 (1.96)	|  9.39 (1.83)	|  8.00 (1.85)	| 0.021 |
-| PVLT Long Delay Free Recall (words)	 | 2.27 (1.74)	|  2.46 (1.82)	|  3.80 (1.93)	| 0.008 |
-| PVLT Long Delay Summary (words)	| 11.75 (0.65)	| 11.85 (0.53)	| 11.80 (0.41)	| 0.646 |
-| Verbal Association Technique (literal) (words)	| 13.67 (4.53)	| 13.12 (4.83)	| 11.00 (5.11)	| 0.110 |
-| Verbal Association Technique (categorical) (words)	| 19.81 (5.33)	| 19.71 (5.17)	| 15.93 (4.27)	| 0.026 |
-| Münsterberg Test (words)	| 16.96 (4.44)	| 18.80 (4.60)	| 16.79 (5.60)	| 0.089 |
-| Benton Visual Retention Test (poins)	| 13.12 (1.40)	| 13.45 (1.38)	| 11.60 (1.35) | <0.001 |
-| Clock Test (points)	|  9.53 (1.00)	|  9.71 (0.51)	| 8.57 (1.70)	| 0.001 |
-| Cube Drawing Test (points)	|  2.85 (0.40)	|  2.90 (0.30)	|  2.57 (0.65)	| 0.029 |
-| Symbol Digit Modalities Test (SDMT) (points)	| 45.13 (8.27)	| 47.23 (7.67)	| 43.07 (8.59)	| 0.191 |
-| Montreal Cognitive Assessment (MoCA) (points)	| 28.78 (1.09)	| 28.84 (1.10)	| 25.83 (1.99)	|<0.001 |
-| Mini–Mental State Examination (MMSE) (points)	| 28.22 (1.30)	| 28.15 (1.52)	| 25.10 (1.10)	|<0.001 |
-| Frontal Assessment Battery (FAB) (points)	| 17.32 (1.05)	| 17.20 (1.11)	| 16.15 (1.46)	| 0.002 |
-| Spielberger-Hanin scale of reactive anxiety (SRPA) (points)	| 35.72 (8.01)	| 38.15 (8.38)	| 34.17 (6.86)	| 0.173 |
-| Spielberger-Hanin scale of personal anxiety (SRPA) (points)	| 38.76 (7.92)	| 40.15 (9.09)	| 42.00 (6.90)	| 0.325 |
-| Beck Depression Inventory (BDI) (points)	|  6.67 (4.92)	|  8.68 (5.61)	|  7.69 (5.27)	| 0.095 |
+| PVLT Short Delay Free Recall (words)	| 10.02 (1.49) | 9.54 (1.71) |8.83 (1.51) | 0.001 | 0.507 |
+| PVLT Short Delay Cued Recall (words)	|  1.82 (1.37) | 2.30 (1.65) |  3.07 (1.46) | <0.001 | 0.564 |
+| PVLT Short Delay Summary (words)	| 11.84 (0.45) | 11.84 (0.37) | 11.90 (0.31) | 0.783 | 0.115 |
+| PVLT Long Delay Free Recall (words)	|9.56 (1.96) | 9.54 (1.73) |  8.23 (1.77) | 0.003 | 0.488 |
+| PVLT Long Delay Free Recall (words)	 | 2.20 (1.73) | 2.30 (1.70) | 3.63 (1.79) | <0.001 | 0.547 |
+| PVLT Long Delay Summary (words)	| 11.75 (0.65) | 11.84 (0.55) | 11.87 (0.35) | 0.552 | 0.140 |
+| Verbal Association Technique (literal) (words)	| 13.90 (4.43) | 13.16 (4.59) | 10.87 (5.14) | 0.006 | 0.422 |
+| Verbal Association Technique (categorical) (words)	| 20.02 (5.31) | 19.51 (5.40) | 16.59 (3.95) | 0.006 | 0.483 |
+| Münsterberg Test (words)	| 16.98 (4.43) | 19.39 (4.03) | 16.96 (5.83) | 0.022 | 0.352 |
+| Benton Visual Retention Test (poins)	| 13.12 (1.42) | 13.40 (1.33) | 11.96 (1.68) | <0.001 | 0.633 |
+| Clock Test (points)	|  9.61 (0.89) | 9.65 (0.54) | 8.97 (1.55) | 0.004 | 0.383 |
+| Cube Drawing Test (points)	|  2.85 (0.38) | 2.92 (0.28) | 2.59 (0.68) | 0.004 | 0.441 |
+| Trail-Making Test A (TMT A) (time) | 38.39 (13.94) | 38.00 (13.13) | 37.60 (8.87) | 0.952 | 0.044 |
+| Trail-Making Test A (TMT A) (errors) | 0.11 (0.41) | 0.19 (0.52) | 0.30 (0.70) | 0.165 | 0.220 |
+| Trail-Making Test B (TMT B) (time) | 105.61 (41.50) | 98.92 (25.54) | 121.70 (54.79) | 0.072 |  0.353 |
+| Trail-Making Test B (TMT B) (errors) | 0.51 (1.00) | 0.54 (0.77) |  1.03 (1.35) | 0.044 | 0.306 |
+| Symbol Digit Modalities Test (SDMT) (points)	| 45.44 (8.58) | 47.50 (7.51) | 44.60 (7.37) | 0.304 | 0.250 |
+| Montreal Cognitive Assessment (MoCA) (points)	| 28.28 (1.28) | 28.12 (1.45) | 24.75 (0.45) | <0.001 | 2.311 |
+| Mini–Mental State Examination (MMSE) (points)	| 28.92 (0.98) | 28.91 (1.13) | 26.66 (1.59) | <0.001 | 1.121 |
+| Frontal Assessment Battery (FAB) (points)	| 17.42 (0.90) | 17.24 (1.13) | 16.25 (1.58) | <0.001 | 0.606 |
+| Spielberger-Hanin scale of reactive anxiety (SRPA) (points)	| 35.60 (7.77) | 37.51 (7.92) | 38.89 (9.04) | 0.111 | 0.265 |
+| Spielberger-Hanin scale of personal anxiety (SRPA) (points)	| 38.31 (7.34) | 39.56 (9.03) | 43.92 (8.60) | 0.005 | 0.449 |
+| Beck Depression Inventory (BDI) (points)	|  6.64 (4.68) | 8.67 (5.30) |  9.62 (7.85) | 0.015 | 0.337 |
 
 **Table 1. Comparison of scores for neuropsychological tests in CI groups**
 
-| **MRI data** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
-| :---:        |     :---:      |    :---:      |    :---:      |    :---:      |
+| **MRI data** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** | **SMD** |
+| :---:        |     :---:      |    :---:      |    :---:      |    :---:      |  :---:      |
 |    |  n=121 (68%)    |   n=42 (24%)  | n=15 (8%) | |
-| Several vascular lesions 	  |  48 (39.67%) 	|    14 (33.33%) 	|     7 (46.67%) 	| 0.436 |
-| Multiple vascular lesions 	|    20 (16.53%) 	|     6 (14.29%) 	|     3 (20.00%) 	| 0.800 |
-| Perivascular spaces (PV spaces) enlargement	 |   17 (14.05%) 	|     6 (14.29%) 	 |    2 (13.33%) 	| 0.980 |
-| Cerebrovascular fluid (CVF) spaces enlargement	|    22 (18.18%) 	|    10 (23.81%) 	 |    3 (20.00%) |	 0.867 |
-| Lacunes  |	     3 (2.48%) 	|     0 (0.00%) 	 |    0 (0.0) 	| 0.459 |
-| Subcortical white matter infarcts	 |    0 (0.00%) 	 |    0 (0.00%) 	 |    2 (13.33%) 	| <0.001 |
-| Hippocampal lesions	 |    4 (3.31%) 	  |   0 (0.00%) 	|     0 (0.00%) |	 0.352	|
+| Several vascular lesions 	  |  51 (46.8%)  |   13 (34.2%) |  11 (37.9%) | 0.344 | 0.172 |
+| Multiple vascular lesions 	|    20 (18.3%)  |   6 (15.8%) |  5 (17.2%) | 0.937 | 0.045 |
+| Perivascular spaces (PV spaces) enlargement	 |   15 (13.8%) |  5 (13.2%) | 9 (31.0%) | 0.069 |0.294 |
+| Cerebrovascular fluid (CVF) spaces enlargement	|    22 (20.2%) | 10 (26.3%) | 6 (20.7%) | 0.725 | 0.097|
+| Lacunes  |	3 (2.8%) | 0 (0.0%) | 0 (0.0%) | 0.391 | 0.159 |
+| Subcortical white matter infarcts	 |  0 (0.0%) | 0 (0.0%) | 2 (6.9%) | 0.006 | 0.257 |
+| Hippocampal lesions	 | 3 (2.8%) | 0 (0.0%) | 1 (3.4%) | 0.555 | 0.182|
 
 **Table 2. Associations between MRI data and CI groups**
 
