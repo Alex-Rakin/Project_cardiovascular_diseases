@@ -55,9 +55,6 @@ The association between CI and other variables in dynamics was assessed with mix
 
 **Figure 1. Distribution of cognitive test variables by outcome ('No CI', 'Subjective CI', and 'Mild CI' groups)**
 
-### Descriptive statistics
-
-
 
 ### PCA and McNemar's test
 
