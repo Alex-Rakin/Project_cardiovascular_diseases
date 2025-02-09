@@ -18,7 +18,6 @@ library(corrplot)
 library(mice)
 ```
 
-## Load dataset
 ```{r Load_dataset}
 # vis01 <- read_excel("data/originals/Visit1.xls") %>% round(digits = 3)
 # vis02 <- read_excel("data/originals/Visit2.xls") %>% round(digits = 3)
@@ -37,9 +36,6 @@ library(mice)
 #          across(where(is.double), ~as.numeric(.))) 
 
 ```
-
-
-## Bind datasets
 
 ```{r Bind_datasets}
 # vis_list <- list(vis01, vis02, vis03, vis04, vis05, vis06, vis07, vis08, ci_new) # убрал ci_fun
@@ -64,9 +60,6 @@ library(mice)
 #  
 
 ```
-
-## Mutate in Factor
-
 
 ```{r processing_dataset}
 # vis_all <- vis_all %>%
@@ -334,7 +327,7 @@ library(mice)
 ```
 
 ## Чтение данных
-```{r, echo = FALSE}
+```{r}
 # Если произошла проблема загрузки файла, то выполните предыдущие чанки
 vis_all <- readRDS("data/raw/vis_all.rds")
 
@@ -347,8 +340,6 @@ vis_all <- vis_all %>%
 
 # Анализ пропусков
 ```{r missing_analysis}
-# Анализ пропусков
-
 #Взяты все строки кроме NA в moca_v8
 filtered_vis_all <- vis_all[!is.na(vis_all$moca_v8), ] 
 
@@ -362,36 +353,49 @@ vars_keep <- c("mmse_v8", "moca_v8", "fab_v8",
 #filtered_vis_all <- vis_all[rowSums(!is.na(vis_all[, vars_keep])) > 0, ]
 
 vars_imp <- names(filtered_vis_all)[grepl("^smoking_|^alcohol_|height|weight|^sbp_|^dbp_|pulse|cholesterol|hdl|mmse_v8|moca_v8|fab_v8|stsutiational_v8|stpersonal_v8|symboldigit_v8|bdi_v8", names(filtered_vis_all))]
-# $ в конце
+# Для выбора переменных можно использовать $ в конце
 
 filtered_vis_all <- filtered_vis_all[rowSums(!is.na(filtered_vis_all[, vars_imp])) > 0, ]
 
 #Выбор только целевых переменных и предикторов
 filtered_vis_all <- filtered_vis_all[, c("id", vars_imp)] 
 
-#filtered_vis_all <- filtered_vis_all %>%
-#  select(-agesmoking_v7, -yearsmoking_v7)
-#Выбор только целевых переменных и предикторов +курение и алкоголь
-#filtered_vis_all <- filtered_vis_all[, c("id", #names(filtered_vis_all)[grepl("smoking_|alcohol_|height|weight|sbp|dbp|pulse|cholesterol|hdl|mmse_v8|moca_v8|fab_v8|stsutiational_v8|stpersonal_v8|symboldigit_v8|bdi_v8", #names(filtered_vis_all))])] 
-#filtered_vis_all <- filtered_vis_all %>%
-#  select(-agesmoking_v7, -yearsmoking_v7)
-
 md.pattern(filtered_vis_all, rotate.names = TRUE)
-colnames(filtered_vis_all)
+#colnames(filtered_vis_all)
 ```
+#Подсчёт количества пропусков до импутации
+
+```{r}
+colSums(is.na(filtered_vis_all))
+
+missing_percentage <- function(df) {
+  total_values <- prod(dim(df))
+  missing_values <- sum(is.na(df))
+  percentage <- (missing_values / total_values) * 100
+  cat("Процент пропущенных значений:", round(percentage, 2), "%\n")
+}
+
+missing_percentage(filtered_vis_all)
+```
+
+
+
 # Построение матрицы импутации
 
 ```{r matrix_of_imput}
 #Построение матрицы импутации
 predictor_matrix <- make.predictorMatrix(filtered_vis_all)
 
-# Обнуление строк переменных позволяет использовать их в качестве предикторов, в то же время не дает восполнять в них пропуски??
+# Обнуление строк переменных позволяет использовать их в качестве предикторов, в то же время не дает восполнять в них пропуски
 
 predictor_matrix["id", ] <- 0
 predictor_matrix[, "id"] <- 0
 
 predictor_matrix[vars_keep,] <- 0
 predictor_matrix[,vars_keep[vars_keep !="moca_v8"]] <- 0
+
+#При включении других целевых переменных, можно настроить матрицу импутации с помощью строк ниже
+
 #predictor_matrix["fab_v8", ] <- 0
 #predictor_matrix["stsutiational_v8", ] <- 0
 #predictor_matrix["stpersonal_v8", ] <- 0
@@ -407,61 +411,57 @@ predictor_matrix[,vars_keep[vars_keep !="moca_v8"]] <- 0
 #predictor_matrix[, "bdi_v8"] <- 0
 
 #print(predictor_matrix)
-
-#id, mmse_v8, moca_v8, fab_v8, stsutiational_v8, stpersonal_v8 и symboldigit_v8, bdi_v8
 ```
 
 ```{r}
-# Чанк импутации. В следующем чанке загрузка результата импутации
+# Чанк импутации. Для ускорения работы кода выполнен 1 раз и результаты сохранены. В следующем чанке загрузка результата импутации
 
-method <- rep("pmm", ncol(filtered_vis_all))
-names(method) <- colnames(filtered_vis_all)
+#method <- rep("pmm", ncol(filtered_vis_all))
+#names(method) <- colnames(filtered_vis_all)
 
 # Отключаем импутацию для целевых переменных
-method[c("id", "mmse_v8", "moca_v8", "fab_v8", 
-         "stsutiational_v8", "stpersonal_v8", 
-         "symboldigit_v8", "bdi_v8")] <- ""
+#method[c("id", "mmse_v8", "moca_v8", "fab_v8", 
+#         "stsutiational_v8", "stpersonal_v8", 
+#         "symboldigit_v8", "bdi_v8")] <- ""
 
-imputed_data <- mice(
-  filtered_vis_all,
-  m = 10,
-  predictorMatrix = predictor_matrix,
-  method = method,  
-  maxit = 10,
-  printFlag = FALSE,
-  seed = 123
-)
+#imputed_data <- mice(
+#  filtered_vis_all,
+#  m = 10,
+#  predictorMatrix = predictor_matrix,
+# method = method,  
+# maxit = 10,
+#  printFlag = FALSE,
+#  seed = 123
+#)
 
-```
-
-```{r}
 # Сохранение результатов импутации
 # saveRDS(imputed_data, file = "data/raw/imputed_data_mids_raw.rds")
 ```
 
+
 ```{r}
 # Загрузка результатов импутации
-# imputed_data <- readRDS("data/raw/imputed_data_mids_raw.rds")
+ imputed_data <- readRDS("data/raw/imputed_data_mids_raw.rds")
 ```
 
 ```{r}
 # Оценка паттернов пропусков в 1 импутированном датасете
 imputed_data_1 <- complete(imputed_data, action = 1)
-md.pattern(imputed_data_1, rotate.names = TRUE)
+#md.pattern(imputed_data_1, rotate.names = TRUE)
 
-not_na_imputed <- imputed_data_1 %>% 
-  filter_all(function(x) !is.na(x))
+#not_na_imputed <- imputed_data_1 %>% 
+#  filter_all(function(x) !is.na(x))
 
 # Оценка паттернов пропусков в оригинальном датасете из тех, кто был полностью импутирован
-filtered_vis_all_not_na <- filtered_vis_all %>%
-  filter(id %in% not_na_imputed$id)
-md.pattern(filtered_vis_all_not_na, rotate.names = TRUE)
+#filtered_vis_all_not_na <- filtered_vis_all %>%
+#  filter(id %in% not_na_imputed$id)
+#md.pattern(filtered_vis_all_not_na, rotate.names = TRUE)
 
 
 # Оценка паттернов пропусков в оригинальном датасете из тех, кто не был полностью импутирован
-filtered_vis_all_na <- filtered_vis_all %>%
-  filter(!id %in% not_na_imputed$id)
-md.pattern(filtered_vis_all_na, rotate.names = TRUE)
+#filtered_vis_all_na <- filtered_vis_all %>%
+#  filter(!id %in% not_na_imputed$id)
+#md.pattern(filtered_vis_all_na, rotate.names = TRUE)
 
 # Результат оценки: ничего не понятно. В когорте импутированных даже есть чел с одним визитом и без целевых переменных и ему всё равно mice всё собрал...
 
@@ -471,20 +471,21 @@ md.pattern(filtered_vis_all_na, rotate.names = TRUE)
 #not_na_imputed <- imputed_data_1[rowSums(!is.na(imputed_data_1)) > 0, ]
 #filtered_vis_all <- vis_all[rowSums(!is.na(vis_all[, vars_keep])) > 0, ]
 ```
-
+## Проверка данных после импутации
 ```{r}
 colnames(imputed_data_1)
 skim(imputed_data_1)
+md.pattern(imputed_data_1, rotate.names = TRUE)
 ```
 
-```{r, eval = FALSE, include = FALSE}
+```{r}
 # Сохранения ДС в длинном формате
 
 imputed_data_long <- complete(imputed_data, action = "long", include = TRUE)
 #write.csv(imputed_data_long, "data/raw/imputed_data_long.csv", row.names = FALSE)
 ```
 
-```{r, echo = FALSE}
+```{r}
 #Расчет переменных ИМТ, "САД" - среднее артериальное давление, индекс атерогенности
 
 imputed_data_long$bmi_v1 <- round(imputed_data_long$weight_v1 / ((imputed_data_long$height_v1 / 100) ^ 2), 3)
@@ -521,10 +522,7 @@ imputed_data_long$athero_index_v8 <- round((imputed_data_long$cholesterol_v8 - i
 
 ```
 
-```{r}
-# Проверка столбцов
-#colnames(imputed_data_long)
-```
+
 # Длинный формат данных
 
 ```{r}
@@ -548,7 +546,6 @@ colnames(imputed_data_longest)
 ```
 
 # Самый длинный формат без "нулевой" импутации
-
 ```{r}
 # Датасеты для графиков
 # Самый длинный формат без "нулевой" импутации
@@ -567,5 +564,3 @@ colnames(imputed_data_longest_mean)
 saveRDS(imputed_data_longest_mean, file = "data/raw/imputed_data_longest_mean.rds")
 
 ```
-
-# Конец
