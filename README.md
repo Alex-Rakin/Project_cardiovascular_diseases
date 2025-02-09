@@ -115,7 +115,7 @@ These findings suggest that memory and executive function variables predominantl
 | Several vascular lesions 	  |  51 (46.8%)  |   13 (34.2%) |  11 (37.9%) | 0.344 | 0.172 |
 | Multiple vascular lesions 	|    20 (18.3%)  |   6 (15.8%) |  5 (17.2%) | 0.937 | 0.045 |
 | Perivascular spaces (PV spaces) enlargement	 |   15 (13.8%) |  5 (13.2%) | 9 (31.0%) | 0.069 |0.294 |
-| Cerebrovascular fluid (CVF) spaces enlargement	|    22 (20.2%) | 10 (26.3%) | 6 (20.7%) | 0.725 | 0.097|
+| Cerebrovascular fluid (CVF spaces) enlargement	|    22 (20.2%) | 10 (26.3%) | 6 (20.7%) | 0.725 | 0.097|
 | Lacunes  |	3 (2.8%) | 0 (0.0%) | 0 (0.0%) | 0.391 | 0.159 |
 | Subcortical white matter infarcts	 |  0 (0.0%) | 0 (0.0%) | 2 (6.9%) | 0.006 | 0.257 |
 | Hippocampal lesions	 | 3 (2.8%) | 0 (0.0%) | 1 (3.4%) | 0.555 | 0.182|
