@@ -152,8 +152,16 @@ To compare scores for neuropsychological assessment in CI groups and the associa
 
 ### Missing value imputation method (MICE)
 
-In order to impute data on CI predictors from previous visits (1-7) we applied missing value imputation method (MICE).
+Only the target variables (**MMSE, MoCA, FAB, STSituational, STPersonal, SymbolDigit, and BDI**) and dependent variables (anthropometric measurements, blood pressure, biochemical markers, and other predictors) were retained from the entire dataset for further analysis. The data were preprocessed by removing records with missing values in key cognitive variables. The dataset was filtered to include only observations where at least one of the target variables and predictors had valid data. 
 
+The missing data structure was analyzed using the md.pattern() function, which visualizes missing value patterns. Before imputation, **14.09% of the data were missing** (1666 values in total). An imputation matrix was constructed to determine which variables were used to restore missing values. In this matrix, target variables were not imputed but were used as predictors, while the identifier (id) was completely excluded from the process. Only predictor variables (anthropometric, biochemical, and physiological indicators) were included in the imputation, with 10 iterations and 10 imputed datasets. 
+
+The **Predictive Mean Matching (PMM) method**, implemented in the mice package in R, was used to fill in missing values. To reduce multicollinearity, height measurements from visits 5 to 8 were averaged into a single variable. This adjustment was necessary because growth curves plateau after the age of 30, making individual height measurements highly correlated. By computing the mean height across these visits, we minimized redundancy in the dataset while preserving essential variability in height-related factors. This approach ensured a more stable statistical model and improved the interpretability of regression analyses.
+
+![Figure X. Missing patterns before imputation](data/pics/pic_7.png "Заголовок изображения")
+**Figure X. Missing patterns before imputation**
+![Figure X. Missing patterns after imputation](data/pics/pic_8.png "Заголовок изображения")
+**Figure X. Missing patterns after imputation**
 
 ### Mixed-effects models
 
