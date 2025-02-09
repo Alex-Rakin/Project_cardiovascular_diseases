@@ -42,8 +42,7 @@ Participants also completed Beck Depression Inventory (BDI-II) and Spielberger-H
 ## Methods
 
 Statistical analysis was performed using R version 4.3.1 with RStudio 2023.06.1 Build 524. 
-After data preprocessing, exploratory data analysis (EDA), and descriptive statistics we created directed acyclic graph (DAG) to represent possible CI predictors. 
-Due to the variety of used cognitive tests' scales we assessed their consistency using PCA and McNemar's test. 
+After data preprocessing and exploratory data analysis (EDA) we decided to assess the consistency of cognitive tests' scales using PCA and McNemar's test.  
 In order to compare scores for depression and anxiety in 'no CI' and 'CI' groups as well as overall cognitive performance with MRI data we performed ANOVA, Kruskal-Wallis test, Fisher’s exact test, and ordinal logistic regression. 
 To impute data on possible CI predictors we used the MICE method for missing value imputation.
 The association between CI and other variables in dynamics was assessed with mixed-effects models.
@@ -52,9 +51,9 @@ The association between CI and other variables in dynamics was assessed with mix
 
 ### Exploratory data analysis (EDA)
 
-![Figure X. Distribution of cognitive test variables by outcome ('No CI', 'Subjective CI', and 'Mild CI' groups)](data/pics/boxplot_cognitive_test_by_groups.jpg "Заголовок изображения")
+![Figure 1. Distribution of cognitive test variables by outcome ('No CI', 'Subjective CI', and 'Mild CI' groups)](data/pics/boxplot_cognitive_test_by_groups.jpg "Заголовок изображения")
 
-**Figure X. Distribution of cognitive test variables by outcome ('No CI', 'Subjective CI', and 'Mild CI' groups)**
+**Figure 1. Distribution of cognitive test variables by outcome ('No CI', 'Subjective CI', and 'Mild CI' groups)**
 
 ### Descriptive statistics
 
@@ -64,20 +63,20 @@ The association between CI and other variables in dynamics was assessed with mix
 
 The consistency of cognitive tests’ scales was assessed using PCA and McNemar's test.
 
-![Figure X. PCA Variable Correlation](data/pics/pic_4.png "Заголовок изображения")
-**Figure X. PCA Variable Correlation**
+![Figure 2. PCA Variable Correlation](data/pics/pic_4.png "Заголовок изображения")
+**Figure 2. PCA Variable Correlation**
 
-![Figure X. Contribution of Variables to the First Principal Component (Dim-1)](data/pics/pic_1.png "Заголовок изображения")
-**Figure X. Contribution of Variables to the First Principal Component (Dim-1)**
+![Figure 3. Contribution of Variables to the First Principal Component (Dim-1)](data/pics/pic_1.png "Заголовок изображения")
+**Figure 3. Contribution of Variables to the First Principal Component (Dim-1)**
 
-![Figure X. Contribution of Variables to the Second Principal Component (Dim-2)](data/pics/pic_2.png "Заголовок изображения")
-**Figure X. Contribution of Variables to the Second Principal Component (Dim-2)**
+![Figure 4. Contribution of Variables to the Second Principal Component (Dim-2)](data/pics/pic_2.png "Заголовок изображения")
+**Figure 4. Contribution of Variables to the Second Principal Component (Dim-2)**
 
-Principal Component Analysis (PCA) was conducted to identify the key contributors to the variance in cognitive function indicators. The first principal component (PC1) explained 29.6% of the total variance, while the second principal component (PC2) accounted for 25.3% (Fig. X). Together, these components captured more than 50% of the total variance in the dataset.
+Principal Component Analysis (PCA) was conducted to identify the key contributors to the variance in cognitive function indicators. The first principal component (PC1) explained 29.6% of the total variance, while the second principal component (PC2) accounted for 25.3% (Fig. 2). Together, these components captured more than 50% of the total variance in the dataset.
 
-The variable contribution plot for PC1 (Fig. X) revealed that stpersonal_v8, moca_v8, and mmse_v8 (SRPA for personal anxiety, MoCA, and MMSE respectively) were the primary contributors to this dimension, indicating their strong influence on the overall variance structure. In contrast, symboldigit_v8, fab_v8, and benton_v8 (SDMT, FAB, and Benton Visual Retention Test respectively) had notably lower contributions, suggesting they played a lesser role in defining PC1.
+The variable contribution plot for PC1 (Fig. 3) revealed that stpersonal_v8, moca_v8, and mmse_v8 (SRPA for personal anxiety, MoCA, and MMSE respectively) were the primary contributors to this dimension, indicating their strong influence on the overall variance structure. In contrast, symboldigit_v8, fab_v8, and benton_v8 (SDMT, FAB, and Benton Visual Retention Test respectively) had notably lower contributions, suggesting they played a lesser role in defining PC1.
 
-Similarly, in PC2 (Fig. X), the highest contributing variables were stsutiational_v8, moca_v8, and stpersonal_v8, reinforcing the importance of executive and memory-related cognitive functions in shaping this component. On the other hand, symboldigit_v8 exhibited the lowest contribution to PC2, implying a relatively minor role in explaining variance in this dimension.
+Similarly, in PC2 (Fig. 4), the highest contributing variables were stsutiational_v8, moca_v8, and stpersonal_v8, reinforcing the importance of executive and memory-related cognitive functions in shaping this component. On the other hand, symboldigit_v8 exhibited the lowest contribution to PC2, implying a relatively minor role in explaining variance in this dimension.
 
 These findings suggest that memory and executive function variables predominantly drive the variance observed in cognitive performance across participants, while other cognitive tests contribute less significantly to the principal components.
 
@@ -166,29 +165,41 @@ The missing data structure was analyzed using the md.pattern() function, which v
 
 The **Predictive Mean Matching (PMM) method**, implemented in the mice package in R, was used to fill in the missing values. To reduce multicollinearity, height measurements from visits 5 to 8 were averaged into a single variable. This adjustment was necessary because growth curves plateau after the age of 30, making individual height measurements highly correlated. By computing the mean height across these visits, we minimized redundancy in the dataset while preserving essential variability in height-related factors. This approach ensured a more stable statistical model and improved the interpretability of regression analyses.
 
-![Figure X. Missing patterns before imputation](data/pics/pic_7.png "Заголовок изображения")
-**Figure X. Missing patterns before imputation**
-![Figure X. Missing patterns after imputation](data/pics/pic_8.png "Заголовок изображения")
-**Figure X. Missing patterns after imputation**
+![Figure 5. Missing patterns before imputation](data/pics/pic_7.png "Заголовок изображения")
+**Figure 5. Missing patterns before imputation**
+![Figure 6. Missing patterns after imputation](data/pics/pic_8.png "Заголовок изображения")
+**Figure 6. Missing patterns after imputation**
+
+![Figure 7. Distribution of BMI, SBP and atherogenic coefficient variables before and after imputation](data/pics/boxplot_all.png "Заголовок изображения")
+**Figure 7. Distribution of BMI, mean BP (SAD) and atherogenic coefficient (index) variables before and after imputation**
+
+As can be seen from the figure, distribution of anthropometric measurements, blood pressure, and biochemical markers did not change significantly after imputation.
+
+![Figure 8. Dynamics for smoking and alcohol variables before and after imputation](data/pics/barplot_all.png "Заголовок изображения")
+**Figure 8. Dynamics for smoking and alcohol variables before and after imputation**
+
+Distribution of smoking and alcohol variables between the visits demonstrated an increase in smoking habits after the visit 4 which corresponds to 16-17 years of participants' age.
+
+Questions about alcohol drinking were added to the questionnare only by visit 5 when participants were 21-23 years old. As we can see, beginning from visit 7 more than 75% of participants admitted that they drink alcohol. 
 
 ### Mixed-effects models
 
 The association between CI and variables from previous visits in dynamics was assessed using mixed-effects models. We used clinical data regarding cardiovascular system (systolic and diastolic blood pressure (SBP and DBP respectively) and pulse), atherogenic coefficient ((total cholesterol-high-density lipoprotein cholesterol (HDLc))/HDLc), and body mass index (BMI) (weight (kg)/height^2 (meters)).
 
-![Figure X. LMM results for systolic blood pressure data](data/pics/LMM_analysis/ft_sbp.png "Заголовок изображения")
-**Figure X. LMM results for systolic blood pressure data**
+![Figure 9. LMM results for systolic blood pressure data](data/pics/LMM_analysis/ft_sbp.png "Заголовок изображения")
+**Figure 9. LMM results for systolic blood pressure data**
 
-![Figure X. LMM results for pulse data](data/pics/LMM_analysis/ft_pulse.png "Заголовок изображения")
-**Figure X. LMM results for pulse data**
+![Figure 10. LMM results for pulse data](data/pics/LMM_analysis/ft_pulse.png "Заголовок изображения")
+**Figure 10. LMM results for pulse data**
 
-![Figure X. LMM results for diastolic blood pressure data](data/pics/LMM_analysis/ft_dbp.png "Заголовок изображения")
-**Figure X. LMM results for diastolic blood pressure data**
+![Figure 11. LMM results for diastolic blood pressure data](data/pics/LMM_analysis/ft_dbp.png "Заголовок изображения")
+**Figure 11. LMM results for diastolic blood pressure data**
 
-![Figure X. LMM results for Body Mass Index data](data/pics/LMM_analysis/ft_bmi.png "Заголовок изображения")
-**Figure X. LMM results for Body Mass Index data**
+![Figure 12. LMM results for Body Mass Index data](data/pics/LMM_analysis/ft_bmi.png "Заголовок изображения")
+**Figure 12. LMM results for Body Mass Index data**
 
-![Figure X. LMM results for atherogenic coefficient data](data/pics/LMM_analysis/ft_athero_index.png "Заголовок изображения")
-**Figure X. LMM results for atherogenic coefficient data**
+![Figure 13. LMM results for atherogenic coefficient data](data/pics/LMM_analysis/ft_athero_index.png "Заголовок изображения")
+**Figure 13. LMM results for atherogenic coefficient data**
 
 The LMM analysis revealed that none of the included cardiovascular parameters demonstrated a significant association with cognitive or psychological outcomes. Specifically:
 
