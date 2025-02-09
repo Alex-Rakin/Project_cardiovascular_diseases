@@ -81,7 +81,7 @@ These findings suggest that memory and executive function variables predominantl
 
 | **Neuropsychological testing** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** | **SMD** |
 | :---:        |     :---:      |    :---:      |    :---:      |    :---:      | :---: |
-|    |  n=121 (68%)    |   n=42 (24%)  | n=15 (8%) | |
+|    |  n=122 (63.9%)    |   n=38 (19.9%)  | n=31 (16.2%) | |
 | 12-word Philadelphia Verbal Learning Test (PVLT) | | | | |
 | PVLT Short Delay Free Recall (words)	| 10.02 (1.49) | 9.54 (1.71) |8.83 (1.51) | 0.001 | 0.507 |
 | PVLT Short Delay Cued Recall (words)	|  1.82 (1.37) | 2.30 (1.65) |  3.07 (1.46) | <0.001 | 0.564 |
@@ -111,7 +111,7 @@ These findings suggest that memory and executive function variables predominantl
 
 | **MRI data** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** | **SMD** |
 | :---:        |     :---:      |    :---:      |    :---:      |    :---:      |  :---:      |
-|    |  n=121 (68%)    |   n=42 (24%)  | n=15 (8%) | |
+|    |  n=122 (63.9%)    |   n=38 (19.9%)  | n=31 (16.2%) | |
 | Several vascular lesions 	  |  51 (46.8%)  |   13 (34.2%) |  11 (37.9%) | 0.344 | 0.172 |
 | Multiple vascular lesions 	|    20 (18.3%)  |   6 (15.8%) |  5 (17.2%) | 0.937 | 0.045 |
 | Perivascular spaces (PV spaces) enlargement	 |   15 (13.8%) |  5 (13.2%) | 9 (31.0%) | 0.069 |0.294 |
@@ -125,7 +125,7 @@ These findings suggest that memory and executive function variables predominantl
 
 | **Endothelium function and arterial stiffness** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
 | :---:        |     :---:      |    :---:      |    :---:      |    :---:      |
-|    |  n=121 (68%)    |   n=42 (24%)  | n=15 (8%) | |
+|    |  n=122 (63.9%)    |   n=38 (19.9%)  | n=31 (16.2%) | |
 | Celermajer test (%)	|  7.35 (3.68)	|  7.09 (3.65)	|  7.32 (2.35)	| 0.925 |
 | Pharmacological test index (amplitude)	|  1.90 (0.68)	|  1.90 (0.43)	|  1.75 (1.56)	| 0.763 |
 | Pharmacological test index (phase)	| -7.02 (5.23)	| -8.02 (6.48)	| -6.15 (3.73) |	0.467 |
