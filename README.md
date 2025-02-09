@@ -122,29 +122,29 @@ These findings suggest that memory and executive function variables predominantl
 **Table 2. Associations between MRI data and CI groups**
 
 
-| **Endothelium function and arterial stiffness** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** |
-| :---:        |     :---:      |    :---:      |    :---:      |    :---:      |
+| **Endothelium function and arterial stiffness** | **No CI** | **Subjective CI** | **Mild CI** | **p-value** | **SMD** |
+| :---:        |     :---:      |    :---:      |    :---:      |    :---:      |  :---:      |
 |    |  n=122 (63.9%)    |   n=38 (19.9%)  | n=31 (16.2%) | |
-| Celermajer test (%)	|  7.35 (3.68)	|  7.09 (3.65)	|  7.32 (2.35)	| 0.925 |
-| Pharmacological test index (amplitude)	|  1.90 (0.68)	|  1.90 (0.43)	|  1.75 (1.56)	| 0.763 |
-| Pharmacological test index (phase)	| -7.02 (5.23)	| -8.02 (6.48)	| -6.15 (3.73) |	0.467 |
-| Heart rate, beats/min	| 70.29 (10.71)	| 67.53 (12.44)	| 76.46 (14.90)	| 0.054 |
-| Augmentation index adjusted to 75 bpm (%)	|  4.23 (12.26)	|  2.86 (10.90)	 | 9.42 (9.66)	| 0.223 |
-| Vascular age (years)	| 50.10 (11.01)	| 48.50 (7.59)	| 53.85 (8.88)	| 0.264 |
-| Oxygen saturation (%)	| 94.55 (2.24)	| 94.91 (1.59)	| 93.70 (1.43)	| 0.194 |
-| Augmentation index (peripheral) (%)	|  6.94 (16.38)	|  6.65 (13.01)	|  7.89 (10.45)	| 0.969 |
-| Stiffness index (m/s)	 | 7.91 (0.85)	|  7.89 (0.68)	|  8.19 (0.90)	| 0.476 |
-| Ejection duration (%)	| 35.09 (4.25)	| 34.32 (4.27)	| 35.08 (5.84)	| 0.637 |
-| Alternative vascular stiffness index (m/s)	|  8.03 (1.70)	|  7.62 (1.69)	| 10.02 (3.36)	|<0.001 |
-| Reflection index (%)	| 32.97 (13.06)	| 29.89 (8.90)	| 34.42 (11.69)	| 0.33 |
-| Ejection duration (ms)	| 302.33 (20.74)	| 307.97 (26.11)	| 278.92 (29.80)	| <0.001 |
-| Pulse wave duration (ms)	| 873.28 (128.86)	| 914.61 (154.97)	| 815.15 (169.59)	| 0.068 |
-| Time to 1st peak (peripheral) (ms)	| 112.88 (9.87)	| 110.21 (19.50)	| 106.92 (18.58)	| 0.223 |
-| Time to 2nd peak (peripheral) (ms)	| 227.05 (20.22)	| 233.32 (24.52)	| 206.62 (27.89)	| 0.001 |
-| dTpp (ms)	| 113.93 (19.61)	| 120.47 (21.70)	|  96.62 (26.18)	|0.002 |
-| Central systolic pressure (predicted) (mmHg)	| 130.95 (16.54)	| 128.24 (20.43)	| 130.00 (17.16)	| 0.709 |
-| Time of maximum rate of capillary blood filling (ms)	| 39.44 (6.31)	| 39.13 (4.67)	| 38.31 (3.47)	| 0.786 |
-| Pulse wave amplitude	|  3.02 (0.89)	|  3.14 (0.73)	|  3.26 (0.81)	| 0.517 |
+| Celermajer test (%)	|  7.35 (3.69) | 6.92 (3.30) | 7.58 (2.97) | 0.736 | 0.133 |
+| Pharmacological test index (amplitude)	| 1.89 (0.70) | 1.85 (0.40) |  1.98 (1.21) | 0.798 | 0.098 |
+| Pharmacological test index (phase)	| -7.20 (5.08) | -7.73 (6.30) | -5.94 (6.10) | 0.414 | 0.201 |
+| Heart rate, beats/min	| 70.21 (10.68) | 68.50 (12.51) | 71.07 (12.96) | 0.647 | 0.140 |
+| Augmentation index adjusted to 75 bpm (%)	|  4.40 (11.75) |  2.58 (10.39) |  6.85 (13.88) | 0.371 | 0.235 |
+| Vascular age (years)	| 50.20 (10.71) | 48.15 (7.94) | 51.18 (10.20) | 0.463 | 0.214 |
+| Oxygen saturation (%)	| 94.49 (2.25) | 95.03 (1.59) | 93.88 (1.87) | 0.104 | 0.411 |
+| Augmentation index (peripheral) (%)	| 7.25 (15.95) |  5.96 (12.99) |  8.04 (13.75) | 0.856 | 0.0999 |
+| Stiffness index (m/s)	 | 7.91 (0.85) |  7.93 (0.68) |  8.07 (0.82) | 0.617 | 0.142 |
+| Ejection duration (%)	| 34.95 (4.27) | 34.68 (4.11) | 34.75 (4.82) | 0.938 | 0.042 |
+| Alternative vascular stiffness index (m/s)	|  8.03 (1.70) |  7.75 (1.74) |  8.60 (2.88) | 0.214 | 0.255 |
+| Reflection index (%)	| 33.13 (13.11) | 29.89 (8.92) | 31.93 (10.19) | 0.380 | 0.201 |
+| Ejection duration (ms)	| 301.41 (20.04) | 306.68 (27.22) | 297.32 (30.20) | 0.282 | 0.235 |
+| Pulse wave duration (ms)	| 874.13 (128.94) | 900.94 (151.42) | 871.68 (155.28) | 0.581 | 0.133 |
+| Time to 1st peak (peripheral) (ms)	| 112.66 (9.64) | 109.65 (20.39) | 110.21 (15.89) | 0.417 | 0.135 |
+| Time to 2nd peak (peripheral) (ms)	| 226.57 (19.81) | 231.65 (25.43) | 223.50 (27.86) | 0.335 | 0.218 |
+| dTpp (ms)	| 113.68 (19.55) | 119.06 (22.58) | 111.86 (26.12) | 0.340 | 0.210 |
+| Central systolic pressure (predicted) (mmHg)	| 131.74 (17.64) | 129.09 (21.14) | 128.21 (11.92) | 0.538 | 0.140|
+| Time of maximum rate of capillary blood filling (ms)	| 39.34 (6.34) | 39.29 (4.88) | 38.46 (3.23) | 0.761 | 0.128 |
+| Pulse wave amplitude	|  01 (0.89) | 3.12 (0.76) |  3.31 (0.66) | 0.238 | 0.254 |
 
 **Table 3. Associations between clinical data and CI groups**
 
